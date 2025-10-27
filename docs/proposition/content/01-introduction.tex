@@ -1,0 +1,37 @@
+\section*{Description du problème}
+
+Nous proposons de modéliser et résoudre un problème réel de planification de maintenance ferroviaire sur 24h,
+inspiré directement des opérations au centre de maintenance SNCF de Paris.
+Ce problème nous a été rapporté par des connaissances ayant travaillé sur site,
+où la planification quotidienne est actuellement réalisée manuellement via Excel.
+Cette approche manuelle est extrêmement chronophage :
+les planificateurs passent plusieurs heures chaque jour à construire et ajuster le planning,
+souvent en début de journée et à chaque modification imprévue.
+
+L'aspect innovant de ce projet réside dans le fait que la SNCF n'a jamais formalisé ce problème comme un problème d'optimisation combinatoire.
+Notre démarche de formalisation et de résolution par programmation par contraintes constitue
+donc une contribution potentiellement très utile pour l'industrie ferroviaire, en transformant un processus manuel et
+chronophage en un système automatisé capable de générer rapidement des plannings optimisés.
+
+Le planificateur doit quotidiennement organiser les interventions de maintenance sur les trains disponibles en respectant de multiples contraintes :
+
+\begin{itemize}
+	\item \textbf{Fenêtres temporelles :}
+	      Chaque train a une fenêtre de disponibilité (temps entre son arrivée à l'atelier et son prochain départ).
+	      Ces fenêtres varient fortement (de 2h à 24h) et peuvent changer.
+
+	\item \textbf{Équipes spécialisées :}
+	      Les opérations nécessitent différentes équipes (mécanique, électricité, confort) avec des compétences spécifiques.
+	      Certaines équipes ne peuvent pas se remplacer et les effectifs sont limités.
+
+	\item \textbf{Capacité d'atelier :}
+	      Nombre limité de voies de garage, certains travaux nécessitent des conditions spéciales (alimentation électrique, équipements particuliers).
+
+	\item \textbf{Priorités :}
+	      Certaines opérations ont des dates butoirs obligatoires (maintenance préventive régulière), d'autres sont urgentes suite à des pannes.
+
+	\item \textbf{Modifications :}
+	      Des travaux non terminés doivent être reportés, des trains peuvent être ajoutés ou retirés, nécessitant une replanification rapide.
+\end{itemize}
+
+Ce problème combine ordonnancement de tâches avec affectation de ressources multiples et fenêtres temporelles contraintes.

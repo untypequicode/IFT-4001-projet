@@ -1,0 +1,28 @@
+\section*{Objectifs du projet}
+
+Nous allons modéliser ce problème en MiniZinc et tester différents solveurs (Chuffed, Gecode, OR-Tools) pour le résoudre.
+Plus précisément :
+
+\begin{enumerate}
+	\item \textbf{Modélisation progressive :}
+	      Commencer simple (juste les fenêtres temporelles) puis ajouter progressivement les contraintes de ressources, de capacité, et de priorités.
+
+	\item \textbf{Gestion des ressources limitées :}
+	      Modéliser le fait que plusieurs équipes peuvent travailler en même temps,
+	      mais qu'on ne peut pas dépasser le nombre total de personnes disponibles.
+	      Par exemple, si on a 5 mécaniciens, on ne peut pas avoir 3 tâches simultanées qui demandent chacune 2 mécaniciens.
+
+	\item \textbf{Occupation exclusive :}
+	      Assurer qu'une voie d'atelier ne peut accueillir qu'un seul train à la fois,
+	      et qu'un train ne peut pas être déplacé pendant qu'on travaille dessus.
+
+	\item \textbf{Comparaison de solveurs :}
+	      Tester les trois solveurs sur des instances de tailles croissantes pour voir lequel trouve les meilleures solutions le plus rapidement.
+
+	\item \textbf{Stratégies de recherche :}
+	      Essayer différents ordres de décision : planifier d'abord les trains qui partent tôt ? Les opérations urgentes ? Voir ce qui fonctionne le mieux.
+\end{enumerate}
+
+Ce projet nous permettra d'appliquer concrètement les concepts du cours sur un problème réel,
+de comprendre comment les solveurs se comportent face à un problème industriel complexe qui,
+jusqu'à présent, n'a jamais été traité par des méthodes d'optimisation automatique.
