@@ -2,15 +2,15 @@ name: Build LaTeX Document
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
     paths:
-      - 'docs/proposition/**'
-      - '.github/workflows/build-latex.yml'
+      - "docs/proposition/**"
+      - ".github/workflows/build-latex.yml"
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
     paths:
-      - 'docs/proposition/**'
-      - '.github/workflows/build-latex.yml'
+      - "docs/proposition/**"
+      - ".github/workflows/build-latex.yml"
   workflow_dispatch:
 
 jobs:
@@ -18,33 +18,63 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install just
-      run: |
-        curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+      - name: Install just
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
 
-    - name: Install LaTeX dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-french
+      - name: Install LaTeX dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-french
 
-    - name: Build PDF with just
-      working-directory: docs/proposition
-      run: just build
+      - name: Build PDF with just
+        working-directory: docs/proposition
+        run: just build
 
-    - name: Upload PDF artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: proposition-pdf
-        path: docs/proposition/main.pdf
-        retention-days: 30
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: proposition-pdf
+          path: docs/proposition/main.pdf
+          retention-days: 30
 
-    - name: Upload PDF to release (on tag)
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: docs/proposition/main.pdf
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy PDF to pdf-build branch
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          # Créer ou checkout la branche pdf-build
+          git fetch origin pdf-build:pdf-build || git checkout --orphan pdf-build
+          git checkout pdf-build || git checkout --orphan pdf-build
+
+          # Nettoyer la branche et garder seulement le PDF
+          git rm -rf . 2>/dev/null || true
+
+          # Copier le PDF généré
+          cp docs/proposition/main.pdf proposition.pdf
+
+          # Créer un README pour la branche
+          echo "# PDF Build" > README.md
+          echo "" >> README.md
+          echo "Cette branche contient le PDF compilé automatiquement." >> README.md
+          echo "" >> README.md
+          echo "**Dernière compilation:** $(date)" >> README.md
+          echo "" >> README.md
+          echo "[📄 Télécharger le PDF](./proposition.pdf)" >> README.md
+
+          # Commit et push
+          git add proposition.pdf README.md
+          git commit -m "Update PDF from commit ${{ github.sha }}" || echo "No changes to commit"
+          git push origin pdf-build
+
+      - name: Upload PDF to release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: docs/proposition/main.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
