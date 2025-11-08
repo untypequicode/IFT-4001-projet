@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install just
         run: |
@@ -36,42 +38,29 @@ jobs:
         working-directory: docs/proposition
         run: just build
 
+      - name: Commit PDF to repository
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+          # Forcer l'ajout du PDF même s'il est dans .gitignore
+          git add -f docs/proposition/main.pdf
+
+          # Vérifier s'il y a des changements
+          if git diff --staged --quiet; then
+            echo "Aucun changement dans le PDF"
+          else
+            git commit -m "🤖 Update compiled PDF [skip ci]"
+            git push
+          fi
+
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: proposition-pdf
           path: docs/proposition/main.pdf
           retention-days: 30
-
-      - name: Deploy PDF to pdf-build branch
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          # Créer ou checkout la branche pdf-build
-          git fetch origin pdf-build:pdf-build || git checkout --orphan pdf-build
-          git checkout pdf-build || git checkout --orphan pdf-build
-
-          # Nettoyer la branche et garder seulement le PDF
-          git rm -rf . 2>/dev/null || true
-
-          # Copier le PDF généré
-          cp docs/proposition/main.pdf proposition.pdf
-
-          # Créer un README pour la branche
-          echo "# PDF Build" > README.md
-          echo "" >> README.md
-          echo "Cette branche contient le PDF compilé automatiquement." >> README.md
-          echo "" >> README.md
-          echo "**Dernière compilation:** $(date)" >> README.md
-          echo "" >> README.md
-          echo "[📄 Télécharger le PDF](./proposition.pdf)" >> README.md
-
-          # Commit et push
-          git add proposition.pdf README.md
-          git commit -m "Update PDF from commit ${{ github.sha }}" || echo "No changes to commit"
-          git push origin pdf-build
 
       - name: Upload PDF to release (on tag)
         if: startsWith(github.ref, 'refs/tags/')
