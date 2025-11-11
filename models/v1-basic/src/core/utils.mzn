@@ -108,7 +108,7 @@ function int: get_linear_index(
 
 % ==========================================================================================
 % Small helpers (optionnels)
-% - safe_sum_bool: somme pondérée d'un tableau booléen en remplaçant false par 0 et true par w
+% - safe_sum_bool: somme pondérée d'un tableau booléen en remplaçant false par 0 et true par 1
 % ==========================================================================================
 function int: safe_sum_bool(array[int] of bool: b, int: w) =
     sum(i in index_set(b))( if b[i] then w else 0 endif );

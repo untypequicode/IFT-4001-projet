@@ -1,3 +1,5 @@
+include "core/types.mzn";
+include "core/utils.mzn";
 include "generic.mzn";
 
 % ==========================================================================================
@@ -12,13 +14,10 @@ int: Deplacement;                                                               
 int: Nettoyage;                                                                            % Temps de nettoyage obligatoire avant départ (minutes)
 int: Preparation;                                                                          % Temps minimal de préparation avant service (minutes)
 int: Transfert;                                                                            % Temps de transfert train de remplacement (minutes)
-enum Plexite;                                                                              % PLexite (nombre d'etages)
 
 % ==========================================================================================
 % Trains
 % ==========================================================================================
-enum TType;                                                                                % Types de train
-enum TId;                                                                                  % Identifiants des trains
 
 array[TType] of int: TNb;                                                                  % Nombre de trains par type
 array[1..sum(TNb)] of TId: T;                                                              % Liste des trains
@@ -32,8 +31,6 @@ array[TType] of Plexite: TDuplex;                                               
 % ==========================================================================================
 % Voies
 % ==========================================================================================
-enum VType;                                                                                % Type de voie
-enum VId;                                                                                  % Identifiants des voies
 
 array[VType] of int: VNb;                                                                  % Nombre de voie par type
 array[1..sum(VNb)] of VId: V;                                                              % Liste des voies
@@ -49,15 +46,12 @@ array[VType] of Plexite: VDuplex;                                               
 % ==========================================================================================
 % Equipements
 % ==========================================================================================
-enum EType;                                                                                % Type d'équipement
 array[EType] of int: ECapacite;                                                            % Capacité d'un équipement
 array[EType] of int: EQuantite;                                                            % Quantité d'un équipement
 
 % ==========================================================================================
 % Shifts
 % ==========================================================================================
-
-enum SType;                                                                                % Type de shift/technicien
 int: SDivision;                                                                            % Nombre de division des équipes de techniciens au sein d'une même journée
 int: SDTemps = ((JOUR) div SDivision);                                                     % Temps de la division des équipes de techniciens
 int: SDCalibration;                                                                        % Début de la premiere division pour calibrer le temps
@@ -71,8 +65,6 @@ array[1..SDivision, SType] of 1..SNb: SOffsets = calc_offsets_2d(SCapacite);
 % ==========================================================================================
 % Trajets & Gares
 % ==========================================================================================
-enum GType;                                                                                % Type/Nom de gare
-enum GSens = {aller, retour, gare};                                                        % Sens du trajet
 array[GType] of int: GTemps;                                                               % Temps de la distance entre la gare et le centre de maintenance (minutes)
 1..H: GPeriode;                                                                            % Periodicité des trajets
 int: GP = GPeriode div P;
@@ -83,8 +75,6 @@ array[1..sum(TNb), 1..GP] of GSens: GTrajetSens;                                
 % ==========================================================================================
 % Maintenances & Opérations
 % ==========================================================================================
-enum MType;                                                                                % Type de maintenance
-enum OType;                                                                                % Type d'opération
 
 array[OType, EType] of bool: OEquipement;                                                  % Equipement nécessaire par opération
 array[OType, Plexite] of int: OTemps;                                                      % Temps nécessaire par opération en fonction de la plexité du train

@@ -7,4 +7,4 @@ include "constraints/operations.mzn";
 include "constraints/trajets.mzn";
 
 % Minimal output (customize as needed)
-output ["Model executed. Check constraints files for details.\n"];
+% output ["Model executed. Check constraints files for details.\n"];
