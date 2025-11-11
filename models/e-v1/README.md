@@ -1,6 +1,10 @@
-# v1-basic
+# e-v1 (v1-basic)
 
 Modèle MiniZinc de base centralisé pour la planification de maintenance ferroviaire.
+Ce répertoire représente la version canonique du modèle (nommé `e-v1`). Le code est organisé
+pour séparer clairement les définitions de types, les utilitaires, les constantes et les
+fichiers de contraintes. Conservez les sources et les jeux de données sous ce dossier pour
+l'exécution locale, les tests et la reproductibilité.
 
 But
 

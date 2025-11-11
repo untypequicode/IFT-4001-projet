@@ -1,5 +1,5 @@
 {
-  "name": "v1-basic",
+  "name": "e-v1",
   "version": "0.1.0",
   "description": "Modèle MiniZinc de base pour la planification de maintenance ferroviaire.",
   "main": "src/main.mzn",
@@ -14,14 +14,14 @@
   "example_run": "minizinc src/main.mzn data/test/data_small.dzn",
   "mzn_version": ">=2.4.0",
   "maintainer": {
-    "name": "<à remplir>",
-    "email": "<à remplir>"
+    "name": "Ethan Facca",
+    "email": "etfac1@ulaval.ca"
   },
   "license": "MIT",
   "requirements": {
     "tools": ["minizinc"],
     "recommended_solvers": ["Gecode", "Chuffed"]
   },
-  "notes": "Conserver ce fichier à jour. Les chemins sont relatifs au répertoire `models/v1-basic`. Ne pas push automatiquement si vous travaillez localement sans revue.",
+  "notes": "Conserver ce fichier à jour. Les chemins sont relatifs au répertoire `models/e-v1`. Ne pas push automatiquement si vous travaillez localement sans revue.",
   "schema_version": "1.0"
 }
