@@ -1,0 +1,3 @@
+# $f
+
+Documentation technique (stub)
