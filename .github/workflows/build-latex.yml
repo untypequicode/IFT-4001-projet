@@ -5,11 +5,13 @@ on:
     branches: [main, master]
     paths:
       - "docs/proposition/**"
+      - "docs/rapport-final/**"
       - ".github/workflows/build-latex.yml"
   pull_request:
     branches: [main, master]
     paths:
       - "docs/proposition/**"
+      - "docs/rapport-final/**"
       - ".github/workflows/build-latex.yml"
   workflow_dispatch:
 
@@ -34,38 +36,56 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-french
 
-      - name: Build PDF with just
-        working-directory: docs/proposition
-        run: just build
+      - name: Build PDFs with just
+        run: |
+          set -e
+          # Build proposition (if present)
+          if [ -d docs/proposition ]; then
+            (cd docs/proposition && just build)
+          fi
+          # Build rapport-final (if present)
+          if [ -d docs/rapport-final ]; then
+            (cd docs/rapport-final && just build)
+          fi
 
-      - name: Commit PDF to repository
+      - name: Commit PDFs to repository
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
 
-          # Forcer l'ajout du PDF même s'il est dans .gitignore
-          git add -f docs/proposition/main.pdf
+          # Forcer l'ajout des PDF même s'ils sont dans .gitignore
+          git add -f docs/proposition/main.pdf || true
+          git add -f docs/rapport-final/main.pdf || true
 
           # Vérifier s'il y a des changements
           if git diff --staged --quiet; then
-            echo "Aucun changement dans le PDF"
+            echo "Aucun changement dans les PDFs"
           else
-            git commit -m "🤖 Update compiled PDF [skip ci]"
+            git commit -m "🤖 Update compiled PDFs [skip ci]"
             git push
           fi
 
-      - name: Upload PDF artifact
+      - name: Upload proposition PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: proposition-pdf
           path: docs/proposition/main.pdf
           retention-days: 30
 
-      - name: Upload PDF to release (on tag)
+      - name: Upload rapport-final PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-final-pdf
+          path: docs/rapport-final/main.pdf
+          retention-days: 30
+
+      - name: Upload PDFs to release (on tag)
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: docs/proposition/main.pdf
+          files: |
+            docs/proposition/main.pdf
+            docs/rapport-final/main.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
