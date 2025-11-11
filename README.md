@@ -1,14 +1,8 @@
 # IFT-4001 / IFT-7020 Projet
 
-Ce projet est conçu pour modéliser et résoudre un problème réel de planification de maintenance ferroviaire sur 24 heures, inspiré des opérations au centre de maintenance SNCF. Actuellement, la planification est réalisée manuellement via Excel, ce qui est extrêmement chronophage. Ce projet vise à transformer ce processus manuel en un système automatisé capable de générer rapidement des plannings optimisés.
+Ce projet modélise et résout un problème de planification de maintenance ferroviaire. L'objectif est d'automatiser la génération de plannings optimisés pour réduire le temps et les erreurs liés aux processus manuels (Excel).
 
-Le problème combine l'ordonnancement de tâches avec l'affectation de ressources multiples et des fenêtres temporelles contraintes. Les contraintes incluent :
-
-- **Fenêtres temporelles** : Disponibilité variable des trains.
-- **Équipes spécialisées** : Compétences spécifiques et effectifs limités.
-- **Capacité d'atelier** : Voies de garage limitées et équipements spécifiques.
-- **Priorités** : Dates butoirs et urgences.
-- **Modifications** : Replanification rapide en cas de changements.
+Le problème combine l'ordonnancement, l'affectation de ressources et des contraintes temporelles et opérationnelles (fenêtres temporelles, compétences des équipes, capacité d'atelier, priorités, replanification rapide).
 
 ---
 
@@ -16,100 +10,117 @@ Le problème combine l'ordonnancement de tâches avec l'affectation de ressource
 
 ### Gestionnaire de paquets Nix (recommandé)
 
-Ce projet utilise [Nix](https://nixos.org/) pour gérer les dépendances et configurer l'environnement de développement. Assurez-vous que Nix est installé sur votre système. Suivez les instructions sur [https://nixos.org/download/](https://nixos.org/download/) pour l'installation.
+Le projet supporte Nix pour la reproductibilité des environnements. Voir https://nixos.org/ pour l'installation.
 
 ### Dépendances sans Nix
 
-Si vous ne souhaitez pas utiliser Nix, vous devrez installer manuellement les dépendances suivantes :
+- `just` (exécuteur de recettes)
+- `texlive-full` (distribution LaTeX)
+- `texlab` (serveur LSP LaTeX)
 
-- **just** : Un outil pour exécuter des recettes. [Documentation officielle](https://github.com/casey/just).
-- **texliveFull** : Une distribution complète de LaTeX. [Documentation officielle](https://www.tug.org/texlive/).
-- **texlab** : Un serveur de langage pour LaTeX. [Documentation officielle](https://texlab.netlify.app/).
-
----
-
-## Installation des dépendances
-
-### Windows
-
-1. Installez [Chocolatey](https://chocolatey.org/) ou [Scoop](https://scoop.sh/).
-2. Installez les dépendances :
-   ```powershell
-   choco install just texlive texlab
-   ```
-   ou
-   ```powershell
-   scoop install just texlive texlab
-   ```
-
-### Mac
-
-1. Installez [Homebrew](https://brew.sh/).
-2. Installez les dépendances :
-   ```bash
-   brew install just texlive texlab
-   ```
-
-### Debian/Ubuntu
-
-1. Mettez à jour les dépôts :
-   ```bash
-   sudo apt update
-   ```
-2. Installez les dépendances :
-   ```bash
-   sudo apt install just texlive-full
-   ```
-3. Installez `texlab` via `npm` ou téléchargez-le depuis [TexLab Releases](https://github.com/latex-lsp/texlab/releases).
+Voir les sections plus bas pour les commandes d'installation sur Windows / macOS / Debian.
 
 ---
 
-## Configuration avec Nix
+## Installation rapide
 
-1. Clonez le dépôt :
+1. Cloner le dépôt :
 
-   ```sh
+   ```
    git clone git@github.com:untypequicode/IFT-4001-projet.git
    cd IFT-4001-projet
    ```
 
-2. Entrez dans l'environnement de développement Nix :
-
-   ```sh
+2. Entrer dans l'environnement (Nix) :
+   ```
    nix-shell
    ```
 
-   Cela configurera automatiquement toutes les dépendances nécessaires.
+---
+
+## Structure du projet (résumé)
+
+La hiérarchie principale a été centralisée et normalisée. Les changements importants :
+
+- le modèle existant `e-v1` a été renommé en `v1-basic` (historique préservé via `git mv`).
+- les sources MiniZinc sont centralisées dans `models/v1-basic/src/`.
+- les résultats précédents `output/e-v1` ont été renommés `output/v1-basic`.
+
+Arborescence principale (extrait) :
+
+- `default.nix` — Configuration Nix
+- `README.md` — Documentation principale (ce fichier)
+- `requirements.txt` — Dépendances Python (si utilisées)
+- `solve.sh` — Script de résolution (si présent)
+- `.gitignore`
+- `docs/`
+  - `proposition/` — Proposition initiale (LaTeX)
+  - `rapport-final/` — Rapport court (LaTeX)
+  - `modeles/` — Documentation technique (nouveau)
+- `models/`
+  - `v1-basic/` — Modèle de base (MiniZinc)
+    - `config.json`
+    - `src/` (contient `main.mzn`, `constant.mzn`, `generic.mzn`, et sous-dossiers `core/`, `constraints/` si présents)
+    - `data/` (schema, `test/`, `prod/`, `generators/`)
+    - `docs/` (explications du modèle)
+  - `v2-optimized/` — Modèle optimisé (squelette)
+  - `v3-decomposition/` — Approche par décomposition (squelette)
+- `output/`
+  - `v1-basic/` — Solutions et exports pour v1
+  - `v2-optimized/` — (même structure prévue)
+  - `comparisons/` — Comparaisons inter-modèles, benchmarks
+- `scripts/` — Scripts utilitaires (export, validation, analyse, latex, utils)
+  - `export/` (exporters, templates)
+  - `validation/`
+  - `analysis/`
+  - `latex/`
+  - `utils/`
+- `tests/` — Tests unitaires / fixtures
+
+Remarque : les renommages/centralisations ont été effectués en conservant l'historique Git (opérations `git mv`). Les sources MiniZinc précédemment dans la racine `src/` ont été déplacées dans `models/v1-basic/src/`.
 
 ---
 
-## Utilisation
+## Utilisation (rappels)
 
-### Just
+- Construire les documents LaTeX :
 
-Ce projet utilise `just` pour automatiser les tâches liées à la compilation des documents LaTeX. Voici les commandes principales :
-
-- Construire le document LaTeX (générer le PDF) :
-
-  ```sh
+  ```
   just build
   ```
 
-- Nettoyer les fichiers temporaires générés par LaTeX :
+- Nettoyer :
 
-  ```sh
+  ```
   just clean
   ```
 
-- Lister toutes les recettes disponibles :
-  ```sh
+- Lister les recettes `just` :
+
+  ```
   just --list
   ```
 
-### Compilation manuelle LaTeX
+- Compiler manuellement LaTeX :
+  ```
+  pdflatex main.tex
+  ```
 
-Si vous préférez compiler manuellement, utilisez `pdflatex` pour générer le document PDF. Par exemple :
+---
 
-```bash
-pdflatex main.tex
-```
+## Notes pour les développeurs
+
+- Si tu ajoutes de nouveaux modèles, place-les sous `models/` avec la même convention (`vX-name`) et un `README.md` explicite.
+- Place les données de test dans `models/<model>/data/test/` et les scénarios de production dans `models/<model>/data/prod/`.
+- Les exportateurs et scripts d'analyse doivent écrire dans `output/<model>/` pour garder une structure propre.
+- Mettre à jour `docs/modeles/` pour documenter les changements d'architecture entre versions de modèles.
+
+---
+
+Si tu veux, je peux :
+
+- ajouter des stubs pour les scripts listés (`scripts/`) et les tests (`tests/`),
+- générer une arborescence README plus détaillée automatiquement,
+- ou commiter les `git mv` et nouveaux fichiers dans une branche spécifique.
+
+Indique ce que tu préfères faire ensuite.
