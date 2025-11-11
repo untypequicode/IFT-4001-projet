@@ -1,7 +1,7 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
 let
-  unstable = import (fetchTarball "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz") {};
+  unstable = import (fetchTarball "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz") { };
 in
 
 pkgs.mkShell {
@@ -11,4 +11,7 @@ pkgs.mkShell {
     texliveFull
     texlab
   ]);
+  shellHook = ''
+    zsh
+  '';
 }
