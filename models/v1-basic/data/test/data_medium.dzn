@@ -1,0 +1,43 @@
+% Medium dataset (6 trains)
+H = 2880;  % 2 days
+P = 30;
+Setup = 15; Deplacement = 10; Nettoyage = 30; Preparation = 30; Transfert = 10;
+
+Plexite = {Simple, Double};
+
+TType = {TER, Intercite};
+TId = {T1, T2, T3, T4, T5, T6};
+TNb = [4,2];
+T = [T1, T2, T3, T4, T5, T6];
+TDuplex = [Simple, Simple];
+
+VType = {VoieNettoyage, VoieReparation, VoieRevision};
+VId = {V1, V2, V3, V4, V5};
+VNb = [1,2,2];
+V = [V1, V2, V3, V4, V5];
+VDuplex = [Simple, Simple, Double];
+
+EType = {Pont_elevateur, Compresseur};
+ECapacite = [1,1];
+EQuantite = [1,1];
+
+SType = {Mecanicien, Electricien};
+SDivision = 2;
+SDCalibration = 360;
+SCapacite = [| 4, 3 |  3,2 |];
+
+GType = {Gare_Nord, Gare_Est};
+GTemps = [15, 20];
+GPeriode = 1440;
+GP = GPeriode div P;
+
+% minimal trajet arrays for 6 trains (repeat simple pattern)
+GTrajetGare = [| Gare_Nord, Gare_Nord, Gare_Est, Gare_Nord, Gare_Est, Gare_Nord |];
+GTrajetSens = [| gare, gare, aller, gare, retour, gare |];
+
+MType = {Nettoyage_quotidien, Revision_hebdo};
+OType = {Op1, Op2};
+OTemps = [| 30, 120 |];
+OEquipement = [| true, false | true, true |];
+MOperation = [| true, false | false, true |];
+

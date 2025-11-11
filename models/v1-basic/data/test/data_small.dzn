@@ -1,0 +1,50 @@
+% Small dataset (3 trains) - minimal example
+H = 1440;  % 1 day
+P = 60;    % 1h periods
+Setup = 15; Deplacement = 10; Nettoyage = 30; Preparation = 30; Transfert = 10;
+
+Plexite = {Simple};
+
+TType = {TER};
+TId = {T1, T2, T3};
+TNb = [3];
+T = [T1, T2, T3];
+TDuplex = [Simple];
+
+VType = {VoieNettoyage, VoieReparation};
+VId = {V1, V2, V3};
+VNb = [1,2];
+V = [V1, V2, V3];
+VDuplex = [Simple, Simple];
+
+EType = {Pont_elevateur};
+ECapacite = [1];
+EQuantite = [1];
+
+SType = {Mecanicien};
+SDivision = 1;
+SDCalibration = 360;
+SCapacite = [| 3 |];
+SDNb = [3];
+SNb = 3;
+STempsMin = [| 120 |];
+STempsMax = [| 480 |];
+
+GType = {Gare_Nord};
+GTemps = [15];
+GPeriode = 1440;
+GP = GPeriode div P;
+
+GTrajetGare = [|
+  Gare_Nord | Gare_Nord | Gare_Nord
+|];
+GTrajetSens = [|
+  gare | gare | gare
+|];
+
+MType = {Nettoyage_quotidien};
+OType = {Op1};
+OTemps = [| 60 |];
+OEquipement = [| true |];
+MOperation = [| true |];
+
