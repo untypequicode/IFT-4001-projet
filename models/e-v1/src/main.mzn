@@ -7,9 +7,7 @@ include "constraints/maintenances.mzn";
 include "constraints/operations.mzn";
 include "constraints/trajets.mzn";
 
-% ==========================================================================================
-% AFFICHAGE TERMINAL
-% ==========================================================================================
+% Fichier principal qui génère l'affichage formaté des résultats
 
 % Section 1: Constantes calculées
 output [

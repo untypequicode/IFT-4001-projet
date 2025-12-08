@@ -1,34 +1,18 @@
-% ==========================================================================================
-% Trains
-% ==========================================================================================
-enum TType;                                                                                % Types de train (ex : TER, TGV, etc.)
-enum TId;                                                                                  % Identifiants des trains (une valeur par train)
+% Définit les types énumérés utilisés dans le modèle
 
-% ==========================================================================================
-% Voies
-% ==========================================================================================
-enum VType;                                                                                % Type de voie (par ex. voie exterieur, voie-atelier, etc.)
-enum VId;                                                                                  % Identifiants des voies
+enum TType;                     % Types de train (TER, TGV, etc.)
+enum TId;                       % Identifiants des trains
 
-% ==========================================================================================
-% Equipements, maintenances, opérations
-% ==========================================================================================
-enum EType;                                                                                % Type d'équipement (ex : moteur, pantographe, ...)
-enum MType;                                                                                % Type de maintenance (M1, M2, ...)
-enum OType;                                                                                % Type d'opération (opérations atomiques d'une maintenance)
+enum VType;                     % Types de voie (extérieure, atelier, etc.)
+enum VId;                       % Identifiants des voies
 
-% ==========================================================================================
-% Shifts / personnels
-% ==========================================================================================
-enum SType;                                                                                % Type de shift / catégorie de technicien (ex: électricien, mécano, ...)
+enum EType;                     % Types d'équipement (moteur, pantographe, etc.)
+enum MType;                     % Types de maintenance (M1, M2, etc.)
+enum OType;                     % Types d'opération (opérations atomiques d'une maintenance)
 
-% ==========================================================================================
-% Trajets & gares
-% ==========================================================================================
-enum GType;                                                                                % Nom/type de gare (pour les trajets trains <-> centre)
-enum GSens = {aller, retour, gare};                                                        % Sens du trajet
+enum SType;                     % Types de technicien (électricien, mécano, etc.)
 
-% ==========================================================================================
-% Plexité / Duplexité
-% ==========================================================================================
-enum Plexite;                                                                              % Plexité (nombre d'étages)
+enum GType;                     % Types de gare
+enum GSens = {aller, retour, gare};  % Sens du trajet
+
+enum Plexite;                   % Plexité (nombre d'étages)

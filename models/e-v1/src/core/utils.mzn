@@ -1,43 +1,23 @@
-% ==========================================================================================
-% core/utils.mzn
-% Fonctions utilitaires réutilisables pour les modèles MiniZinc (v1-basic)
-%
-% Contient :
-%  - calculer_decalages : calcul des indices de départ pour tableaux groupés 1D
-%  - extraire_sous_tableau  : extraction d'un sous-tableau 1D
-%  - calculer_decalages_2d: calcul des indices de départ pour tableaux groupés 2D
-%  - extraire_sous_tableau_var_2d: extraction d'un sous-tableau 2D (variables)
-%  - calculer_index_lineaire: conversion (r,c,item) vers index 1D
-%  - Fonctions de logique temporelle (a_retour_avant, a_aller_apres, etc.)
-%
-% Notes :
-% - Ces fonctions opèrent sur des tableaux 1-indexés.
-% - Les fonctions 2D supposent une structure rectangulaire.
-% ==========================================================================================
+% Fonctions utilitaires pour manipuler des tableaux et vérifier des séquences temporelles
 
-% ==========================================================================================
-% calculer_decalages : Indices de départ pour tableau 1D groupé
-% Entrée :
-%   comptes : array[$$E] of int  (nombre d'éléments dans chaque groupe)
-% Sortie :
-%   array[$$E] of int contenant l'indice (1-indexé) du début de chaque groupe
-% Exemple :
-%  comptes = [5,3,4] -> decalages = [1,6,9]
-% ==========================================================================================
+/**
+ * @brief Calcule les indices de départ pour chaque groupe dans un tableau 1D
+ * @param comptes Nombre d'éléments dans chaque groupe
+ * @return Tableau des indices de départ (1-indexé) pour chaque groupe
+ * @example comptes = [5,3,4] -> retourne [1,6,9]
+ */
 function array[$$E] of int: calculer_decalages(array[$$E] of int: comptes) =
     [ 1 + sum([ comptes[m2] | m2 in index_set(comptes) where m2 < m ])
       | m in index_set(comptes) ];
 
-% ==========================================================================================
-% extraire_sous_tableau : Extraction depuis une représentation linéaire 1D
-% Entrée :
-%   donnees   : array[int] of $$T     (tableau linéaire complet)
-%   decalages : array[$$E] of int     (résultat de calculer_decalages)
-%   comptes   : array[$$E] of int     (nombre d'éléments par groupe)
-%   m         : $$E                   (groupe à extraire)
-% Sortie :
-%   array[int] of $$T contenant les éléments du groupe m
-% ==========================================================================================
+/**
+ * @brief Extrait un sous-tableau depuis un tableau linéaire 1D
+ * @param donnees Tableau linéaire complet
+ * @param decalages Résultat de calculer_decalages
+ * @param comptes Nombre d'éléments par groupe
+ * @param m Groupe à extraire
+ * @return Sous-tableau contenant les éléments du groupe m
+ */
 function array[int] of $$T: extraire_sous_tableau(
     array[int] of $$T: donnees,
     array[$$E] of int: decalages,
@@ -46,13 +26,11 @@ function array[int] of $$T: extraire_sous_tableau(
 ) =
     [ donnees[decalages[m] + i - 1] | i in 1..comptes[m] ];
 
-% ==========================================================================================
-% calculer_decalages_2d : Indices de départ pour tableau 2D groupé
-% Entrée :
-%   comptes : array[$$E1, $$E2] of int  (nombre d'éléments par groupe (r,c))
-% Sortie :
-%   array[$$E1, $$E2] of int avec l'indice linéaire du début de chaque groupe
-% ==========================================================================================
+/**
+ * @brief Calcule les indices de départ pour chaque groupe dans un tableau 2D
+ * @param comptes Nombre d'éléments par groupe (ligne, colonne)
+ * @return Tableau 2D avec l'indice linéaire du début de chaque groupe
+ */
 function array[$$E1, $$E2] of int: calculer_decalages_2d(
     array[$$E1, $$E2] of int: comptes
 ) =
@@ -66,16 +44,15 @@ function array[$$E1, $$E2] of int: calculer_decalages_2d(
              | r in index_set_1of2(comptes), c in index_set_2of2(comptes)
            ] );
 
-% ==========================================================================================
-% extraire_sous_tableau_var_2d : Extraction sous-ensemble de variables (2D → 1D)
-% Entrée :
-%   donnees   : array[int] of var $$T     (tableau linéaire de variables)
-%   decalages : array[$$E1, $$E2] of int  (résultat de calculer_decalages_2d)
-%   comptes   : array[$$E1, $$E2] of int  (nombre d'éléments par groupe)
-%   r, c      : $$E1, $$E2                (coordonnées du groupe)
-% Sortie :
-%   array[int] of var $$T contenant les variables du groupe (r,c)
-% ==========================================================================================
+/**
+ * @brief Extrait un sous-tableau de variables depuis un tableau 2D linéarisé
+ * @param donnees Tableau linéaire de variables
+ * @param decalages Résultat de calculer_decalages_2d
+ * @param comptes Nombre d'éléments par groupe
+ * @param r Ligne du groupe
+ * @param c Colonne du groupe
+ * @return Sous-tableau contenant les variables du groupe (r,c)
+ */
 function array[int] of var $$T: extraire_sous_tableau_var_2d(
     array[int] of var $$T: donnees,
     array[$$E1, $$E2] of int: decalages,
@@ -85,15 +62,14 @@ function array[int] of var $$T: extraire_sous_tableau_var_2d(
 ) =
     [ donnees[decalages[r, c] + i - 1] | i in 1..comptes[r, c] ];
 
-% ==========================================================================================
-% calculer_index_lineaire : Conversion (r, c, item) -> Index 1D
-% Entrée :
-%   decalages : array[$$E1, $$E2] of int  (résultat de calculer_decalages_2d)
-%   r, c      : $$E1, $$E2                (coordonnées du groupe)
-%   item_pos  : int                       (position 1-indexée dans le groupe)
-% Sortie :
-%   int : indice linéaire correspondant
-% ==========================================================================================
+/**
+ * @brief Convertit les coordonnées (ligne, colonne, position) vers un index linéaire
+ * @param decalages Résultat de calculer_decalages_2d
+ * @param r Ligne du groupe
+ * @param c Colonne du groupe
+ * @param item_pos Position 1-indexée dans le groupe
+ * @return Indice linéaire correspondant
+ */
 function int: calculer_index_lineaire(
     array[$$E1, $$E2] of int: decalages,
     $$E1: r,
@@ -101,30 +77,26 @@ function int: calculer_index_lineaire(
     int: item_pos
 ) = decalages[r, c] + (item_pos - 1);
 
-% ==========================================================================================
-% somme_ponderee_bool: Somme d'un tableau booléen (Vrai = poids w, Faux = 0)
-% ==========================================================================================
+/**
+ * @brief Calcule la somme pondérée d'un tableau booléen
+ * @param b Tableau de booléens
+ * @param w Poids (true = w, false = 0)
+ * @return Somme pondérée
+ */
 function int: somme_ponderee_bool(array[int] of bool: b, int: w) =
     sum(i in index_set(b))( if b[i] then w else 0 endif );
 
-% ==========================================================================================
-% LOGIQUE SÉQUENTIELLE GÉNÉRIQUE (Compatible int, bool, enum)
-% ==========================================================================================
-
-% ------------------------------------------------------------------------------------------
-% verifier_sequence_gauche : Regarde l'élément actuel et le passé (gauche)
-%
-% Entrées :
-%   - val_neutre      : La valeur "courante" (ex: gare, 1)
-%   - val_cible       : La valeur qui déclenche/arrête la séquence (ex: retour, 2)
-%   - accepter_bord   : True si le début du tableau est valide
-%   - verifier_actuel : True pour forcer grille[ligne, t] == val_neutre
-%
-% Logique :
-%   1. (Optionnel) Vérifie si la case actuelle est 'val_neutre'.
-%   2. Vérifie si à gauche on a une chaîne de 'val_neutre' qui vient d'un 'val_cible' 
-%      ou du bord.
-% ------------------------------------------------------------------------------------------
+/**
+ * @brief Vérifie qu'une séquence de val_neutre existe depuis val_cible ou le bord gauche
+ * @param grille Grille 2D à analyser
+ * @param ligne Ligne à examiner
+ * @param t Position actuelle (colonne)
+ * @param val_neutre Valeur neutre (ex: gare)
+ * @param val_cible Valeur qui déclenche la séquence (ex: retour)
+ * @param accepter_bord True si le début du tableau est valide
+ * @param verifier_actuel True pour forcer grille[ligne, t] == val_neutre
+ * @return True si une séquence valide existe
+ */
 function bool: verifier_sequence_gauche(
     array[int, int] of $$T: grille,
     int: ligne,
@@ -135,24 +107,26 @@ function bool: verifier_sequence_gauche(
     bool: verifier_actuel
 ) =
     let {
-        % 1. Validation de la case courante (si demandé)
         bool: actuel_ok = if verifier_actuel then grille[ligne, t] == val_neutre else true endif;
-
-        % 2. Recherche cible (ex: retour) vers la gauche
         bool: trouve_cible = exists(k in index_set_2of2(grille) where k < t)(
-            grille[ligne, k] == val_cible /\ 
+            grille[ligne, k] == val_cible /\
             forall(j in k+1..t-1)(grille[ligne, j] == val_neutre)
         );
-        
-        % 3. Vérification bord (Début)
-        bool: atteint_bord = accepter_bord /\ 
+        bool: atteint_bord = accepter_bord /\
             forall(k in index_set_2of2(grille) where k < t)(grille[ligne, k] == val_neutre);
-            
     } in (actuel_ok /\ (trouve_cible \/ atteint_bord));
 
-% ------------------------------------------------------------------------------------------
-% verifier_sequence_droite : Regarde l'élément actuel et le futur (droite)
-% ------------------------------------------------------------------------------------------
+/**
+ * @brief Vérifie qu'une séquence de val_neutre existe depuis val_cible ou le bord droit
+ * @param grille Grille 2D à analyser
+ * @param ligne Ligne à examiner
+ * @param t Position actuelle (colonne)
+ * @param val_neutre Valeur neutre (ex: gare)
+ * @param val_cible Valeur qui déclenche la séquence (ex: aller)
+ * @param accepter_bord True si la fin du tableau est valide
+ * @param verifier_actuel True pour forcer grille[ligne, t] == val_neutre
+ * @return True si une séquence valide existe
+ */
 function bool: verifier_sequence_droite(
     array[int, int] of $$T: grille,
     int: ligne,
@@ -163,21 +137,11 @@ function bool: verifier_sequence_droite(
     bool: verifier_actuel
 ) =
     let {
-        % 1. Validation de la case courante (si demandé)
         bool: actuel_ok = if verifier_actuel then grille[ligne, t] == val_neutre else true endif;
-
-        % 2. Recherche cible (ex: aller) vers la droite
         bool: trouve_cible = exists(k in index_set_2of2(grille) where k > t)(
-            grille[ligne, k] == val_cible /\ 
+            grille[ligne, k] == val_cible /\
             forall(j in t+1..k-1)(grille[ligne, j] == val_neutre)
         );
-        
-        % 3. Vérification bord (Fin)
-        bool: atteint_bord = accepter_bord /\ 
+        bool: atteint_bord = accepter_bord /\
             forall(k in index_set_2of2(grille) where k > t)(grille[ligne, k] == val_neutre);
-            
     } in (actuel_ok /\ (trouve_cible \/ atteint_bord));
-
-% ==========================================================================================
-% Fin de core/utils.mzn
-% ==========================================================================================
