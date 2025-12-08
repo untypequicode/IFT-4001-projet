@@ -1,100 +1,116 @@
-include "constant.mzn";
-include "core/types.mzn";
-include "core/utils.mzn";
+% ==============================================================================
+% MAIN.MZN
+% ==============================================================================
+
 include "core/output_functions.mzn";
-include "constraints/techniciens.mzn";
+include "constant.mzn";
+
+% Inclusions des contraintes
 include "constraints/maintenances.mzn";
 include "constraints/operations.mzn";
 include "constraints/trajets.mzn";
+include "constraints/techniciens.mzn";
 
-% Fichier principal qui génère l'affichage formaté des résultats
+solve satisfy;
 
-% Section 1: Constantes calculées
 output [
-  "\n",
-  "╔══════════════════════════════════════════════════════════════════════════════════════╗\n",
-  "║                     CONSTANTES CALCULÉES AUTOMATIQUEMENT                             ║\n",
-  "╚══════════════════════════════════════════════════════════════════════════════════════╝\n",
-  "\n",
-  "┌─ Périodes et horizon ─────────────────────────────────────────────────────────────┐\n",
-  "│ PNb (Nombre de périodes)        : ", show_int(6, PNb), "                                      │\n",
-  "│ PJour (Nombre de jours)         : ", show_int(6, PJour), "                                      │\n",
-  "│ GP (Périodes par cycle trajet)  : ", show_int(6, GP), "                                      │\n",
-  "└───────────────────────────────────────────────────────────────────────────────────┘\n",
-  "\n",
-  "┌─ Trains ──────────────────────────────────────────────────────────────────────────┐\n",
-  "│ Total trains                    : ", show_int(6, sum(TNb)), "                                      │\n",
-  "│ Par type                        : ", show(TNb), "\n",
-  "│ Offsets                         : ", show(TOffsets), "\n",
-  "└───────────────────────────────────────────────────────────────────────────────────┘\n",
-  "\n",
-  "┌─ Voies ───────────────────────────────────────────────────────────────────────────┐\n",
-  "│ Total voies                     : ", show_int(6, sum(VNb)), "                                      │\n",
-  "│ Par type                        : ", show(VNb), "\n",
-  "│ Offsets                         : ", show(VOffsets), "\n",
-  "└───────────────────────────────────────────────────────────────────────────────────┘\n",
-  "\n",
-  "┌─ Techniciens ─────────────────────────────────────────────────────────────────────┐\n",
-  "│ Total techniciens               : ", show_int(6, SNb), "                                      │\n",
-  "│ Nombre de divisions             : ", show_int(6, SDivision), "                                      │\n",
-  "│ Temps par division              : ", show_int(6, SDTemps), " minutes                             │\n",
-  "│ Techniciens par division        : ", show(SDNb), "\n",
-  "└───────────────────────────────────────────────────────────────────────────────────┘\n",
-  "\n",
-  "┌─ Trajets & Gares ─────────────────────────────────────────────────────────────────┐\n",
-  "│ Période de cycle                : ", show_int(6, GP), "                                      │\n",
-  "│ Total intervalles présence      : ", show_int(6, GTotalIntervalles), "                                      │\n",
-  "└───────────────────────────────────────────────────────────────────────────────────┘\n",
-  "\n\n"
-];
+    entete_gantt("PLANNING DE MAINTENANCE", 
+                 "Horizon: " ++ show(H) ++ " min | Périodes: " ++ show(PNb)),
 
-% Section 2: Gantt Techniciens
-output [
-  "╔══════════════════════════════════════════════════════════════════════════════════════╗\n",
-  "║                          GANTT - PLANNING TECHNICIENS                                ║\n",
-  "╚══════════════════════════════════════════════════════════════════════════════════════╝\n",
-  "\n",
-  "Légende : █ = Travail  │  ░ = Repos\n",
-  "\n"
+    % --------------------------------------------------------------------------
+    % 1. GANTT DES TRAJETS + DETAILS (Sur la même ligne)
+    % --------------------------------------------------------------------------
+    debut_section("TRAJETS_ET_DISPONIBILITE"),
+    "\n",
+    "Légende : A = Aller  │  R = Retour  │  ■ = En gare  │  · = Autre\n",
+    "Format  : |GANTT| [Debut..Fin GareDebut->GareFin]\n",
+    "\n"
 ] ++ [
-  let {
-    int: d = min(dd in 1..SDivision, t in SType where
-                 SOffsets[dd, t] <= i /\
-                 i < SOffsets[dd, t] + SCapacite[dd, t])(dd);
-    SType: type_tech = min(dd in 1..SDivision, t in SType where
-                           SOffsets[dd, t] <= i /\
-                           i < SOffsets[dd, t] + SCapacite[dd, t])(t);
-    array[int] of bool: planning = [fix(STravail[i, u]) | u in 1..SDTemps];
-  } in
-  gantt_technicien_visuel(i, show(type_tech), d, planning, fix(STemps[i, d]), SDTemps)
-  | i in 1..SNb
-] ++ [
-  "\n\n"
-];
+    let {
+        % --- Partie 1 : Données pour le Gantt ---
+        array[int] of GSens: sens = [GTrajetSens[n, p] | p in 1..GP];
+        array[GSens] of string: symboles = [aller: "A", retour: "R", gare: "■"];
+        TId: tid = T[n]; 
 
-% Section 3: Gantt Trajets
-output [
-  "╔══════════════════════════════════════════════════════════════════════════════════════╗\n",
-  "║                          GANTT - PLANNING TRAJETS                                    ║\n",
-  "╚══════════════════════════════════════════════════════════════════════════════════════╝\n",
-  "\n",
-  "Légende : A = Aller  │  R = Retour  │  ■ = En gare (maintenance possible)  │  · = Autre\n",
-  "\n"
+        % --- Partie 2 : Construction de la chaîne d'infos (Intervalles) ---
+        int: nb_creneaux = GNbIntervalles[n];
+        int: offset = GOffsetsIntervalles[n];
+        
+        string: info_intervalles = 
+            if nb_creneaux == 0 then "" 
+            else
+                concat([
+                    let {
+                        % Index linéaire dans les tableaux de computed.mzn
+                        int: idx = offset + k;
+                        int: deb = GIntervallesDebut[idx];
+                        int: fin = GIntervallesFin[idx];
+                        GType: g_deb = GIntervallesTypeDebut[idx];
+                        GType: g_fin = GIntervallesTypeFin[idx];
+                    } in
+                    " [P" ++ show(deb) ++ ".." ++ show(fin) ++ " " ++ 
+                    show(g_deb) ++ "->" ++ show(g_fin) ++ "]"
+                    | k in 0..nb_creneaux-1
+                ])
+            endif;
+    } in
+    % --- Assemblage de la ligne ---
+    " T" ++ show_int(3, n) ++ " (" ++ show(tid) ++ ") |" ++
+    concat([
+        if sens[p] == gare then
+            (if GPresent[n, p] then "■" else "·" endif)
+        else
+            enum_vers_symbole(sens[p], symboles)
+        endif
+        | p in 1..GP
+    ]) ++ "| " ++ info_intervalles ++ "\n"
+    | n in 1..NbTrains
 ] ++ [
-  let {
-    array[int] of GSens: sens = [GTrajetSens[n, p] | p in 1..GP];
-    array[GSens] of string: symboles = [aller: "A", retour: "R", gare: "■"];
-  } in
-  " T" ++ show_int(3, n) ++ " |" ++
-  concat([
-    if sens[p] == gare then
-      (if GPresent[n, p] then "■" else "·" endif)
-    else
-      enum_vers_symbole(sens[p], symboles)
-    endif
-    | p in 1..GP
-  ]) ++ "|\n"
-  | n in 1..sum(TNb)
-] ++ [
-  "\n"
+    fin_section("TRAJETS_ET_DISPONIBILITE"),
+
+    % --------------------------------------------------------------------------
+    % 2. URGENCES & MAINTENANCE
+    % --------------------------------------------------------------------------
+    debut_section("ETAT_MAINTENANCES"),
+    "Dates butoirs (Deadlines) par rapport à H=" ++ show(H) ++ ":\n",
+    concat([
+        let { TId: tid = T[i] } in
+        "Train " ++ show(tid) ++ " : " ++
+        concat([ 
+            let { int: deadline = MUrgence[tid, m] } in
+            if deadline < H then
+                " [" ++ show(m) ++ ": Urgence à T=" ++ show(deadline) ++ "] "
+            else " ." endif
+            | m in MType 
+        ]) ++ "\n"
+        | i in 1..NbTrains
+    ]),
+    fin_section("ETAT_MAINTENANCES"),
+
+    % --------------------------------------------------------------------------
+    % 3. PLANNING TECHNICIENS
+    % --------------------------------------------------------------------------
+    debut_section("PLANNING_RESSOURCES"),
+    "Légende: [X] = Travail | [.] = Pause\n",
+    concat([
+        let {
+            % Conversion var bool -> bool avec fix()
+            array[1..SDTemps] of bool: planning_fixe = [ fix(STravail[i, p]) | p in 1..SDTemps ],
+            
+            int: total_travail = fix(sum(d in 1..SDivision)(STemps[i, d])),
+            int: total_max = SDTemps * SDivision
+        } in
+        gantt_technicien_visuel(
+            i, 
+            "Tech", 
+            1, 
+            planning_fixe, 
+            total_travail, 
+            total_max
+        )
+        | i in 1..SNb
+    ]),
+    fin_section("PLANNING_RESSOURCES"),
+
+    pied_gantt()
 ];

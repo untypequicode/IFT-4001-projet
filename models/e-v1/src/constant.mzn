@@ -29,8 +29,8 @@ array[EType] of int: EQuantite;     % Quantité d'un équipement
 int: SDivision;                                     % Nombre de divisions par jour
 int: SDCalibration;                                 % Début de la première division
 array[1..SDivision, SType] of int: SCapacite;       % Capacité par division et type
-array[1..SDivision, SType] of 1..SDTemps: STempsMin;  % Temps minimal de travail
-array[1..SDivision, SType] of 1..SDTemps: STempsMax;  % Temps maximal de travail
+array[1..SDivision, SType] of 0..SDTemps: STempsMin;  % Temps minimal de travail
+array[1..SDivision, SType] of 0..SDTemps: STempsMax;  % Temps maximal de travail
 
 % Trajets & Gares
 array[GType] of int: GTemps;        % Temps depuis gare vers centre (minutes)
