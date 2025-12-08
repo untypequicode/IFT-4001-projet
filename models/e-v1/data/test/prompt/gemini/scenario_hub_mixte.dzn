@@ -1,0 +1,92 @@
+% === SCENARIO 3 : HUB AEROPORT & FRET (CORRIGE V2) ===
+H = 10080; P = 30;
+Setup = 15; Deplacement = 15; Nettoyage = 15; Preparation = 30; Transfert = 15;
+
+TType = {Navette, Fret}; TId = {Nav_1, Nav_2, Nav_3, Nav_4, Fret_Lourd, Fret_Express};
+VType = {V_Courte, V_Longue}; VId = {V_C1, V_C2, V_C3, V_L1, V_L2};
+EType = {Diag_Valise}; MType = {Check_Rapide, Maint_Freins};
+OType = {Op_Freins, Op_Diag}; SType = {Expert};
+GType = {Aeroport}; Plexite = {Simple, Double};
+
+TNb = [4, 2]; T = [Nav_1, Nav_2, Nav_3, Nav_4, Fret_Lourd, Fret_Express];
+TDuplex = [Simple, Simple]; 
+
+VNb = [3, 2]; V = [V_C1, V_C2, V_C3, V_L1, V_L2];
+VDuplex = [Simple, Simple];
+
+ECapacite = [2]; EQuantite = [2];
+
+SDivision = 3; SDCalibration = 0;
+SCapacite = [| 2 | 2 | 2 |]; 
+STempsMin = array2d(1..3, SType, [0, 0, 0]);
+STempsMax = array2d(1..3, SType, [480, 480, 480]);
+
+GTemps = [15]; GPeriode = 10080;
+GTrajetGare = array2d(1..6, 1..336, [Aeroport | t in 1..6, p in 1..336]);
+
+GTrajetSens = array2d(1..6, 1..336,
+  % --- Navette 1 (Ligne 1) ---
+  % Cycle 5 périodes : 2 aller, 2 retour, 1 gare. 
+  % 336 n'est pas multiple de 5, on arrête la logique à la fin.
+  [ if (p-1) mod 5 < 2 then aller 
+    elseif (p-1) mod 5 < 4 then retour 
+    else gare endif | p in 1..336 ]
+  ++
+  
+  % --- Navette 2 (Ligne 2) --- 
+  % Identique Navette 1
+  [ if (p-1) mod 5 < 2 then aller 
+    elseif (p-1) mod 5 < 4 then retour 
+    else gare endif | p in 1..336 ]
+  ++
+  
+  % --- Navette 3 (Ligne 3) ---
+  % Décalée : Commence par 2 périodes gare, puis lance le cycle
+  [ if p <= 2 then gare
+    else 
+       % p-3 pour décaler l'index de 2
+       if (p-3) mod 5 < 2 then aller 
+       elseif (p-3) mod 5 < 4 then retour 
+       else gare endif 
+    endif | p in 1..336 ]
+  ++
+  
+  % --- Navette 4 (Ligne 4) ---
+  % Identique Navette 3
+  [ if p <= 2 then gare
+    else 
+       if (p-3) mod 5 < 2 then aller 
+       elseif (p-3) mod 5 < 4 then retour 
+       else gare endif 
+    endif | p in 1..336 ]
+  ++
+
+  % --- Fret Lourd (Ligne 5) ---
+  % Lundi/Mardi voyage, Mercredi Gare, Jeudi-Dimanche voyage
+  ([aller | i in 1..48] ++ [retour | i in 1..48] ++ [gare | i in 1..48] ++ [aller | i in 1..192]) 
+  ++
+  
+  % --- Fret Express (Ligne 6) ---
+  % Cycle journalier simple : 20 aller, 8 gare, 20 retour (Total 48)
+  [ if (p-1) mod 48 < 20 then aller 
+    elseif (p-1) mod 48 < 28 then gare 
+    else retour endif | p in 1..336 ]
+);
+
+OEquipement = [| false | true |];
+OTemps = [| 90, 120 | 15, 15 |]; 
+ODependance = [| false, false | false, false |];
+OShift = [1, 1]; 
+OVType = [V_Longue, V_Courte]; 
+
+MOperation = [| false, true | true, false |]; 
+MPeriode = [| 1440, 10080 | 1440, 10080 |]; 
+
+MDerniereFois = [| 
+  0, 0 | 
+  -2000, 0 | 
+  0, 0 | 
+  0, 0 |
+  0, -10000 | 
+  0, 0 
+|];

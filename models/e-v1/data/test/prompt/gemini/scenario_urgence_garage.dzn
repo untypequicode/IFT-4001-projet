@@ -1,0 +1,68 @@
+% === SCENARIO 1 : URGENCE & DECALAGE ===
+H = 10080; P = 30; % 1 semaine, pas de 30min
+Setup = 30; Deplacement = 30; Nettoyage = 30; Preparation = 30; Transfert = 30;
+
+TType = {TER, TGV}; TId = {Epave_A, Banlieue_B, Nocturne_C};
+VType = {V_Atelier, V_Stockage}; VId = {Voie_1, Voie_2, Voie_3};
+EType = {Pont}; MType = {M_Critique, M_Routine};
+OType = {Op_Lourde, Op_Rapide}; SType = {Mecano};
+GType = {Gare_Centrale}; Plexite = {Simple, Double};
+
+TNb = [2, 1]; T = [Epave_A, Banlieue_B, Nocturne_C];
+TDuplex = [Simple, Double]; % TER=Simple, TGV=Double
+
+VNb = [1, 2]; V = [Voie_1, Voie_2, Voie_3];
+VDuplex = [Simple, Simple]; % Atelier simple, Stockage simple
+
+ECapacite = [1]; EQuantite = [1]; % Un seul pont élévateur !
+
+SDivision = 3; SDCalibration = 0;
+% Juste 2 mécanos le jour, 1 la nuit
+SCapacite = [| 2 | 2 | 1 |]; 
+STempsMin = array2d(1..3, SType, [0, 0, 0]);
+STempsMax = array2d(1..3, SType, [480, 480, 480]);
+
+GTemps = [30]; GPeriode = 10080;
+GTrajetGare = array2d(1..3, 1..336, [Gare_Centrale | t in 1..3, p in 1..336]);
+
+% --- TRAJETS FAITS MAIN ---
+% 336 périodes = 7 jours * 48 périodes
+% Train A : En panne. Reste en Gare (dispo maintenance) TOUTE la semaine.
+% Train B : Classique. Roule le jour (32p), Gare la nuit (16p).
+% Train C : Inversé. Gare le jour (32p), Roule la nuit (16p).
+
+GTrajetSens = array2d(1..3, 1..336, 
+  % Train A (Ligne 1) : Dispo tout le temps (gare)
+  [gare | i in 1..336]
+  ++
+  % Train B (Ligne 2) : 7 cycles Jour/Nuit
+  ([gare | i in 1..16] ++ [aller | i in 1..16] ++ [retour | i in 1..16]) ++ % J1
+  ([gare | i in 1..16] ++ [aller | i in 1..16] ++ [retour | i in 1..16]) ++ % J2
+  ([gare | i in 1..16] ++ [aller | i in 1..16] ++ [retour | i in 1..16]) ++ % J3
+  ([gare | i in 1..16] ++ [aller | i in 1..16] ++ [retour | i in 1..16]) ++ % J4
+  ([gare | i in 1..16] ++ [aller | i in 1..16] ++ [retour | i in 1..16]) ++ % J5
+  ([gare | i in 1..48]) ++                                                   % Samedi repos
+  ([gare | i in 1..48])                                                      % Dimanche repos
+  ++
+  % Train C (Ligne 3) : Train de nuit (dispo le jour pour maintenance)
+  ([gare | i in 1..32] ++ [aller | i in 1..8] ++ [retour | i in 1..8]) ++ % J1
+  ([gare | i in 1..32] ++ [aller | i in 1..8] ++ [retour | i in 1..8]) ++ % J2
+  ([gare | i in 1..32] ++ [aller | i in 1..8] ++ [retour | i in 1..8]) ++ % J3
+  ([gare | i in 1..32] ++ [aller | i in 1..8] ++ [retour | i in 1..8]) ++ % J4
+  ([gare | i in 1..32] ++ [aller | i in 1..8] ++ [retour | i in 1..8]) ++ % J5
+  ([gare | i in 1..48]) ++                                                 % Samedi
+  ([gare | i in 1..48])                                                    % Dimanche
+);
+
+OEquipement = [| true | false |]; 
+OTemps = [| 120, 180 | 30, 30 |]; % Op lourde très longue (2h/3h)
+ODependance = [| false, false | true, false |]; % Op Rapide après Op Lourde
+OShift = [1, 1]; OVType = [V_Atelier, V_Stockage];
+
+MOperation = [| true, true | false, true |]; % Critique = Tout faire, Routine = Juste rapide
+MPeriode = [| 10080, 5000 | 10080, 5000 |]; 
+
+% Train A (Epave) : Retard massif (-5000) sur maintenance critique
+% Train B : A jour
+% Train C : Un peu en retard sur la routine
+MDerniereFois = [| -5000, 0 | 0, 0 | 0, -100 |];

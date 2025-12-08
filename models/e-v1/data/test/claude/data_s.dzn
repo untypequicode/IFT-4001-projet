@@ -1,0 +1,166 @@
+% ============================================================================
+% Jeu de données S (Small) - Scénario réaliste minimal
+% 5 trains (3 TER + 2 TGV), 4 voies, 3 jours d'horizon
+% ============================================================================
+
+% === Horizon et unités ===
+H = 4320;               % 3 jours (72h * 60min)
+P = 30;                 % Période de 30 minutes
+Setup = 15;             % 15 min setup
+Deplacement = 5;        % 5 min déplacement
+Nettoyage = 30;         % 30 min nettoyage
+Preparation = 20;       % 20 min préparation
+Transfert = 45;         % 45 min transfert
+
+% === Types énumérés ===
+TType = {TER, TGV};
+TId = {T1, T2, T3, T4, T5};
+VType = {Exterieur, Atelier};
+VId = {V1, V2, V3, V4};
+EType = {Moteur, Pantographe};
+MType = {M1, M2};
+OType = {Inspection, Revision, Vidange};
+SType = {Mecanicien, Electricien};
+GType = {Centre, Terminus, Intermediaire};
+Plexite = {Simple, Duplex};
+
+% === Trains ===
+TNb = [3, 2];           % 3 TER + 2 TGV
+T = [T1, T2, T3, T4, T5];
+TDuplex = [Simple, Duplex];
+
+% === Voies ===
+VNb = [2, 2];           % 2 extérieures + 2 ateliers
+V = [V1, V2, V3, V4];
+VDuplex = [Simple, Duplex];
+
+% === Équipements ===
+ECapacite = [1, 1];     % 1 utilisation simultanée
+EQuantite = [3, 2];     % 3 moteurs, 2 pantographes
+
+% === Techniciens (shifts) ===
+SDivision = 3;          % 3 shifts par jour
+SDCalibration = 360;    % Début à 6h (8h shift)
+
+SCapacite = [| 2, 1     % Division 1: 2 mécaniciens, 1 électricien
+             | 2, 1     % Division 2: 2 mécaniciens, 1 électricien
+             | 1, 1 |]; % Division 3: 1 mécanicien, 1 électricien
+
+STempsMin = [| 360, 360
+            | 360, 360
+            | 240, 240 |];
+
+STempsMax = [| 480, 480
+            | 480, 480
+            | 420, 420 |];
+
+% === Trajets & Gares ===
+GTemps = [0, 45, 20];   % Centre: 0, Terminus: 45min, Intermédiaire: 20min
+GPeriode = 1440;        % Période trajet = 1 jour
+
+% GP = GPeriode / P = 1440 / 30 = 48 périodes par cycle
+% Trajets: 5 trains x 48 périodes
+
+GTrajetGare = [|
+  % T1 (TER) - en gare la nuit, trajets le jour
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre,
+  Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+|
+  % T2 (TER) - décalé
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Intermediaire, Centre,
+  Centre, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Terminus,
+  Intermediaire, Intermediaire, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+|
+  % T3 (TER) - autre pattern
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Intermediaire, Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Intermediaire,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Intermediaire, Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Intermediaire,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Centre, Centre, Centre, Centre
+|
+  % T4 (TGV) - longue distance
+  Centre, Centre, Centre, Centre, Centre, Centre,
+  Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+|
+  % T5 (TGV) - décalé
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre,
+  Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus,
+  Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+|];
+
+GTrajetSens = [|
+  % T1
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, retour, retour, retour, retour,
+  gare, gare, aller, aller, aller, aller, retour, retour,
+  retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare,
+  gare, gare, gare, gare, gare, gare, gare, gare
+|
+  % T2
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, retour, retour, retour,
+  gare, gare, gare, gare, aller, aller, aller, aller, aller,
+  retour, retour, retour, gare, gare, gare, gare, gare, gare, gare,
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare
+|
+  % T3
+  gare, gare, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare,
+  gare, gare, gare, gare
+|
+  % T4
+  gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, retour, retour, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare
+|
+  % T5
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, retour, retour, gare, gare, gare, gare,
+  aller, aller, aller, aller, aller, aller, aller, aller, retour, retour,
+  retour, retour, retour, retour, gare, gare, gare, gare, gare, gare
+|];
+
+% === Maintenances & Opérations ===
+OEquipement = [| true, false    % Inspection: Moteur oui, Pantographe non
+              | true, true      % Revision: Moteur et Pantographe
+              | true, false |]; % Vidange: Moteur seulement
+
+OTemps = [| 60, 90              % Temps par plexité (Simple, Duplex)
+         | 120, 180
+         | 45, 60 |];
+
+ODependance = [| false, false, false    % Inspection ne dépend de rien
+              | true, false, false      % Revision dépend d'Inspection
+              | false, false, false |]; % Vidange indépendante
+
+OShift = [1, 2, 1];             % Techniciens par opération
+OVType = [Exterieur, Atelier, Atelier];
+
+MOperation = [| true, false, true       % M1: Inspection + Vidange
+             | true, true, false |];    % M2: Inspection + Revision
+
+MPeriode = [| 7200, 14400       % TER: M1 tous les 5j, M2 tous les 10j
+           | 10080, 20160 |];   % TGV: M1 tous les 7j, M2 tous les 14j
+
+MDerniereFois = [| -5000, -10000    % T1
+                | -6000, -12000     % T2
+                | -4000, -8000      % T3
+                | -7000, -15000     % T4
+                | -8000, -16000 |]; % T5

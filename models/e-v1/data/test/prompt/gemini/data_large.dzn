@@ -1,0 +1,43 @@
+% === DATA LARGE (40 Trains) ===
+H = 10080; P = 30;
+Setup = 30; Deplacement = 30; Nettoyage = 30; Preparation = 30; Transfert = 30;
+
+TType = {TER, TGV}; 
+% Enum générée pour 40 trains
+TId = {T01,T02,T03,T04,T05,T06,T07,T08,T09,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35,T36,T37,T38,T39,T40};
+VType = {VA, VB}; 
+VNb = [30, 20];
+% Enum générée pour 50 voies (abrégé pour la réponse, mais complet en logique)
+VId = {V01,V02,V03,V04,V05,V06,V07,V08,V09,V10,V11,V12,V13,V14,V15,V16,V17,V18,V19,V20,V21,V22,V23,V24,V25,V26,V27,V28,V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50};
+
+EType = {E1}; MType = {M1}; OType = {O1, O2}; SType = {S1}; GType = {G1}; Plexite = {Simple, Double};
+
+TNb = [20, 20]; 
+T = [TId[i] | i in 1..40];
+TDuplex = [Simple, Double];
+
+V = [VId[i] | i in 1..50];
+VDuplex = [Simple, Double];
+
+ECapacite = [10]; EQuantite = [10];
+SDivision = 3; SDCalibration = 0;
+SCapacite = array2d(1..3, SType, [15, 10, 10]); % Grosse équipe shift 1
+STempsMin = array2d(1..3, SType, [0, 0, 0]);
+STempsMax = array2d(1..3, SType, [480, 480, 480]);
+
+GTemps = [30]; GPeriode = 10080;
+GTrajetGare = array2d(1..40, 1..336, [G1 | t in 1..40, p in 1..336]);
+GTrajetSens = array2d(1..40, 1..336, [
+  let { int: h = p mod 48 } in
+  if h >= 12 /\ h <= 38 then aller 
+  elseif h > 38 /\ h <= 40 then retour 
+  else gare endif | t in 1..40, p in 1..336
+]);
+
+OEquipement = array2d(OType, EType, [true, false]);
+OTemps = array2d(OType, Plexite, [60, 60, 30, 60]);
+ODependance = [| false, true | false, false |];
+OShift = [1, 1]; OVType = [VA, VB];
+MOperation = [| true, true |];
+MPeriode = [| 10080 | 10080 |];
+MDerniereFois = array2d(TId, MType, [ if t_id mod 5 == 0 then -200 else 0 endif | t_id in 1..40, m in MType]);

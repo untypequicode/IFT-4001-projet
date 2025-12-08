@@ -1,0 +1,62 @@
+% =========================================================
+% DATA_LARGE.DZN (CORRIGÉ V2)
+% =========================================================
+
+H = 4320; P = 60;
+Setup = 10; Deplacement = 10; Nettoyage = 15; Preparation = 30; Transfert = 15;
+
+TType = {TypeA, TypeB, TypeC};
+TId = {T01, T02, T03, T04, T05, T06, T07, T08, T09, T10};
+VType = {Voie_Principale, Voie_Annexe};
+VId = {V01, V02, V03, V04, V05, V06};
+EType = {Equip_X}; 
+MType = {M1, M2};
+OType = {Op1, Op2, Op3}; 
+SType = {S1, S2};
+GType = {G1}; 
+Plexite = {Simple, Double};
+
+TNb = [4, 3, 3]; 
+T = [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10];
+TDuplex = [Simple, Double, Double]; % 3 valeurs pour 3 Types
+
+VNb = [4, 2]; 
+V = [V01, V02, V03, V04, V05, V06];
+VDuplex = [Simple, Simple]; 
+
+ECapacite = [3]; EQuantite = [3];
+
+% CORRECTION : 3 divisions par jour (3 x 8h = 24h)
+SDivision = 3; 
+SDCalibration = 0;
+
+% Matrices ajustées pour 3 shifts (Lignes 1..3)
+SCapacite = array2d(1..3, SType, [2 | i in 1..6]); 
+STempsMin = array2d(1..3, SType, [0 | i in 1..6]);
+STempsMax = array2d(1..3, SType, [480 | i in 1..6]); % 480 <= (1440/3)
+
+GTemps = [10]; GPeriode = 1440;
+GTrajetGare = array2d(1..10, 1..24, [G1 | t in 1..10, p in 1..24]);
+
+GTrajetSens = array2d(1..10, 1..24, [
+  if (t mod 2 == 1) then
+     if p <= 6 \/ p >= 21 then gare else aller endif
+  else
+     if p >= 11 /\ p <= 16 then gare else aller endif
+  endif
+  | t in 1..10, p in 1..24
+]);
+
+OEquipement = array2d(OType, EType, [true, false, true]); 
+OTemps = array2d(OType, Plexite, [60, 120, 60, 90, 30, 30]);
+ODependance = array2d(OType, OType, [false | i in 1..9]);
+OShift = [1, 1, 2]; 
+OVType = [Voie_Principale, Voie_Annexe, Voie_Principale];
+
+MOperation = [| true, true, false | false, true, true |]; 
+MPeriode = [| 1440, 2880 | 1440, 2880 | 1440, 2880 |];
+
+MDerniereFois = array2d(TId, MType, [
+   if m == M1 then -100 else 0 endif 
+   | t in TId, m in MType
+]);

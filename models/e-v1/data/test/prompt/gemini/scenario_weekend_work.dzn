@@ -1,0 +1,80 @@
+% === SCENARIO 2 : LE RUSH DU WEEK-END (CORRIGE V2) ===
+H = 10080; P = 30;
+Setup = 30; Deplacement = 30; Nettoyage = 30; Preparation = 30; Transfert = 30;
+
+TType = {RER, Intercite}; TId = {RER_A, RER_B, RER_C, IC_Nord, IC_Sud};
+VType = {V_Maint, V_Garage}; VId = {V1, V2, V3, V4, V5};
+EType = {Grue, Valise}; MType = {Grand_Carene, Visite_Legere};
+OType = {Demontage, Test_Elec, Remontage}; SType = {Tech_Polyvalent};
+GType = {Gare_Nord}; Plexite = {Simple, Double};
+
+TNb = [3, 2]; T = [RER_A, RER_B, RER_C, IC_Nord, IC_Sud];
+TDuplex = [Double, Simple]; 
+
+VNb = [2, 3]; V = [V1, V2, V3, V4, V5];
+VDuplex = [Double, Simple];
+
+ECapacite = [1, 3]; EQuantite = [1, 3];
+
+SDivision = 3; SDCalibration = 0;
+SCapacite = [| 3 | 3 | 2 |];
+STempsMin = array2d(1..3, SType, [0, 0, 0]);
+STempsMax = array2d(1..3, SType, [480, 480, 480]);
+
+GTemps = [30]; GPeriode = 10080;
+GTrajetGare = array2d(1..5, 1..336, [Gare_Nord | t in 1..5, p in 1..336]);
+
+% Logique :
+% p <= 240 correspond aux 5 premiers jours (5 * 48 = 240 périodes)
+% (p-1) mod 48 donne l'heure dans la journée (0..47)
+
+GTrajetSens = array2d(1..5, 1..336,
+  % RER A (Ligne 1) : L-V [8 Gare, 16 Aller, 16 Retour, 8 Gare] puis Week-end Gare
+  [ if p > 240 then gare 
+    else 
+       if (p-1) mod 48 < 8 then gare 
+       elseif (p-1) mod 48 < 24 then aller 
+       elseif (p-1) mod 48 < 40 then retour 
+       else gare endif 
+    endif | p in 1..336 ] 
+  ++
+  % RER B (Ligne 2) : Décalé de 2h (4 périodes) le matin
+  [ if p > 240 then gare 
+    else 
+       if (p-1) mod 48 < 12 then gare 
+       elseif (p-1) mod 48 < 28 then aller 
+       elseif (p-1) mod 48 < 44 then retour 
+       else gare endif 
+    endif | p in 1..336 ] 
+  ++
+  % RER C (Ligne 3) : Idem RER A
+  [ if p > 240 then gare 
+    else 
+       if (p-1) mod 48 < 8 then gare 
+       elseif (p-1) mod 48 < 24 then aller 
+       elseif (p-1) mod 48 < 40 then retour 
+       else gare endif 
+    endif | p in 1..336 ] 
+  ++
+  % IC Nord (Ligne 4) : Longs cycles manuels (Utilisation de ++ valide ici car simple niveau)
+  ([aller|i in 1..48] ++ [retour|i in 1..48] ++ [gare|i in 1..24] ++ [aller|i in 1..48] ++ [retour|i in 1..48] ++ [gare|i in 1..120]) 
+  ++
+  % IC Sud (Ligne 5) : Voyage unique milieu de semaine
+  ([gare|i in 1..48] ++ [aller|i in 1..48] ++ [retour|i in 1..48] ++ [gare|i in 1..192])
+);
+
+OEquipement = [| true, false | false, true | true, false |]; 
+OTemps = [| 120, 180 | 30, 30 | 120, 180 |];
+ODependance = [| false, false, false | true, false, false | false, true, false |]; 
+OShift = [2, 1, 2]; OVType = [V_Maint, V_Garage, V_Maint];
+
+MOperation = [| true, true, true | false, true, false |]; 
+MPeriode = [| 20000, 5000 | 20000, 5000 |]; 
+
+MDerniereFois = [| 
+  -10000, 0 | 
+  0, 0 |      
+  0, -100 |   
+  -15000, 0 | 
+  0, 0        
+|];

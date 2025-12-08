@@ -1,0 +1,182 @@
+% ============================================================================
+% Jeu de données L (Large) - Scénario grande échelle
+% 20 trains (10 TER + 6 TGV + 4 Fret), 15 voies, 14 jours d'horizon
+% ============================================================================
+
+% === Horizon et unités ===
+H = 20160;              % 14 jours
+P = 60;                 % Période de 1 heure (pour limiter la complexité)
+Setup = 15;
+Deplacement = 5;
+Nettoyage = 30;
+Preparation = 20;
+Transfert = 45;
+
+% === Types énumérés ===
+TType = {TER, TGV, Fret, Intercity};
+TId = {T01, T02, T03, T04, T05, T06, T07, T08, T09, T10,
+       T11, T12, T13, T14, T15, T16, T17, T18, T19, T20};
+VType = {VExterieur, VAtelier, VLavage, VStockage};
+VId = {V01, V02, V03, V04, V05, V06, V07, V08, V09, V10, V11, V12, V13, V14, V15};
+EType = {Moteur, Pantographe, Frein, Climatisation, Portes};
+MType = {M1, M2, M3, M4};
+OType = {OpInspection, OpRevision, OpVidange, OpTestFrein, OpNettoyage, OpTestPortes};
+SType = {Mecanicien, Electricien, Technicien, Superviseur};
+GType = {Centre, Terminus, Intermediaire, Depot, GareSecondaire};
+Plexite = {Simple, Duplex, Triple, Quadruple};
+
+% === Trains ===
+TNb = [10, 6, 2, 2];    % 10 TER + 6 TGV + 2 Fret + 2 Intercity
+T = [T01, T02, T03, T04, T05, T06, T07, T08, T09, T10,
+     T11, T12, T13, T14, T15, T16, T17, T18, T19, T20];
+TDuplex = [Simple, Duplex, Simple, Triple];
+
+% === Voies ===
+VNb = [5, 5, 3, 2];     % 5 ext + 5 ateliers + 3 lavages + 2 stockages
+V = [V01, V02, V03, V04, V05, V06, V07, V08, V09, V10, V11, V12, V13, V14, V15];
+VDuplex = [Simple, Duplex, Simple, Triple];
+
+% === Équipements ===
+ECapacite = [2, 1, 2, 1, 1];
+EQuantite = [6, 4, 5, 3, 4];
+
+% === Techniciens (shifts) ===
+SDivision = 3;
+SDCalibration = 360;
+
+SCapacite = [| 5, 3, 3, 1      % Division 1
+             | 5, 3, 3, 1      % Division 2
+             | 3, 2, 2, 1 |];  % Division 3
+
+STempsMin = [| 360, 360, 360, 360
+            | 360, 360, 360, 360
+            | 300, 300, 300, 300 |];
+
+STempsMax = [| 480, 480, 480, 480
+            | 480, 480, 480, 480
+            | 420, 420, 420, 420 |];
+
+% === Trajets & Gares ===
+GTemps = [0, 90, 30, 15, 45];
+GPeriode = 1440;
+
+% GP = 1440 / 60 = 24 périodes par cycle
+% 20 trains x 24 périodes (chaque ligne a exactement 24 éléments)
+
+GTrajetGare = [|
+  % T01-T10 (TER) - 24 éléments chacun
+  Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, GareSecondaire, GareSecondaire, Terminus, Terminus, GareSecondaire, GareSecondaire, Centre, Centre, Centre, GareSecondaire, GareSecondaire, Terminus, Terminus, GareSecondaire, GareSecondaire, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre, Centre, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, GareSecondaire, Terminus, Terminus, Terminus, GareSecondaire, Centre, Centre, Centre, Centre, GareSecondaire, Terminus, Terminus, Terminus, GareSecondaire, Centre, Centre, Centre, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Centre, Centre, Centre
+|
+  % T11-T16 (TGV) - 24 éléments chacun
+  Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre
+| Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre
+| Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Centre
+| Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre
+| Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre, Centre, Centre, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Centre, Centre
+|
+  % T17-T18 (Fret) - 24 éléments chacun
+  Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Depot, Depot, Depot, Depot
+| Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Depot, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Terminus, Depot, Depot, Depot, Depot
+|
+  % T19-T20 (Intercity) - 24 éléments chacun
+  Centre, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre
+| Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre, Centre, Intermediaire, Intermediaire, Terminus, Terminus, Terminus, Intermediaire, Intermediaire, Centre, Centre
+|];
+
+GTrajetSens = [|
+  % T01-T10 (TER) - 24 éléments chacun
+  gare, gare, gare, gare, gare, aller, aller, aller, retour, retour, gare, gare, aller, aller, aller, retour, retour, gare, gare, gare, gare, gare, gare, gare
+| gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, gare, gare, gare
+| gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare, gare, gare, gare, gare
+| gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare
+| gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare, gare, gare
+| gare, gare, gare, gare, aller, aller, aller, retour, retour, gare, gare, gare, gare, aller, aller, aller, retour, retour, gare, gare, gare, gare, gare, gare
+| gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare
+| gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, gare, gare
+| gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare
+| gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, gare, gare, gare, gare
+|
+  % T11-T16 (TGV) - 24 éléments chacun
+  gare, gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare
+| gare, gare, gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare
+| gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare
+| gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, gare, gare, aller, aller, aller, aller, retour
+| gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare
+| gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare
+|
+  % T17-T18 (Fret) - 24 éléments chacun
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, retour, retour, retour, gare, gare, gare, gare
+| gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, retour, gare, gare, gare, gare
+|
+  % T19-T20 (Intercity) - 24 éléments chacun
+  gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, retour, retour, retour, gare, gare, gare, aller, aller, aller, aller, retour, retour, retour, gare
+| gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, gare, gare, aller, aller, aller, aller, aller, retour, retour, retour, gare
+|];
+
+% === Maintenances & Opérations ===
+OEquipement = [| true, false, false, false, false       % OpInspection
+              | true, true, false, false, false         % OpRevision
+              | true, false, false, false, false        % OpVidange
+              | false, false, true, false, false        % OpTestFrein
+              | false, false, false, true, false        % OpNettoyage
+              | false, false, false, false, true |];    % OpTestPortes
+
+OTemps = [| 60, 90, 120, 150            % Temps par plexité
+         | 180, 270, 360, 450
+         | 45, 60, 75, 90
+         | 30, 45, 60, 75
+         | 90, 120, 150, 180
+         | 30, 40, 50, 60 |];
+
+ODependance = [| false, false, false, false, false, false
+              | true, false, false, false, false, false
+              | false, false, false, false, false, false
+              | true, false, false, false, false, false
+              | false, false, false, false, false, false
+              | true, false, false, false, false, false |];
+
+OShift = [1, 2, 1, 1, 1, 1];
+OVType = [VExterieur, VAtelier, VAtelier, VExterieur, VLavage, VExterieur];
+
+MOperation = [| true, false, true, false, false, false          % M1
+             | true, true, false, true, false, false            % M2
+             | true, true, true, true, true, false              % M3
+             | true, true, true, true, true, true |];           % M4
+
+MPeriode = [| 7200, 21600, 43200, 86400         % TER
+           | 10080, 30240, 60480, 120960        % TGV
+           | 14400, 43200, 86400, 172800        % Fret
+           | 8640, 25920, 51840, 103680 |];     % Intercity
+
+MDerniereFois = [|
+  -5000, -15000, -30000, -60000
+| -6000, -18000, -35000, -70000
+| -4000, -12000, -25000, -50000
+| -7000, -20000, -40000, -80000
+| -5500, -16000, -32000, -64000
+| -4500, -13500, -27000, -54000
+| -6500, -19500, -39000, -78000
+| -5200, -15600, -31200, -62400
+| -7200, -21600, -43200, -86400
+| -4800, -14400, -28800, -57600
+| -8000, -24000, -48000, -96000
+| -9000, -27000, -54000, -108000
+| -7500, -22500, -45000, -90000
+| -10000, -30000, -60000, -120000
+| -8500, -25500, -51000, -102000
+| -11000, -33000, -66000, -132000
+| -15000, -45000, -90000, -180000
+| -12000, -36000, -72000, -144000
+| -6800, -20400, -40800, -81600
+| -7400, -22200, -44400, -88800
+|];
