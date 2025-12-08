@@ -22,9 +22,9 @@ int: Transfert;                                                                 
 array[TType] of int: TNb;                                                                  % Nombre de trains par type
 array[1..sum(TNb)] of TId: T;                                                              % Liste des trains
 
-array[TType] of int: TOffsets = calc_offsets(TNb);
+array[TType] of int: TOffsets = calculer_decalages(TNb);
 function array[int] of TId: ModTrains(TType: t) =
-    get_subarray(T, TOffsets, TNb, t);
+    extraire_sous_tableau(T, TOffsets, TNb, t);
 
 array[TType] of Plexite: TDuplex;                                                          % Plexité d'un train
 
@@ -35,9 +35,9 @@ array[TType] of Plexite: TDuplex;                                               
 array[VType] of int: VNb;                                                                  % Nombre de voie par type
 array[1..sum(VNb)] of VId: V;                                                              % Liste des voies
 
-array[VType] of int: VOffsets = calc_offsets(VNb);
+array[VType] of int: VOffsets = calculer_decalages(VNb);
 function array[int] of VId: ModVoies(VType: v) =
-    get_subarray(V, VOffsets, VNb, v);
+    extraire_sous_tableau(V, VOffsets, VNb, v);
 
 array[VType] of Plexite: VDuplex;                                                          % Plexité d'une voie
 
@@ -60,7 +60,7 @@ array[1..SDivision] of int: SDNb = [sum(t in SType)(SCapacite[d, t]) | d in 1..S
 int: SNb = sum(SDNb);                                                                      % Nombre de techniciens par division
 array[1..SDivision, SType] of 1..SDTemps: STempsMin;                                       % Nombre d'heure minimale pour une équipe de techniciens sur une division
 array[1..SDivision, SType] of 1..SDTemps: STempsMax;                                       % Nombre d'heure maximale pour une équipe de techniciens sur une division
-array[1..SDivision, SType] of 1..SNb: SOffsets = calc_offsets_2d(SCapacite);
+array[1..SDivision, SType] of 1..SNb: SOffsets = calculer_decalages_2d(SCapacite);
 
 % ==========================================================================================
 % Trajets & Gares
@@ -71,6 +71,44 @@ int: GP = GPeriode div P;
 
 array[1..sum(TNb), 1..GP] of GType: GTrajetGare;                                           % Gare du trajet
 array[1..sum(TNb), 1..GP] of GSens: GTrajetSens;                                           % Sens du trajet
+array[1..sum(TNb), 1..GP] of bool: GPresent = array2d(1..sum(TNb), 1..GP, [                % Matrice de présence d'un train en gare de proximité (Vérifie la séquence Gauche/Droite + Présence actuelle)
+    if GTrajetSens[n, p] != gare then false else
+      verifier_sequence_gauche(GTrajetSens, n, p, gare, retour, true, true) /\
+      verifier_sequence_droite(GTrajetSens, n, p, gare, aller,  true, true)
+    endif
+    | n in 1..sum(TNb), p in 1..GP 
+]);
+array[1..sum(TNb)] of int: GNbIntervalles = [                                              % Nombre d'intervalles (Comptage basé sur les DÉBUTS de créneaux)
+    sum(p in 1..GP)(GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1]))
+    | n in 1..sum(TNb)
+];
+
+array[1..sum(TNb)] of int: GOffsetsIntervalles = calculer_decalages(GNbIntervalles);       % Offsets pour accéder aux intervalles (Via utils.mzn)
+int: GTotalIntervalles = sum(GNbIntervalles);                                              % Nombre total d'intervalles pour dimensionner les tableaux
+
+array[1..GTotalIntervalles] of 1..GP: GIntervallesDebut = [                                % Heure de début en gare
+    p
+    | n in 1..sum(TNb), p in 1..GP
+    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+];
+array[1..GTotalIntervalles] of 1..GP: GIntervallesFin = [                                  % Heure de fin en gare
+    min(k in p..GP where (k == GP \/ not GPresent[n, k+1]))(k)
+    | n in 1..sum(TNb), p in 1..GP
+    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+];
+array[1..GTotalIntervalles] of GType: GIntervallesTypeDebut = [                            % Type de gare au début
+    GTrajetGare[n, p]
+    | n in 1..sum(TNb), p in 1..GP
+    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+];
+array[1..GTotalIntervalles] of GType: GIntervallesTypeFin = [                              % Type de gare à la fin
+    let { 
+        int: fin = min(k in p..GP where (k == GP \/ not GPresent[n, k+1]))(k) 
+    } in GTrajetGare[n, fin]
+    | n in 1..sum(TNb), p in 1..GP
+    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+];
+
 
 % ==========================================================================================
 % Maintenances & Opérations

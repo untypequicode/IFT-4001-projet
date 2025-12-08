@@ -1,117 +1,182 @@
 % ==========================================================================================
 % core/utils.mzn
 % Fonctions utilitaires réutilisables pour les modèles MiniZinc (v1-basic)
-% Contient :
-%  - calc_offsets : calcul des offsets pour tableaux groupés 1D
-%  - get_subarray  : extraction d'un sous-tableau 1D
-%  - calc_offsets_2d: calcul des offsets pour tableaux groupés 2D
-%  - get_var_subarray_2d: extraction d'un sous-tableau 2D (variables linéarisées)
-%  - get_linear_index: conversion d'un indice (r,c,item) vers index linéaire 1D
 %
-% Chaque fonction est écrite de manière générique (utilise les placeholders $$E, $$T, $$E1, $$E2)
-% pour être réutilisable dans plusieurs contextes du modèle.
+% Contient :
+%  - calculer_decalages : calcul des indices de départ pour tableaux groupés 1D
+%  - extraire_sous_tableau  : extraction d'un sous-tableau 1D
+%  - calculer_decalages_2d: calcul des indices de départ pour tableaux groupés 2D
+%  - extraire_sous_tableau_var_2d: extraction d'un sous-tableau 2D (variables)
+%  - calculer_index_lineaire: conversion (r,c,item) vers index 1D
+%  - Fonctions de logique temporelle (a_retour_avant, a_aller_apres, etc.)
 %
 % Notes :
-% - Ces fonctions opèrent sur des tableaux 1-indexés (convention MiniZinc).
-% - Les fonctions 2D supposent que la structure de `counts` est rectangulaire.
+% - Ces fonctions opèrent sur des tableaux 1-indexés.
+% - Les fonctions 2D supposent une structure rectangulaire.
 % ==========================================================================================
 
 % ==========================================================================================
-% calc_offsets : offsets pour tableau 1D groupé
+% calculer_decalages : Indices de départ pour tableau 1D groupé
 % Entrée :
-%   counts : array[$$E] of int  (nombre d'éléments dans chaque groupe)
+%   comptes : array[$$E] of int  (nombre d'éléments dans chaque groupe)
 % Sortie :
 %   array[$$E] of int contenant l'indice (1-indexé) du début de chaque groupe
 % Exemple :
-%  counts = [5,3,4] -> offsets = [1,6,9]
+%  comptes = [5,3,4] -> decalages = [1,6,9]
 % ==========================================================================================
-function array[$$E] of int: calc_offsets(array[$$E] of int: counts) =
-    [ 1 + sum([ counts[m2] | m2 in index_set(counts) where m2 < m ])
-      | m in index_set(counts) ];
+function array[$$E] of int: calculer_decalages(array[$$E] of int: comptes) =
+    [ 1 + sum([ comptes[m2] | m2 in index_set(comptes) where m2 < m ])
+      | m in index_set(comptes) ];
 
 % ==========================================================================================
-% get_subarray : extraction d'un sous-tableau depuis une représentation linéaire 1D
+% extraire_sous_tableau : Extraction depuis une représentation linéaire 1D
 % Entrée :
-%   data    : array[int] of $$T     (tableau linéaire contenant les éléments de tous les groupes)
-%   offsets : array[$$E] of int     (résultat de calc_offsets)
-%   counts  : array[$$E] of int     (nombre d'éléments par groupe)
-%   m       : $$E                   (groupe à extraire)
+%   donnees   : array[int] of $$T     (tableau linéaire complet)
+%   decalages : array[$$E] of int     (résultat de calculer_decalages)
+%   comptes   : array[$$E] of int     (nombre d'éléments par groupe)
+%   m         : $$E                   (groupe à extraire)
 % Sortie :
 %   array[int] of $$T contenant les éléments du groupe m
 % ==========================================================================================
-function array[int] of $$T: get_subarray(
-    array[int] of $$T: data,
-    array[$$E] of int: offsets,
-    array[$$E] of int: counts,
+function array[int] of $$T: extraire_sous_tableau(
+    array[int] of $$T: donnees,
+    array[$$E] of int: decalages,
+    array[$$E] of int: comptes,
     $$E: m
 ) =
-    [ data[offsets[m] + i - 1] | i in 1..counts[m] ];
+    [ donnees[decalages[m] + i - 1] | i in 1..comptes[m] ];
 
 % ==========================================================================================
-% calc_offsets_2d : offsets pour tableau 2D groupé
+% calculer_decalages_2d : Indices de départ pour tableau 2D groupé
 % Entrée :
-%   counts : array[$$E1, $$E2] of int  (nombre d'éléments par groupe (r,c))
+%   comptes : array[$$E1, $$E2] of int  (nombre d'éléments par groupe (r,c))
 % Sortie :
-%   array[$$E1, $$E2] of int avec l'indice linéaire (1-indexé) du début de chaque groupe
-%
-% Logique :
-%  - parcours par lignes (r croissant), puis colonnes (c croissant)
-%  - offset(r,c) = 1 + total des éléments des groupes précédents (lignes + colonnes antérieures)
+%   array[$$E1, $$E2] of int avec l'indice linéaire du début de chaque groupe
 % ==========================================================================================
-function array[$$E1, $$E2] of int: calc_offsets_2d(
-    array[$$E1, $$E2] of int: counts
+function array[$$E1, $$E2] of int: calculer_decalages_2d(
+    array[$$E1, $$E2] of int: comptes
 ) =
-    array2d(index_set_1of2(counts), index_set_2of2(counts),
+    array2d(index_set_1of2(comptes), index_set_2of2(comptes),
            [ let {
-               int: before_rows = sum([ sum([ counts[r2, c2] | c2 in index_set_2of2(counts) ])
-                                        | r2 in index_set_1of2(counts) where r2 < r ]),
-               int: before_cols = sum([ counts[r, c2] | c2 in index_set_2of2(counts) where c2 < c ])
+               int: lignes_avant = sum([ sum([ comptes[r2, c2] | c2 in index_set_2of2(comptes) ])
+                                        | r2 in index_set_1of2(comptes) where r2 < r ]),
+               int: cols_avant   = sum([ comptes[r, c2] | c2 in index_set_2of2(comptes) where c2 < c ])
              } in
-             1 + before_rows + before_cols
-             | r in index_set_1of2(counts), c in index_set_2of2(counts)
+             1 + lignes_avant + cols_avant
+             | r in index_set_1of2(comptes), c in index_set_2of2(comptes)
            ] );
 
 % ==========================================================================================
-% get_var_subarray_2d : extraction d'un sous-ensemble linéarisé de variables (2D → 1D)
+% extraire_sous_tableau_var_2d : Extraction sous-ensemble de variables (2D → 1D)
 % Entrée :
-%   data    : array[int] of var $$T         (tableau linéaire de variables)
-%   offsets : array[$$E1, $$E2] of int      (résultat de calc_offsets_2d)
-%   counts  : array[$$E1, $$E2] of int      (nombre d'éléments par groupe)
-%   r, c    : $$E1, $$E2                    (coordonnées du groupe)
+%   donnees   : array[int] of var $$T     (tableau linéaire de variables)
+%   decalages : array[$$E1, $$E2] of int  (résultat de calculer_decalages_2d)
+%   comptes   : array[$$E1, $$E2] of int  (nombre d'éléments par groupe)
+%   r, c      : $$E1, $$E2                (coordonnées du groupe)
 % Sortie :
-%   array[int] of var $$T contenant les variables correspondant au groupe (r,c)
+%   array[int] of var $$T contenant les variables du groupe (r,c)
 % ==========================================================================================
-function array[int] of var $$T: get_var_subarray_2d(
-    array[int] of var $$T: data,
-    array[$$E1, $$E2] of int: offsets,
-    array[$$E1, $$E2] of int: counts,
+function array[int] of var $$T: extraire_sous_tableau_var_2d(
+    array[int] of var $$T: donnees,
+    array[$$E1, $$E2] of int: decalages,
+    array[$$E1, $$E2] of int: comptes,
     $$E1: r,
     $$E2: c
 ) =
-    [ data[offsets[r, c] + i - 1] | i in 1..counts[r, c] ];
+    [ donnees[decalages[r, c] + i - 1] | i in 1..comptes[r, c] ];
 
 % ==========================================================================================
-% get_linear_index : conversion coordonnée (r, c, item_in_group) -> index linéaire 1D
+% calculer_index_lineaire : Conversion (r, c, item) -> Index 1D
 % Entrée :
-%   offsets : array[$$E1, $$E2] of int  (résultat de calc_offsets_2d)
-%   r, c    : $$E1, $$E2                (coordonnées du groupe)
-%   item_in_group : int                 (position (1-indexed) dans le groupe)
+%   decalages : array[$$E1, $$E2] of int  (résultat de calculer_decalages_2d)
+%   r, c      : $$E1, $$E2                (coordonnées du groupe)
+%   item_pos  : int                       (position 1-indexée dans le groupe)
 % Sortie :
-%   int : indice linéaire correspondant dans le tableau 1D
+%   int : indice linéaire correspondant
 % ==========================================================================================
-function int: get_linear_index(
-    array[$$E1, $$E2] of int: offsets,
+function int: calculer_index_lineaire(
+    array[$$E1, $$E2] of int: decalages,
     $$E1: r,
     $$E2: c,
-    int: item_in_group
-) = offsets[r, c] + (item_in_group - 1);
+    int: item_pos
+) = decalages[r, c] + (item_pos - 1);
 
 % ==========================================================================================
-% Small helpers (optionnels)
-% - safe_sum_bool: somme pondérée d'un tableau booléen en remplaçant false par 0 et true par 1
+% somme_ponderee_bool: Somme d'un tableau booléen (Vrai = poids w, Faux = 0)
 % ==========================================================================================
-function int: safe_sum_bool(array[int] of bool: b, int: w) =
+function int: somme_ponderee_bool(array[int] of bool: b, int: w) =
     sum(i in index_set(b))( if b[i] then w else 0 endif );
+
+% ==========================================================================================
+% LOGIQUE SÉQUENTIELLE GÉNÉRIQUE (Compatible int, bool, enum)
+% ==========================================================================================
+
+% ------------------------------------------------------------------------------------------
+% verifier_sequence_gauche : Regarde l'élément actuel et le passé (gauche)
+%
+% Entrées :
+%   - val_neutre      : La valeur "courante" (ex: gare, 1)
+%   - val_cible       : La valeur qui déclenche/arrête la séquence (ex: retour, 2)
+%   - accepter_bord   : True si le début du tableau est valide
+%   - verifier_actuel : True pour forcer grille[ligne, t] == val_neutre
+%
+% Logique :
+%   1. (Optionnel) Vérifie si la case actuelle est 'val_neutre'.
+%   2. Vérifie si à gauche on a une chaîne de 'val_neutre' qui vient d'un 'val_cible' 
+%      ou du bord.
+% ------------------------------------------------------------------------------------------
+function bool: verifier_sequence_gauche(
+    array[int, int] of $$T: grille,
+    int: ligne,
+    int: t,
+    $$T: val_neutre,
+    $$T: val_cible,
+    bool: accepter_bord,
+    bool: verifier_actuel
+) =
+    let {
+        % 1. Validation de la case courante (si demandé)
+        bool: actuel_ok = if verifier_actuel then grille[ligne, t] == val_neutre else true endif;
+
+        % 2. Recherche cible (ex: retour) vers la gauche
+        bool: trouve_cible = exists(k in index_set_2of2(grille) where k < t)(
+            grille[ligne, k] == val_cible /\ 
+            forall(j in k+1..t-1)(grille[ligne, j] == val_neutre)
+        );
+        
+        % 3. Vérification bord (Début)
+        bool: atteint_bord = accepter_bord /\ 
+            forall(k in index_set_2of2(grille) where k < t)(grille[ligne, k] == val_neutre);
+            
+    } in (actuel_ok /\ (trouve_cible \/ atteint_bord));
+
+% ------------------------------------------------------------------------------------------
+% verifier_sequence_droite : Regarde l'élément actuel et le futur (droite)
+% ------------------------------------------------------------------------------------------
+function bool: verifier_sequence_droite(
+    array[int, int] of $$T: grille,
+    int: ligne,
+    int: t,
+    $$T: val_neutre,
+    $$T: val_cible,
+    bool: accepter_bord,
+    bool: verifier_actuel
+) =
+    let {
+        % 1. Validation de la case courante (si demandé)
+        bool: actuel_ok = if verifier_actuel then grille[ligne, t] == val_neutre else true endif;
+
+        % 2. Recherche cible (ex: aller) vers la droite
+        bool: trouve_cible = exists(k in index_set_2of2(grille) where k > t)(
+            grille[ligne, k] == val_cible /\ 
+            forall(j in t+1..k-1)(grille[ligne, j] == val_neutre)
+        );
+        
+        % 3. Vérification bord (Fin)
+        bool: atteint_bord = accepter_bord /\ 
+            forall(k in index_set_2of2(grille) where k > t)(grille[ligne, k] == val_neutre);
+            
+    } in (actuel_ok /\ (trouve_cible \/ atteint_bord));
 
 % ==========================================================================================
 % Fin de core/utils.mzn

@@ -12,7 +12,7 @@ array[1..SNb, 1..SDivision] of var 0..SDTemps: STemps;                          
 constraint                                                                                 % Calcul du temps travaillé par technicien pour sa division d
   forall(d in 1..SDivision, t in SType, c in 1..SCapacite[d, t]) (                         % (conversion binaire -> somme des périodes)
     let {
-      int: i = get_linear_index(SOffsets, d, t, c)
+      int: i = calculer_index_lineaire(SOffsets, d, t, c)
     } in
       STemps[i, d] =
         sum(u in 1..SDTemps)(
@@ -23,7 +23,7 @@ constraint                                                                      
 constraint                                                                                 % Respect des minima / maxima de temps de travail par division/type pour chaque technicien
   forall(d in 1..SDivision, t in SType, c in 1..SCapacite[d, t]) (
     let {
-      int: i = get_linear_index(SOffsets, d, t, c)
+      int: i = calculer_index_lineaire(SOffsets, d, t, c)
     } in
       STempsMin[d, t] <= STemps[i, d] /\
       STemps[i, d] <= STempsMax[d, t]
