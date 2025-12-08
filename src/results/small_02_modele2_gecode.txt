@@ -1,0 +1,389 @@
+﻿Running model.mzn, small_02.dzn
+4s 795msec
+
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=182min, Fin=375min, Retard=209min
+Maintenance 3 (Train 2, Priorité=2): Début=629min, Fin=813min, Retard=551min
+Maintenance 4 (Train 2, Priorité=2): Début=405min, Fin=619min, Retard=241min
+Maintenance 5 (Train 3, Priorité=2): Début=843min, Fin=986min, Retard=511min
+Maintenance 6 (Train 3, Priorité=1): Début=996min, Fin=1104min, Retard=312min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=182min, Fin=279min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=289min, Fin=375min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=629min, Fin=729min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=739min, Fin=813min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=405min, Fin=521min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=531min, Fin=619min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=843min, Fin=875min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=885min, Fin=986min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=996min, Fin=1049min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1059min, Fin=1104min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 3336
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=182min, Fin=375min, Retard=209min
+Maintenance 3 (Train 2, Priorité=2): Début=405min, Fin=589min, Retard=327min
+Maintenance 4 (Train 2, Priorité=2): Début=599min, Fin=813min, Retard=435min
+Maintenance 5 (Train 3, Priorité=2): Début=843min, Fin=986min, Retard=511min
+Maintenance 6 (Train 3, Priorité=1): Début=996min, Fin=1104min, Retard=312min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=182min, Fin=279min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=289min, Fin=375min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=405min, Fin=505min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=515min, Fin=589min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=599min, Fin=715min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=725min, Fin=813min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=843min, Fin=875min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=885min, Fin=986min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=996min, Fin=1049min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1059min, Fin=1104min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 3276
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=375min, Retard=24min
+Maintenance 2 (Train 1, Priorité=2): Début=88min, Fin=281min, Retard=115min
+Maintenance 3 (Train 2, Priorité=2): Début=405min, Fin=589min, Retard=327min
+Maintenance 4 (Train 2, Priorité=2): Début=599min, Fin=813min, Retard=435min
+Maintenance 5 (Train 3, Priorité=2): Début=906min, Fin=1049min, Retard=574min
+Maintenance 6 (Train 3, Priorité=1): Début=843min, Fin=1104min, Retard=312min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=291min, Fin=375min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=88min, Fin=185min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=195min, Fin=281min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=405min, Fin=505min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=515min, Fin=589min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=599min, Fin=715min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=725min, Fin=813min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=906min, Fin=938min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=948min, Fin=1049min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=843min, Fin=896min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1059min, Fin=1104min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 3262
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=375min, Retard=24min
+Maintenance 2 (Train 1, Priorité=2): Début=88min, Fin=281min, Retard=115min
+Maintenance 3 (Train 2, Priorité=2): Début=405min, Fin=589min, Retard=327min
+Maintenance 4 (Train 2, Priorité=2): Début=599min, Fin=813min, Retard=435min
+Maintenance 5 (Train 3, Priorité=2): Début=961min, Fin=1104min, Retard=629min
+Maintenance 6 (Train 3, Priorité=1): Début=843min, Fin=951min, Retard=159min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=291min, Fin=375min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=88min, Fin=185min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=195min, Fin=281min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=405min, Fin=505min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=515min, Fin=589min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=599min, Fin=715min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=725min, Fin=813min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=961min, Fin=993min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=1003min, Fin=1104min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=843min, Fin=896min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=906min, Fin=951min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 3219
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=375min, Retard=24min
+Maintenance 2 (Train 1, Priorité=2): Début=88min, Fin=281min, Retard=115min
+Maintenance 3 (Train 2, Priorité=2): Début=405min, Fin=589min, Retard=327min
+Maintenance 4 (Train 2, Priorité=2): Début=599min, Fin=813min, Retard=435min
+Maintenance 5 (Train 3, Priorité=2): Début=843min, Fin=986min, Retard=511min
+Maintenance 6 (Train 3, Priorité=1): Début=996min, Fin=1104min, Retard=312min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=291min, Fin=375min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=88min, Fin=185min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=195min, Fin=281min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=405min, Fin=505min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=515min, Fin=589min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=599min, Fin=715min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=725min, Fin=813min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=843min, Fin=875min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=885min, Fin=986min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=996min, Fin=1049min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1059min, Fin=1104min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 3136
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=203min, Fin=375min, Retard=24min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=405min, Fin=589min, Retard=327min
+Maintenance 4 (Train 2, Priorité=2): Début=599min, Fin=813min, Retard=435min
+Maintenance 5 (Train 3, Priorité=2): Début=843min, Fin=986min, Retard=511min
+Maintenance 6 (Train 3, Priorité=1): Début=996min, Fin=1104min, Retard=312min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=203min, Fin=281min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=291min, Fin=375min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=405min, Fin=505min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=515min, Fin=589min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=599min, Fin=715min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=725min, Fin=813min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=843min, Fin=875min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=885min, Fin=986min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=996min, Fin=1049min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1059min, Fin=1104min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 2960
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=287min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=584min, Fin=768min, Retard=506min
+Maintenance 4 (Train 2, Priorité=2): Début=360min, Fin=574min, Retard=196min
+Maintenance 5 (Train 3, Priorité=2): Début=798min, Fin=941min, Retard=466min
+Maintenance 6 (Train 3, Priorité=1): Début=951min, Fin=1059min, Retard=267min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=203min, Fin=287min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=584min, Fin=684min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=694min, Fin=768min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=360min, Fin=476min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=486min, Fin=574min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=798min, Fin=830min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=840min, Fin=941min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=951min, Fin=1004min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1014min, Fin=1059min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 2657
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=287min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=360min, Fin=544min, Retard=282min
+Maintenance 4 (Train 2, Priorité=2): Début=554min, Fin=768min, Retard=390min
+Maintenance 5 (Train 3, Priorité=2): Début=798min, Fin=941min, Retard=466min
+Maintenance 6 (Train 3, Priorité=1): Début=951min, Fin=1059min, Retard=267min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 1): Début=203min, Fin=287min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 1): Début=360min, Fin=460min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=470min, Fin=544min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=554min, Fin=670min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=680min, Fin=768min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=798min, Fin=830min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=840min, Fin=941min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=951min, Fin=1004min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=1014min, Fin=1059min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 2597
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=360min, Fin=560min, Retard=298min
+Maintenance 4 (Train 2, Priorité=2): Début=360min, Fin=658min, Retard=280min
+Maintenance 5 (Train 3, Priorité=2): Début=720min, Fin=863min, Retard=388min
+Maintenance 6 (Train 3, Priorité=1): Début=873min, Fin=981min, Retard=189min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 2): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 2): Début=360min, Fin=460min, Durée=100min
+Opération 6 (Maint 3, Voie 1): Début=486min, Fin=560min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=360min, Fin=476min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=570min, Fin=658min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=720min, Fin=752min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=762min, Fin=863min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=873min, Fin=926min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=936min, Fin=981min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 2175
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=360min, Fin=544min, Retard=282min
+Maintenance 4 (Train 2, Priorité=2): Début=360min, Fin=574min, Retard=196min
+Maintenance 5 (Train 3, Priorité=2): Début=720min, Fin=863min, Retard=388min
+Maintenance 6 (Train 3, Priorité=1): Début=873min, Fin=981min, Retard=189min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 2): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 2): Début=360min, Fin=460min, Durée=100min
+Opération 6 (Maint 3, Voie 2): Début=470min, Fin=544min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=360min, Fin=476min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=486min, Fin=574min, Durée=88min
+Opération 9 (Maint 5, Voie 1): Début=720min, Fin=752min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=762min, Fin=863min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=873min, Fin=926min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=936min, Fin=981min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 1975
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=360min, Fin=544min, Retard=282min
+Maintenance 4 (Train 2, Priorité=2): Début=360min, Fin=574min, Retard=196min
+Maintenance 5 (Train 3, Priorité=2): Début=720min, Fin=939min, Retard=464min
+Maintenance 6 (Train 3, Priorité=1): Début=720min, Fin=828min, Retard=36min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 2): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 2): Début=360min, Fin=460min, Durée=100min
+Opération 6 (Maint 3, Voie 2): Début=470min, Fin=544min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=360min, Fin=476min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=486min, Fin=574min, Durée=88min
+Opération 9 (Maint 5, Voie 2): Début=720min, Fin=752min, Durée=32min
+Opération 10 (Maint 5, Voie 1): Début=838min, Fin=939min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=720min, Fin=773min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=783min, Fin=828min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 1974
+----------
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=0min, Départ=480min
+Train 2: Arrivée=360min, Départ=840min
+Train 3: Arrivée=720min, Départ=1200min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=0min, Fin=172min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=0min, Fin=193min, Retard=27min
+Maintenance 3 (Train 2, Priorité=2): Début=360min, Fin=544min, Retard=282min
+Maintenance 4 (Train 2, Priorité=2): Début=360min, Fin=574min, Retard=196min
+Maintenance 5 (Train 3, Priorité=2): Début=720min, Fin=863min, Retard=388min
+Maintenance 6 (Train 3, Priorité=1): Début=720min, Fin=828min, Retard=36min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 2): Début=0min, Fin=78min, Durée=78min
+Opération 2 (Maint 1, Voie 2): Début=88min, Fin=172min, Durée=84min
+Opération 3 (Maint 2, Voie 1): Début=0min, Fin=97min, Durée=97min
+Opération 4 (Maint 2, Voie 1): Début=107min, Fin=193min, Durée=86min
+Opération 5 (Maint 3, Voie 2): Début=360min, Fin=460min, Durée=100min
+Opération 6 (Maint 3, Voie 2): Début=470min, Fin=544min, Durée=74min
+Opération 7 (Maint 4, Voie 1): Début=360min, Fin=476min, Durée=116min
+Opération 8 (Maint 4, Voie 1): Début=486min, Fin=574min, Durée=88min
+Opération 9 (Maint 5, Voie 2): Début=720min, Fin=752min, Durée=32min
+Opération 10 (Maint 5, Voie 2): Début=762min, Fin=863min, Durée=101min
+Opération 11 (Maint 6, Voie 1): Début=720min, Fin=773min, Durée=53min
+Opération 12 (Maint 6, Voie 1): Début=783min, Fin=828min, Durée=45min
+
+--- Objectif ---
+Retard pondéré total: 1822
+----------
+==========
+Finished in 4s 795msec.

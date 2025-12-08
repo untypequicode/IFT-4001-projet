@@ -1,0 +1,34 @@
+\section{Introduction}
+
+La planification de maintenance ferroviaire représente un défi opérationnel majeur pour les entreprises de transport, notamment la SNCF. Avec des centaines de trains nécessitant des maintenances régulières, des fenêtres temporelles strictes, et des ressources limitées (voies, techniciens, équipements), ce problème présente toutes les caractéristiques d'un problème d'optimisation combinatoire complexe.
+
+Ce projet s'intéresse à la modélisation de ce problème comme un \textbf{Resource-Constrained Project Scheduling Problem (RCPSP)} avec des contraintes spécifiques au domaine ferroviaire : fenêtres temporelles strictes, temps de setup variables selon le contexte, et ressources multiples avec capacités simultanées.
+
+\subsection{Problématique}
+
+Le problème consiste à planifier les opérations de maintenance sur un horizon de 24 heures en respectant :
+\begin{itemize}
+    \item Les fenêtres temporelles d'arrivée et de départ des trains
+    \item Les contraintes de précédence entre opérations
+    \item Les capacités limitées des ressources (voies, techniciens, équipements)
+    \item Les temps de setup entre opérations et entre trains différents
+    \item Les compatibilités entre voies et équipements
+\end{itemize}
+
+L'objectif est de minimiser le retard pondéré par priorité des maintenances, où les maintenances urgentes ont un poids plus élevé que les préventives.
+
+\subsection{Objectifs}
+
+Les objectifs de ce projet sont :
+\begin{enumerate}
+    \item Modéliser le problème de planification de maintenance ferroviaire comme un RCPSP avec contraintes temporelles
+    \item Développer deux modèles MiniZinc distincts avec des approches de modélisation différentes
+    \item Comparer les performances des deux modèles sur deux solveurs (Chuffed et Gecode) sur différentes instances
+    \item Identifier les limites de résolubilité selon la complexité des instances
+    \item \textbf{Découvrir} l'impact de différentes modélisations sur la performance des solveurs et comparer le comportement de Chuffed et Gecode
+\end{enumerate}
+
+\subsection{Structure du rapport}
+
+Ce rapport est organisé comme suit : la Section~\ref{sec:probleme} présente la description formelle du problème, la Section~\ref{sec:approche} décrit les deux modèles développés, la Section~\ref{sec:protocole} présente le protocole expérimental, la Section~\ref{sec:resultats} expose les résultats expérimentaux, la Section~\ref{sec:discussion} en discute les implications, et la Section~\ref{sec:conclusion} conclut le travail.
+

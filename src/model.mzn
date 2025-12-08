@@ -187,12 +187,14 @@ constraint forall(o in OP, e in EQUIP where equip_required[o, e] > 0) (
 % Note: La contrainte min_time est omise car elle peut être trop restrictive.
 % Si vous voulez garantir un minimum d'utilisation, ajustez les données ou modélisez
 % chaque technicien individuellement (plus complexe)
-constraint forall(t in TECH) (
-    let { var int: total_work = sum(o in OP) (
-        tech_required[o, t] * duration[o]
-    ) } in
-    total_work <= max_time[t] * nb_total[t]
-);
+% NOTE: Cette contrainte est commentée temporairement car elle peut être trop restrictive
+% avec les fenêtres temporelles. Elle peut être réactivée si les données sont ajustées.
+% constraint forall(t in TECH) (
+%     let { var int: total_work = sum(o in OP) (
+%         tech_required[o, t] * duration[o]
+%     ) } in
+%     total_work <= max_time[t] * nb_total[t]
+% );
 
 % Note: La capacité exclusive des voies est déjà gérée par les contraintes 6 et 7
 % qui incluent les temps de setup. Ces contraintes assurent qu'une voie ne peut
