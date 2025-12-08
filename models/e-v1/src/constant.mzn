@@ -122,5 +122,14 @@ array[OType] of VType: OVType;                                                  
 
 array[MType, OType] of bool: MOperation;                                                   % Operations nécessaire par maintenance
 array[TType, MType] of int: MPeriode;                                                      % Periodicite d'une maintenance par type de train
-array[TType, MType] of ..0: MDerniereFois;                                                 % Derniere execution d'une maintenance par type de train
-array[TId, MType] of 0..H: MUrgence;                                                       % Urgence d'une maintenance par train
+array[TId, MType] of ..0: MDerniereFois;                                                   % Derniere execution d'une maintenance par type de train
+array[TId, MType] of int: MUrgence = array2d(TId, MType, [                                 % Urgence d'une maintenance par train
+    let {
+        TType: type_train = min(tt in TType where exists(tr in ModTrains(tt))(tr == t))(tt);
+        int: date_butoir = MDerniereFois[t, m] + MPeriode[type_train, m];
+    } in
+    if MPeriode[type_train, m] == 0 then H 
+    else date_butoir 
+    endif
+    | t in TId, m in MType
+]);
