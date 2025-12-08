@@ -1,5 +1,4 @@
 include "core/types.mzn";
-include "computed.mzn";
 
 % ==========================================================================================
 % PARAMÈTRES UTILISATEUR - À DÉFINIR DANS LE FICHIER .dzn
@@ -53,7 +52,6 @@ array[1..SDivision, SType] of 1..SDTemps: STempsMax;                            
 array[GType] of int: GTemps;                                                               % Temps de la distance entre la gare et le centre de maintenance (minutes)
 1..H: GPeriode;                                                                            % Periodicité des trajets (minutes)
 
-% Note: On utilise 1..card(TId) au lieu de TId pour permettre l'indexation numérique
 array[1..sum(TNb), 1..GP] of GType: GTrajetGare;                                           % Gare du trajet (par train et période)
 array[1..sum(TNb), 1..GP] of GSens: GTrajetSens;                                           % Sens du trajet (par train et période)
 
