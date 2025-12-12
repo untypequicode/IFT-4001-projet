@@ -1,0 +1,8 @@
+﻿
+￼
+Running model.mzn, large_02.dzn
+14s 79msec
+
+=====UNSATISFIABLE=====
+Finished in 14s 79msec.
+

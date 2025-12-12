@@ -1,0 +1,53 @@
+\section{Résultats}
+\label{sec:resultats}
+
+Cette section présente les résultats expérimentaux de la comparaison des deux modèles sur Chuffed et Gecode.
+
+\subsection{Performance globale}
+
+Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour chaque combinaison instance-modèle-solveur. Les timeouts (dépassement du temps limite de 300 secondes) sont indiqués par \textbf{TO}.
+
+\begin{table}[h]
+\centering
+\caption{Temps de résolution (secondes) pour chaque combinaison instance-modèle-solveur}
+\label{tab:resultats_temps}
+\begin{tabular}{lcccc}
+\toprule
+Instance & Modèle 1 & Modèle 1 & Modèle 2 & Modèle 2 \\
+         & (Chuffed) & (Gecode) & (Chuffed) & (Gecode) \\
+\midrule
+small\_01 & [À compléter] & [À compléter] & 0.6 & 0.3 \\
+small\_02 & [À compléter] & [À compléter] & 1.9 & 4.8 \\
+medium\_01 & [À compléter] & [À compléter] & \textbf{UNSAT} (1.5s) & \textbf{UNSAT} (1.4s) \\
+medium\_02 & [À compléter] & [À compléter] & \textbf{UNSAT} (2.6s) & \textbf{TO} \\
+medium\_03 & [À compléter] & [À compléter] & \textbf{UNSAT} (4.0s) & \textbf{TO} \\
+large\_01 & [À compléter] & [À compléter] & \textbf{UNSAT} (5.9s) & \textbf{UNSAT} (26.5s) \\
+large\_02 & [À compléter] & [À compléter] & \textbf{UNSAT} (14.1s) & \textbf{UNSAT} (12.8s) \\
+large\_03 & [À compléter] & [À compléter] & \textbf{UNSAT} (13.5s) & \textbf{UNSAT} (12.6s) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Note :} TO = Timeout (> 300s), UNSAT = Instance insatisfiable (aucune solution n'existe). Les valeurs entre parenthèses indiquent le temps nécessaire pour prouver l'insatisfiabilité.
+
+\subsection{Comparaison des modèles}
+
+% Analyse comparative des deux modèles :
+% - Quel modèle est le plus rapide en moyenne ?
+% - Y a-t-il des instances où un modèle excelle et l'autre échoue ?
+% - Impact de la modélisation sur la performance
+
+\subsection{Comparaison des solveurs}
+
+% Analyse comparative de Chuffed vs Gecode :
+% - Pour chaque modèle, quel solveur est le plus performant ?
+% - Y a-t-il des différences selon le modèle utilisé ?
+% - Taux de succès par solveur et par modèle
+
+\subsection{Observations principales}
+
+% Observations clés :
+% - À partir de quelle taille les solveurs commencent-ils à échouer ?
+% - Y a-t-il des patterns dans les instances difficiles ?
+% - Impact de la modélisation sur la résolubilité
+

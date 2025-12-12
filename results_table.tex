@@ -1,0 +1,22 @@
+\begin{table}[h]
+\centering
+\caption{Temps de résolution (secondes) pour chaque combinaison instance-modèle-solveur}
+\label{tab:resultats_temps}
+\begin{tabular}{lcccc}
+\toprule
+Instance & Modèle 1 & Modèle 1 & Modèle 2 & Modèle 2 \\
+         & (Chuffed) & (Gecode) & (Chuffed) & (Gecode) \\
+\midrule
+large\_01 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{UNSAT} \\
+large\_02 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{UNSAT} \\
+large\_03 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{UNSAT} \\
+medium\_01 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{UNSAT} \\
+medium\_02 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{TO} \\
+medium\_03 & UNKNOWN & UNKNOWN & \textbf{UNSAT} & \textbf{TO} \\
+small\_01 & UNKNOWN & UNKNOWN & 0.6 & 0.3 \\
+small\_02 & UNKNOWN & UNKNOWN & 1.9 & 4.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Note :} TO = Timeout (> 300s), UNSAT = Instance insatisfiable. Les valeurs sont en secondes.
