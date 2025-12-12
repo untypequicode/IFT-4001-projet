@@ -1,5 +1,3 @@
-% Définit les types énumérés utilisés dans le modèle
-
 enum TType;                     % Types de train (TER, TGV, etc.)
 enum TId;                       % Identifiants des trains
 

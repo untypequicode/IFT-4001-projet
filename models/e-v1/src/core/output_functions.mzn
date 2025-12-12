@@ -1,5 +1,3 @@
-% Fonctions pour l'affichage formaté et l'export des résultats
-
 /**
  * @brief Convertit un booléen en symbole
  * @param val Valeur booléenne

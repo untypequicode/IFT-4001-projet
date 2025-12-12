@@ -1,11 +1,6 @@
-% ==============================================================================
-% MAIN.MZN
-% ==============================================================================
-
 include "core/output_functions.mzn";
 include "constant.mzn";
 
-% Inclusions des contraintes
 include "constraints/maintenances.mzn";
 include "constraints/operations.mzn";
 include "constraints/trajets.mzn";

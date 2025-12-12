@@ -1,5 +1,4 @@
 include "../constant.mzn";
-% Gère le planning et le temps de travail des techniciens
 
 array[1..SNb, 1..SDTemps] of var bool: STravail;  % Planning binaire des techniciens (true = travail)
 array[1..SNb, 1..SDivision] of var 0..SDTemps: STemps;  % Temps total travaillé par technicien et par division
