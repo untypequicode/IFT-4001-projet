@@ -1,0 +1,103 @@
+% Données générées automatiquement depuis configuration JSON
+
+% === PÉRIODES ET UNITÉS ===
+J = 1;
+PJ = 48;
+PSetup = 1;
+PNettoyage = 2;
+Preparation = 2;
+PTransfert = 4;
+EtageMax = 1;
+
+% === VOIES ===
+VTNb = 2;
+VNbT = [2, 2];
+VEtage = [1, 1, 1, 1];
+
+% === ÉQUIPEMENTS ===
+ENb = 2;
+ECapacite = [3, 1];
+EQuantite = [5, 6];
+
+% === TECHNICIENS ===
+STNb = 2;
+SNbT = [3, 3];
+STTempsMin = [28, 28];
+STTempsMax = [36, 36];
+
+% === TRAINS ===
+TTNb = 2;
+TNbT = [3, 3];
+TEtage = [1, 1];
+
+% === GARES ===
+GNb = 2;
+GTemps = [16, 4];
+
+% === TRAJETS ===
+TTrajetGare = [|
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2 |
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+|];
+
+TTrajetSens = [|
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour, retour, retour, retour, retour |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare
+|];
+
+% === OPÉRATIONS ===
+OTNb = 3;
+OEquipement = [|
+  true, false |
+  false, true |
+  false, true
+|];
+
+OTemps = [|
+  5 |
+  2 |
+  11
+|];
+
+ODependance = [|
+  false, false, false |
+  false, false, false |
+  false, false, false
+|];
+
+OShift = [1, 2, 2];
+
+OVoie = [|
+  false, false |
+  true, true |
+  false, false
+|];
+
+% === MAINTENANCES ===
+MTNb = 2;
+MOperation = [|
+  true, false, false |
+  false, true, false
+|];
+
+MTPeriode = [|
+  17520, 17520 |
+  336, 17520
+|];
+
+MDerniereFois = [|
+  -1074, -247 |
+  -246, -511 |
+  -24, -1418 |
+  -373, -1384 |
+  -683, -127 |
+  -1355, -378
+|];

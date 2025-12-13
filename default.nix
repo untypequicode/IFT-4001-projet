@@ -15,10 +15,13 @@ pkgs.mkShell {
       just
       python313Packages.rope
       ruff
+      python313
     ]
     ++ (with unstable.buildPackages; [
       texliveFull
       texlab
+      minizinc
+      minizincide
     ]);
   shellHook = ''
     zsh
