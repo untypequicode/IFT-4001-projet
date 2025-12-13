@@ -1,15 +1,15 @@
 include "../constant.mzn";
 
-% ==============================================================================
+% ================================================
 % Variables de Décision - Techniciens
-% ==============================================================================
+% ================================================
 
-array[1..SNb, 1..P] of var bool: varSTache;        % Technicien en tâche.
-array[1..SNb, 1..P] of var bool: varSTravail;      % Technicien en travail.
+array[1..SNb, 1..P] of var bool: varSTache;       % Technicien en tâche.
+array[1..SNb, 1..P] of var bool: varSTravail;     % Technicien en travail.
 
-% ==============================================================================
+% ================================================
 % Contrainte 1 : Ubiquité des Techniciens
-% ==============================================================================
+% ================================================
 
 constraint forall(s in 1..SNb, p in 1..P) (
     sum(i in 1..MInstanceNb, o in 1..OTNb)(
@@ -20,12 +20,12 @@ constraint forall(s in 1..SNb, p in 1..P) (
             p > varOStart[i, o] /\
             p <= varOStart[i, o] + varODuree[i, o]
         )
-    ) <= 1                                          % Un seul travail par technicien.
+    ) <= 1                                        % Un seul travail par technicien.
 );
 
-% ==============================================================================
+% ================================================
 % Contrainte 2 : Activation des Statuts
-% ==============================================================================
+% ================================================
 
 constraint forall(s in 1..SNb, p in 1..P) (
     varSTache[s, p] <-> exists(i in 1..MInstanceNb, o in 1..OTNb)(
@@ -34,24 +34,24 @@ constraint forall(s in 1..SNb, p in 1..P) (
         varODuree[i, o] > 0 /\
         p > varOStart[i, o] /\
         p <= varOStart[i, o] + varODuree[i, o]
-    )                                               % Tâche active si opération cours.
+    )                                             % Tâche active si opération cours.
 );
 
 constraint forall(s in 1..SNb, p in 1..P) (
-    varSTache[s, p] -> varSTravail[s, p]            % Tâche implique travail.
+    varSTache[s, p] -> varSTravail[s, p]          % Tâche implique travail.
 );
 
 constraint forall(i in 1..MInstanceNb, o in 1..OTNb) (
     if varMActive[i] /\ varOAffectation[i, o] > 0 then
-        STRef[varOAffectation[i, o]] == OShift[o]  % Type shift coïncide.
+        STRef[varOAffectation[i, o]] == OShift[o] % Type shift coïncide.
     else true endif
 );
 
-% ==============================================================================
+% ================================================
 % Contrainte 3 : Gestion Journalière
-% ==============================================================================
+% ================================================
 
-int: NbJours = ceil(P / PJ);                       % Nombre de jours.
+int: NbJours = ceil(P / PJ);                      % Nombre de jours.
 
 constraint forall(s in 1..SNb, j in 1..NbJours) (
     let {
