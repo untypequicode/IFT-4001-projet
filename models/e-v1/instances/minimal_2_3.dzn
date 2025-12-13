@@ -14,7 +14,7 @@ VEtage = [1, 1, 1, 1];
 
 % === ÉQUIPEMENTS ===
 ENb = 2;
-ECapacite = [3, 4];
+ECapacite = [4, 1];
 EQuantite = [4, 4];
 VEDisponible = [|
   true, true |
@@ -26,8 +26,8 @@ VEDisponible = [|
 % === TECHNICIENS ===
 STNb = 2;
 SNbT = [3, 3];
-STTempsMin = [28, 24];
-STTempsMax = [36, 40];
+STTempsMin = [24, 24];
+STTempsMax = [40, 32];
 
 % === TRAINS ===
 TTNb = 2;
@@ -36,51 +36,51 @@ TEtage = [1, 1];
 
 % === GARES ===
 GNb = 2;
-GTemps = [2, 1];
+GTemps = [1, 1];
 
 % === TRAJETS ===
 TTrajetGare = [|
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 |];
 
 TTrajetSens = [|
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare
 |];
 
 % === OPÉRATIONS ===
 OTNb = 3;
 OEquipement = [|
   false, false |
-  false, true |
+  true, false |
   false, true
 |];
 
 OTemps = [|
-  3 |
   4 |
-  4
+  2 |
+  3
 |];
 
 ODependance = [|
   false, false, false |
   true, false, false |
-  false, true, false
+  false, false, false
 |];
 
-OShift = [2, 1, 2];
+OShift = [2, 2, 2];
 
 OVoie = [|
-  true, false |
+  true, true |
   false, false |
   false, false
 |];
@@ -88,20 +88,20 @@ OVoie = [|
 % === MAINTENANCES ===
 MTNb = 2;
 MOperation = [|
-  true, true, true |
-  true, true, false
+  false, true, true |
+  true, false, false
 |];
 
 MTPeriode = [|
-  infinity, 17520 |
-  0, 0
+  8640, 17520 |
+  336, 17520
 |];
 
 MDerniereFois = [|
-  -631, -1331 |
-  -294, -281 |
-  -891, -934 |
-  -473, -472 |
-  -313, -258 |
-  -355, -548
+  -547, -106 |
+  -77, -164 |
+  -918, -899 |
+  -857, -353 |
+  -294, -72 |
+  -134, -718
 |];
