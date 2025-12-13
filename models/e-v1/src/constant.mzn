@@ -1,54 +1,54 @@
-include "core/types.mzn";
+include "generic.mzn";
 
 % Paramètres à définir par l'utilisateur dans le fichier .dzn
 
-% Horizon et unités
-int: H;                 % Horizon de planification (minutes)
-int: P;                 % Période de temps (minutes)
-int: Setup;             % Temps de setup entre opérations (minutes)
-int: Deplacement;       % Temps de déplacement entre voies (minutes)
-int: Nettoyage;         % Temps de nettoyage avant départ (minutes)
-int: Preparation;       % Temps de préparation avant service (minutes)
-int: Transfert;         % Temps de transfert train de remplacement (minutes)
-
-% Trains
-array[TType] of int: TNb;           % Nombre de trains par type
-array[1..sum(TNb)] of TId: T;       % Liste des trains
-array[TType] of Plexite: TDuplex;   % Plexité par type de train
+% Périodes et unités
+1..: J;                                        % Nombre de jours
+1..1440: PJ;                                   % Période par jour
+1..: PSetup;                                   % Temps de setup entre opérations (periodes)
+1..: PVoie;                                    % Temps entre deux trains sur une même voie (periodes)
+1..: EtageMax;                                 % Nombre maximum d'etage pour un train
 
 % Voies
-array[VType] of int: VNb;           % Nombre de voies par type
-array[1..sum(VNb)] of VId: V;       % Liste des voies
-array[VType] of Plexite: VDuplex;   % Plexité par type de voie
+1..: VTNb;                                     % Nombre de type de voies
+array[1..VTNb] of 1..: VNbT;                   % Nombre de voies par type
+array[1..VNb] of 1..EtageMax: VEtage;          % Nombre d'étage autorisé par type de voie
 
 % Equipements
-array[EType] of int: ECapacite;     % Capacité d'un équipement
-array[EType] of int: EQuantite;     % Quantité d'un équipement
+1..: ENb;                                      % Nombre d'équipements
+array[1..ENb] of 1..: ECapacite;               % Capacité d'un équipement
+array[1..ENb] of 1..: EQuantite;               % Quantité d'un équipement
+array[1..VNb, 1..ENb] of bool: VEDisponible;   % Equipement disponible par voie
 
 % Techniciens (shifts)
-int: SDivision;                                     % Nombre de divisions par jour
-int: SDCalibration;                                 % Début de la première division
-array[1..SDivision, SType] of int: SCapacite;       % Capacité par division et type
-array[1..SDivision, SType] of 0..SDTemps: STempsMin;  % Temps minimal de travail
-array[1..SDivision, SType] of 0..SDTemps: STempsMax;  % Temps maximal de travail
+1..: STNb;                                     % Nombre de type de techniciens
+array[1..STNb] of 1..: SNbT;                   % Nombre de techniciens par type par division
+array[1..STNb] of 0..PJ: STTempsMin;           % Temps minimal de travail par type de technicien (periodes)
+array[1..STNb] of 0..PJ: STTempsMax;           % Temps maximal de travail par type de technicien (periodes)
 
-% Trajets & Gares
-array[GType] of int: GTemps;        % Temps depuis gare vers centre (minutes)
-1..H: GPeriode;                     % Périodicité des trajets (minutes)
+% Trains & Trajets & Gares
+1..: TTNb;                                     % Nombre de type de trains
+array[1..TTNb] of 1..: TNbT;                   % Nombre de trains par type
+array[1..TTNb] of 1..EtageMax: TEtage;         % Nombre d'étage par type de train
 
-array[1..sum(TNb), 1..GP] of GType: GTrajetGare;  % Gare par train et période
-array[1..sum(TNb), 1..GP] of GSens: GTrajetSens;  % Sens par train et période
+1..: GNb;                                      % Nombre de gares
+array[1..GNb] of 1..P: GTemps;                 % Temps de la gare vers le centre de maintenance (periodes)
+
+array[1..TNb, 1..P] of 0..GNb: TTrajetGare;    % Gare actuelle pour un train à une periode précise (0 => est à une gare mais peut se déplacer dans une autre gare ou le centre de maintenance, mais il peut aussi être dans une gare loin du centre de maintenance)
+array[1..TNb, 1..P] of GSens: TTrajetSens;     % Sens du train par rapport au centre de maintenance par periode
 
 % Maintenances & Opérations
-array[OType, EType] of bool: OEquipement;      % Équipement nécessaire par opération
-array[OType, Plexite] of int: OTemps;          % Temps par opération et plexité
-array[OType, OType] of bool: ODependance;      % Dépendances entre opérations
-array[OType] of int: OShift;                   % Shifts nécessaires par opération
-array[OType] of VType: OVType;                 % Type de voie par opération
+1..: MTNb;                                     % Nombre de type de maintenances
+1..: OTNb;                                     % Nombre de type d'opérations
 
-array[MType, OType] of bool: MOperation;       % Opérations par maintenance
-array[TType, MType] of int: MPeriode;          % Périodicité par type de train (minutes)
-array[TId, MType] of ..0: MDerniereFois;       % Dernière exécution (timestamp négatif ou 0)
+array[1..OTNb, 1..ENb] of bool: OEquipement;   % Équipement nécessaire par opération
+array[1..OTNb, 1..EtageMax] of 1..P: OTemps;   % Temps par opération et nombre d'étage
+array[1..OTNb, 1..OTNb] of bool: ODependance;  % Dépendances entre opérations
+array[1..OTNb] of 1..STNb: OShift;             % Shifts nécessaires par opération
+array[1..OTNb, 1..VTNb] of bool: OVoie;        % Voie nécessaire par opération
 
-% Inclut les constantes calculées automatiquement
+array[1..MTNb, 1..OTNb] of bool: MOperation;   % Opérations nécessaires par maintenance
+array[1..TTNb, 1..MTNb] of 0..: MTPeriode;     % Périodicité d'une maintenance par type de train (periodes) (0 => à chaque visite au centre de maintenance) (infinity => pas necessaire pour un type de train)
+array[1..TNb, 1..MTNb] of ..0: MDerniereFois;  % Denière exécution d'une maintenance par train
+
 include "computed.mzn";

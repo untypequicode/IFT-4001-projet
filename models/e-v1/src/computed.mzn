@@ -1,85 +1,277 @@
-include "core/utils.mzn";
 include "generic.mzn";
 include "constant.mzn";
 
 % Calcule automatiquement les constantes dérivées des paramètres utilisateur
 
-% Périodes et horizon
-int: PNb = H div P;                         % Nombre de périodes
-int: PJour = H div JOUR;                    % Nombre de jours
-int: GP = GPeriode div P;                   % Périodes par cycle de trajet
-
-% Trains
-int: NbTrains = card(TId);                  % Nombre total de trains
-array[TType] of int: TOffsets = calculer_decalages(TNb);  % Offsets par type
-
-function array[int] of TId: ModTrains(TType: t) =  % Trains d'un type donné
-    extraire_sous_tableau(T, TOffsets, TNb, t);
+% Périodes et unités
+1..: P = J * PJ;
 
 % Voies
-int: NbVoies = card(VId);                   % Nombre total de voies
-array[VType] of int: VOffsets = calculer_decalages(VNb);  % Offsets par type
-
-function array[int] of VId: ModVoies(VType: v) =  % Voies d'un type donné
-    extraire_sous_tableau(V, VOffsets, VNb, v);
+1..: VNb = sum(VNbT);
+array[1..VNb] of 1..VTNb: VRef;
+VRef = [
+  v
+  | v in 1..VTNb, _ in 1..VNbT[v]
+];
 
 % Techniciens (shifts)
-int: SDTemps = JOUR div SDivision;          % Temps par division
-array[1..SDivision] of int: SDNb = [sum(t in SType)(SCapacite[d, t]) | d in 1..SDivision];  % Techniciens par division
-int: SNb = sum(SDNb);                       % Nombre total de techniciens
-array[1..SDivision, SType] of 1..SNb: SOffsets = calculer_decalages_2d(SCapacite);  % Offsets par division et type
+1..: SNb = sum(SNbT);
+array[1..SNb] of 1..STNb: STRef;
+STRef = [
+  s
+  | s in 1..STNb, _ in 1..SNbT[s]
+];
 
-% Trajets & Gares (présence et intervalles)
-array[1..NbTrains, 1..GP] of bool: GPresent = array2d(1..NbTrains, 1..GP, [  % Matrice de présence en gare
-    if GTrajetSens[n, p] != gare then false else
-      verifier_sequence_gauche(GTrajetSens, n, p, gare, retour, true, true) /\
-      verifier_sequence_droite(GTrajetSens, n, p, gare, aller,  true, true)
-    endif
-    | n in 1..NbTrains, p in 1..GP
+% Trains & Trajets & Gares
+1..: TNb = sum(TNbT);
+array[1..TNb] of 1..TTNb: TTRef;
+TTRef = [
+  t
+  | t in 1..TTNb, _ in 1..TNbT[t]
+];
+
+array[1..TNb, 1..P] of bool: TPresent;
+TPresent = array2d(1..TNb, 1..P, [
+  TTrajetSens[n, p] == gare /\
+  (
+    exists(k in 1..p-1)(
+      TTrajetSens[n, k] == retour /\
+      forall(j in k+1..p-1)(TTrajetSens[n, j] == gare)
+    ) \/
+    forall(k in 1..p-1)(
+      TTrajetSens[n, k] == gare
+    )
+  ) /\
+  (
+    exists(k in p+1..P)(
+      TTrajetSens[n, k] == aller /\
+      forall(j in p+1..k-1)(TTrajetSens[n, j] == gare)
+    ) \/
+    forall(k in p+1..P)(
+      TTrajetSens[n, k] == gare
+    )
+  )
+  | n in 1..TNb, p in 1..P
 ]);
 
-array[1..NbTrains] of int: GNbIntervalles = [  % Nombre d'intervalles par train
-    sum(p in 1..GP)(GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1]))
-    | n in 1..NbTrains
+array[1..TNb] of 0..: TIntervallesNb;
+TIntervallesNb = [
+  sum(p in 1..P)(TPresent[n, p] /\ (p == 1 \/ not TPresent[n, p-1]))
+  | n in 1..TNb
 ];
 
-array[1..NbTrains] of int: GOffsetsIntervalles = calculer_decalages(GNbIntervalles);  % Offsets des intervalles
-int: GTotalIntervalles = sum(GNbIntervalles);  % Total d'intervalles
+0..: TIntervallesNbTotal;
+TIntervallesNbTotal = sum(TIntervallesNb);
 
-array[1..GTotalIntervalles] of 1..GP: GIntervallesDebut = [  % Début de chaque intervalle
-    p
-    | n in 1..NbTrains, p in 1..GP
-    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+array[1..TIntervallesNbTotal] of 1..TNb: TIntervallesTRef;
+TIntervallesTRef = [
+  n
+  | n in 1..TNb, p in 1..P
+    where TPresent[n, p] /\ (p == 1 \/ not TPresent[n, p-1])
 ];
 
-array[1..GTotalIntervalles] of 1..GP: GIntervallesFin = [  % Fin de chaque intervalle
-    min(k in p..GP where (k == GP \/ not GPresent[n, k+1]))(k)
-    | n in 1..NbTrains, p in 1..GP
-    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+array[1..TNb] of 1..max(1, TIntervallesNbTotal): TIntervallesDecaladeT;
+TIntervallesDecaladeT = [
+  1 + sum(
+    [
+      TIntervallesNb[j]
+      | j in index_set(TIntervallesNb) where j < k
+    ]
+  )
+  | k in index_set(TIntervallesNb)
 ];
 
-array[1..GTotalIntervalles] of GType: GIntervallesTypeDebut = [  % Type de gare au début
-    GTrajetGare[n, p]
-    | n in 1..NbTrains, p in 1..GP
-    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+array[1..TIntervallesNbTotal] of 1..P: TIntervallesPDebut;
+TIntervallesPDebut = [
+  p
+  | n in 1..TNb, p in 1..P
+    where TPresent[n, p] /\ (p == 1 \/ not TPresent[n, p-1])
 ];
 
-array[1..GTotalIntervalles] of GType: GIntervallesTypeFin = [  % Type de gare à la fin
-    let {
-        int: fin = min(k in p..GP where (k == GP \/ not GPresent[n, k+1]))(k)
-    } in GTrajetGare[n, fin]
-    | n in 1..NbTrains, p in 1..GP
-    where GPresent[n, p] /\ (p == 1 \/ not GPresent[n, p-1])
+array[1..TIntervallesNbTotal] of 1..P: TIntervallesPFin;
+TIntervallesPFin = [
+  p
+  | n in 1..TNb, p in 1..P
+    where TPresent[n, p] /\ (p == P \/ not TPresent[n, p+1])
 ];
 
-% Maintenances (urgences)
-array[TId, MType] of int: MUrgence = array2d(TId, MType, [  % Date butoir par maintenance
-    let {
-        TType: type_train = min(tt in TType where exists(tr in ModTrains(tt))(tr == t))(tt);
-        int: date_butoir = MDerniereFois[t, m] + MPeriode[type_train, m];
-    } in
-    if MPeriode[type_train, m] == 0 then H
-    else date_butoir
-    endif
-    | t in TId, m in MType
+% --- CORRECTION TYPE ERROR ICI ---
+% Utilisation de max/min sur des listes pour garantir le typage 'int' (constant)
+
+array[1..TIntervallesNbTotal] of 0..GNb: TIntervallesGDebut;
+TIntervallesGDebut = [
+  let {
+      int: n = TIntervallesTRef[i];
+      int: p_debut = TIntervallesPDebut[i];
+      % On cherche le max index k <= p_debut où la gare est connue.
+      % [0] est ajouté pour éviter un crash si la liste est vide (max renverra 0)
+      int: best_k = max([0] ++ [ k | k in 1..p_debut where TTrajetGare[n, k] > 0 ]);
+  } in
+  if best_k > 0 then TTrajetGare[n, best_k] else 0 endif
+  | i in 1..TIntervallesNbTotal
+];
+
+array[1..TIntervallesNbTotal] of 0..GNb: TIntervallesGFin;
+TIntervallesGFin = [
+  let {
+      int: n = TIntervallesTRef[i];
+      int: p_fin = TIntervallesPFin[i];
+      % On cherche le min index k >= p_fin où la gare est connue.
+      % [P+1] est ajouté comme sentinelle (infini) si la liste est vide
+      int: best_k = min([P+1] ++ [ k | k in p_fin..P where TTrajetGare[n, k] > 0 ]);
+  } in
+  if best_k <= P then TTrajetGare[n, best_k] else 0 endif
+  | i in 1..TIntervallesNbTotal
+];
+
+% --- FIN CORRECTION ---
+
+% Maintenances & Opérations
+array[1..MTNb] of 0..: MONb;
+MONb = [
+  sum(o in 1..OTNb)(
+    if MOperation[m, o] then 1 else 0 endif
+  )
+  | m in 1..MTNb
+];
+
+array[1..MTNb, 1..EtageMax] of 0..: MTempsMin;
+MTempsMin = array2d(1..MTNb, 1..EtageMax, [
+  PSetup * max(0, MONb[m] - 1) +
+  sum(o in 1..OTNb)(
+    OTemps[o, e]
+  )
+  | m in 1..MTNb, e in 1..EtageMax
 ]);
+
+array[1..TTNb] of 0..: TTMTempsMin;
+TTMTempsMin = [
+  min(m in 1..MTNb where MTPeriode[t, m] != infinity)(
+    MTempsMin[m, TEtage[t]]
+  )
+  | t in 1..TTNb
+];
+
+array[1..TIntervallesNbTotal] of bool: TIntervallesPossible;
+TIntervallesPossible = [
+  (TIntervallesPFin[i] - (if TIntervallesGFin[i] > 0 then GTemps[TIntervallesGFin[i]] else 0 endif)) - 
+  (TIntervallesPDebut[i] + (if TIntervallesGDebut[i] > 0 then GTemps[TIntervallesGDebut[i]] else 0 endif)) - 
+  TTMTempsMin[TTRef[TIntervallesTRef[i]]] > 0
+  | i in 1..TIntervallesNbTotal
+];
+
+0..TIntervallesNbTotal: TIntervallesPossibleNb;
+TIntervallesPossibleNb = sum(i in 1..TIntervallesNbTotal)(
+  if TIntervallesPossible[i] then 1 else 0 endif
+);
+
+array[1..TIntervallesPossibleNb] of 1..TNb: TIntervallesTRefPossible;
+TIntervallesTRefPossible = [
+  TIntervallesTRef[i]
+  | i in 1..TIntervallesNbTotal where TIntervallesPossible[i]
+];
+
+array[1..TIntervallesPossibleNb] of int: TIntervallesPDebutPossible;
+TIntervallesPDebutPossible = [
+  TIntervallesPDebut[i] + (if TIntervallesGDebut[i] > 0 then GTemps[TIntervallesGDebut[i]] else 0 endif)
+  | i in 1..TIntervallesNbTotal where TIntervallesPossible[i]
+];
+
+array[1..TIntervallesPossibleNb] of int: TIntervallesPFinPossible;
+TIntervallesPFinPossible = [
+  TIntervallesPFin[i] - (if TIntervallesGFin[i] > 0 then GTemps[TIntervallesGFin[i]] else 0 endif)
+  | i in 1..TIntervallesNbTotal where TIntervallesPossible[i]
+];
+
+array[1..TIntervallesPossibleNb] of 0..GNb: TIntervallesGDebutPossible;
+TIntervallesGDebutPossible = [
+  TIntervallesGDebut[i]
+  | i in 1..TIntervallesNbTotal where TIntervallesPossible[i]
+];
+
+array[1..TIntervallesPossibleNb] of 0..GNb: TIntervallesGFinPossible;
+TIntervallesGFinPossible = [
+  TIntervallesGFin[i]
+  | i in 1..TIntervallesNbTotal where TIntervallesPossible[i]
+];
+
+
+array[1..TTNb] of 1..: MTNbT;
+MTNbT = [
+  sum(m in 1..MTNb)(
+    if MTPeriode[t, m] == infinity then 0 else 1 endif
+  )
+  | t in 1..TTNb
+];
+
+array[1..TNb] of 1..: MNbT;
+MNbT = [
+  MTNbT[TTRef[t]]
+  | t in 1..TNb
+];
+
+1..: MNb;
+MNb = sum(MNbT);
+
+array[1..MNb] of 1..TNb: MRefT;
+MRefT = [
+  t
+  | t in 1..TNb, _ in 1..MNbT[t]
+];
+
+array[1..MNb] of 1..MTNb: MRefM;
+MRefM = [
+  m
+  | t in 1..TNb, m in 1..MTNb
+    where MTPeriode[TTRef[t], m] != infinity,
+    _ in 1..1
+];
+
+% Instances
+0..: TIntervallesNbMax;
+TIntervallesNbMax = max(TIntervallesNb);
+
+int: MInstanceNb;
+MInstanceNb = MNb * TIntervallesNbMax;
+
+array[1..MInstanceNb] of 1..MNb: MInstanceRefMNb;
+MInstanceRefMNb = [
+  ceil(i / TIntervallesNbMax) 
+  | i in 1..MInstanceNb
+];
+
+array[1..MInstanceNb] of 1..TIntervallesNbMax: MInstanceRepetition;
+MInstanceRepetition = [
+  (i - 1) mod TIntervallesNbMax + 1 
+  | i in 1..MInstanceNb
+];
+
+array[1..MInstanceNb] of 1..TNb: MInstanceRefT;
+MInstanceRefT = [
+  MRefT[MInstanceRefMNb[i]] 
+  | i in 1..MInstanceNb
+];
+
+array[1..MInstanceNb] of 1..MTNb: MInstanceRefType;
+MInstanceRefType = [
+  MRefM[MInstanceRefMNb[i]] 
+  | i in 1..MInstanceNb
+];
+
+int: MaxDureePossible = max(
+  [P] ++ 
+  [OTemps[o, e] | o in 1..OTNb, e in 1..EtageMax] ++
+  STTempsMax
+);
+
+int: MaxPeriodicitePossible = max(
+  [0] ++ 
+  [MTPeriode[t, m] | t in 1..TTNb, m in 1..MTNb where MTPeriode[t, m] != infinity]
+);
+
+int: MaxHorizonFutur = P + MaxPeriodicitePossible + MaxDureePossible;
+
+int: MinHorizonPasse = min(
+  [0] ++ 
+  [MDerniereFois[t, m] | t in 1..TNb, m in 1..MTNb]
+);
