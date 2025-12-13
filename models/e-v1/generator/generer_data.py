@@ -54,9 +54,6 @@ class DatasetGenerator:
         self.SNb = sum(config["techniciens_par_type"])
         self.TNb = sum(config["trains_par_type"])
 
-        # Liste des temps de trajet gare <-> centre de maintenance (en périodes).
-        # Remplie dans `generate_gares`; utilisée par `generate_trajets` pour
-        # garantir des durées minimales cohérentes entre deux gares via le centre.
         self.gtemps = []
 
     def generate_voies(self) -> str:
@@ -65,7 +62,6 @@ class DatasetGenerator:
         lines.append(f"VTNb = {self.config['types_voies']};")
         lines.append(f"VNbT = {self.config['voies_par_type']};")
 
-        # Nombre d'étages autorisés par voie
         etages = []
         for i, nb_voies in enumerate(self.config["voies_par_type"]):
             etage = (
@@ -84,8 +80,6 @@ class DatasetGenerator:
         lines.append(f"ENb = {self.config['nb_equipements']};")
 
         capacites = [random.randint(1, 4) for _ in range(self.config["nb_equipements"])]
-        # On limite la quantité d'un équipement au nombre de voies (VNb) afin que
-        # la quantité = nombre de voies où l'équipement est disponible (true).
         quantites = [
             min(random.randint(2, 10), self.VNb)
             for _ in range(self.config["nb_equipements"])
@@ -94,16 +88,12 @@ class DatasetGenerator:
         lines.append(f"ECapacite = {capacites};")
         lines.append(f"EQuantite = {quantites};")
 
-        # Générer la matrice VEDisponible : array[1..VNb, 1..ENb] of bool
-        # Pour chaque équipement j, exactement quantites[j] voies auront la valeur true.
         ENb = self.config["nb_equipements"]
         VNb = self.VNb
 
-        # Initialiser matrice VNb x ENb à False
         ved = [[False for _ in range(ENb)] for _ in range(VNb)]
         for j in range(ENb):
             k = quantites[j]
-            # Choisir k indices distincts de voies
             if k >= VNb:
                 chosen = list(range(VNb))
             else:
@@ -160,20 +150,9 @@ class DatasetGenerator:
         lines = []
         lines.append(f"GNb = {self.config['nb_gares']};")
 
-        # Limiter GTemps à au plus 1 heure exprimée en périodes.
-        # Calcul du nombre de périodes correspondant à 1 heure :
-        #   périodes_par_heure = periodes_par_jour / 24
-        # On utilise un plafond entier et on garantit au moins 1 période.
         pj = self.config["periodes_par_jour"]
-        max_periods = max(
-            1, (pj + 23) // 24
-        )  # équiv. à math.ceil(pj / 24) sans importer math
-
-        # Générer des temps de trajet entre 1 période et au plus 1 heure (en périodes)
+        max_periods = max(1, (pj + 23) // 24)
         temps = [random.randint(1, max_periods) for _ in range(self.config["nb_gares"])]
-
-        # Stocker la liste pour réutilisation dans generate_trajets
-        # (utile pour garantir des temps minimaux cohérents entre deux gares via le centre)
         self.gtemps = temps[:]
 
         lines.append(f"GTemps = {temps};")
@@ -181,27 +160,19 @@ class DatasetGenerator:
         return "\n".join(lines)
 
     def generate_trajets(self) -> str:
-        """Génère les trajets des trains
-
-        Contraintes implémentées :
-        - Si un train quitte la gare A pour aller à la gare B, la durée en transit
-          (périodes codées par 0) entre les deux gares est au moins
-          gtemps[A] + gtemps[B].
-        - Lorsqu'un train fait un aller vers une gare B depuis A, le retour suivant
-          doit ramener le train à la gare A (cohérence aller/retour).
+        """Génère les trajets des trains avec les nouvelles règles :
+        - En GARE : ID = 0
+        - En TRAJET (Aller/Retour) : ID = Numéro de la gare concernée
+        - Retour obligatoirement à la même gare que l'aller.
         """
         lines = []
-
         gares = []
         sens = []
 
-        # S'assurer que self.gtemps est disponible et valide
         if (
             not getattr(self, "gtemps", None)
             or len(self.gtemps) != self.config["nb_gares"]
         ):
-            # Par défaut on met des temps minima de 1 période si generate_gares
-            # n'a pas été appelé ou n'a pas produit la bonne taille.
             self.gtemps = [1] * self.config["nb_gares"]
 
         for train in range(self.TNb):
@@ -209,71 +180,74 @@ class DatasetGenerator:
             sens_train = []
 
             periode_courante = 0
+            # Position actuelle (numéro de gare physique)
             position = random.randint(1, self.config["nb_gares"])
 
             while periode_courante < self.P:
-                # Temps en gare : présence prolongée pour permettre des opérations
+                # --- PHASE 1 : STATIONNEMENT EN GARE ---
                 temps_gare = random.randint(8, 24)
+
+                # Conserver l'ID de la gare courante pour le trajet à venir
+                current_station_id = position
+
                 for _ in range(min(temps_gare, self.P - periode_courante)):
-                    gare_train.append(position)
+                    # MODIFICATION : 0 quand on est en gare
+                    gare_train.append(0)
                     sens_train.append("gare")
                     periode_courante += 1
 
                 if periode_courante >= self.P:
                     break
 
-                # Choisir une destination (si possible différente)
-                dest = position
-                if self.config["nb_gares"] > 1:
-                    # Forte probabilité de choisir une autre gare pour créer des trajets
-                    if random.random() < 0.9:
-                        while dest == position:
-                            dest = random.randint(1, self.config["nb_gares"])
+                # --- PHASE 2 : ALLER (Gare -> Centre) ---
+                # Le retour se fait à la même gare, donc destination = origine
+                dest = current_station_id
 
-                # Calculer la durée minimale de trajet (aller) en périodes :
-                # temps pour aller de la gare A au centre + du centre à gare B
-                min_travel = max(1, self.gtemps[position - 1] + self.gtemps[dest - 1])
-
-                # Déterminer une longueur de trajet aléatoire, mais au moins min_travel
+                # Calcul durée trajet
+                min_travel = max(
+                    1, self.gtemps[current_station_id - 1] + self.gtemps[dest - 1]
+                )
                 base_max = random.randint(4, 12)
                 travel_len = random.randint(min_travel, max(min_travel, base_max))
 
                 for _ in range(min(travel_len, self.P - periode_courante)):
-                    gare_train.append(0)
+                    # MODIFICATION : ID de la gare de départ pendant le trajet aller
+                    gare_train.append(current_station_id)
                     sens_train.append("aller")
                     periode_courante += 1
 
                 if periode_courante >= self.P:
                     break
 
-                # Arrivée à la destination
-                origine = position
-                position = dest
+                # --- PHASE 3 : AU CENTRE / DESTINATION ---
+                # On considère que le train est au centre de maintenance (hors gare commerciale)
+                # Donc on met 0, comme pour une gare.
 
-                # Temps de service / présence à la gare de destination
                 temps_service = random.randint(8, 24)
                 for _ in range(min(temps_service, self.P - periode_courante)):
-                    gare_train.append(position)
+                    gare_train.append(0)
                     sens_train.append("gare")
                     periode_courante += 1
 
                 if periode_courante >= self.P:
                     break
 
-                # Retour : s'assurer que le retour ramène au point d'origine
+                # --- PHASE 4 : RETOUR (Centre -> Gare) ---
+                # Retour vers la même gare
                 min_return = max(
-                    1, self.gtemps[position - 1] + self.gtemps[origine - 1]
+                    1, self.gtemps[dest - 1] + self.gtemps[current_station_id - 1]
                 )
                 base_max2 = random.randint(4, 12)
                 travel_back = random.randint(min_return, max(min_return, base_max2))
 
                 for _ in range(min(travel_back, self.P - periode_courante)):
-                    gare_train.append(0)
+                    # MODIFICATION : ID de la gare d'arrivée (la même) pendant le trajet retour
+                    gare_train.append(current_station_id)
                     sens_train.append("retour")
                     periode_courante += 1
 
-                # Retour effectif au point d'origine
-                position = origine
+                # Le train est physiquement revenu à sa position initiale
+                position = current_station_id
 
             gares.append(gare_train)
             sens.append(sens_train)
@@ -316,9 +290,6 @@ class DatasetGenerator:
 
         lines.append("")
         lines.append("OTemps = [|")
-        # Temps d'opération réduits : 1-4 périodes
-        # Avec 96 périodes/jour (15min) : 15min - 1h
-        # Avec 48 périodes/jour (30min) : 30min - 2h
         for i in range(self.config["types_operations"]):
             temps = [random.randint(1, 4) for _ in range(self.config["etage_max"])]
             line = "  " + ", ".join(map(str, temps))
@@ -329,16 +300,10 @@ class DatasetGenerator:
 
         lines.append("")
         lines.append("ODependance = [|")
-        # Matrice de dépendances : ODependance[i,j] = true si opération i dépend de j
-        # Contraintes :
-        # 1. Pas de boucles (ordre topologique)
-        # 2. Une opération ne peut dépendre que d'opérations précédentes (j < i)
-        # 3. Les dépendances doivent être dans la même maintenance
         for i in range(self.config["types_operations"]):
             deps = []
             for j in range(self.config["types_operations"]):
-                # Une opération ne peut dépendre que d'opérations antérieures (évite les boucles)
-                if j < i and random.random() < 0.25:  # 25% de chance de dépendance
+                if j < i and random.random() < 0.25:
                     deps.append("true")
                 else:
                     deps.append("false")
@@ -394,13 +359,10 @@ class DatasetGenerator:
         for i in range(self.config["types_trains"]):
             periodes = []
             for j in range(self.config["types_maintenances"]):
-                # 15% de chance que la maintenance ne soit pas applicable (infinity)
                 if random.random() < 0.15:
                     periodes.append("infinity")
-                # 20% de chance d'être à chaque visite (0)
                 elif random.random() < 0.25:
                     periodes.append("0")
-                # Sinon périodique
                 else:
                     jours = random.choice([7, 14, 30, 90, 180, 365])
                     periodes.append(str(jours * self.config["periodes_par_jour"]))
@@ -504,21 +466,17 @@ def main():
 
     args = parser.parse_args()
 
-    # Charger la configuration
     print(f"📖 Chargement de la configuration : {args.config}")
     config = charger_config(Path(args.config))
     print("✓ Configuration chargée")
 
-    # Générer les données
     print(f"\n⚙️  Génération du jeu de données...")
     generator = DatasetGenerator(config, seed=args.seed)
     data = generator.generate()
 
-    # Sauvegarder
     output_path = Path(args.output)
     output_path.write_text(data, encoding="utf-8")
 
-    # Résumé
     print(f"\n{'=' * 70}")
     print(f"✅ Jeu de données généré : {output_path}")
     print(f"{'=' * 70}")
@@ -534,7 +492,6 @@ def main():
     print(f"  ⚙️  Opérations : {config['types_operations']} types")
     print(f"{'=' * 70}")
 
-    # Instructions
     print(f"\n🎯 Pour résoudre avec MiniZinc :")
     print(f"   minizinc src/main.mzn {output_path}")
     print()

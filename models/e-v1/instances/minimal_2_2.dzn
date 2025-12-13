@@ -1,0 +1,107 @@
+% Données générées automatiquement depuis configuration JSON
+
+% === PÉRIODES ET UNITÉS ===
+J = 2;
+PJ = 48;
+PSetup = 1;
+PVoie = 2;
+EtageMax = 1;
+
+% === VOIES ===
+VTNb = 2;
+VNbT = [2, 2];
+VEtage = [1, 1, 1, 1];
+
+% === ÉQUIPEMENTS ===
+ENb = 2;
+ECapacite = [1, 3];
+EQuantite = [4, 3];
+VEDisponible = [|
+  true, true |
+  true, true |
+  true, false |
+  true, true
+|];
+
+% === TECHNICIENS ===
+STNb = 2;
+SNbT = [3, 3];
+STTempsMin = [24, 24];
+STTempsMax = [32, 32];
+
+% === TRAINS ===
+TTNb = 2;
+TNbT = [3, 3];
+TEtage = [1, 1];
+
+% === GARES ===
+GNb = 2;
+GTemps = [2, 2];
+
+% === TRAJETS ===
+TTrajetGare = [|
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0 |
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0
+|];
+
+TTrajetSens = [|
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, gare, gare |
+  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare
+|];
+
+% === OPÉRATIONS ===
+OTNb = 3;
+OEquipement = [|
+  false, true |
+  false, false |
+  false, true
+|];
+
+OTemps = [|
+  4 |
+  1 |
+  4
+|];
+
+ODependance = [|
+  false, false, false |
+  false, false, false |
+  true, true, false
+|];
+
+OShift = [2, 1, 1];
+
+OVoie = [|
+  false, false |
+  true, true |
+  false, true
+|];
+
+% === MAINTENANCES ===
+MTNb = 2;
+MOperation = [|
+  true, true, false |
+  true, true, false
+|];
+
+MTPeriode = [|
+  0, 0 |
+  672, 336
+|];
+
+MDerniereFois = [|
+  -634, -18 |
+  -933, -964 |
+  -1338, -837 |
+  -569, -1421 |
+  -92, -843 |
+  -226, -191
+|];

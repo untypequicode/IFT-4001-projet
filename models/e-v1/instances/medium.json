@@ -2,9 +2,7 @@
   "jours": 7,
   "periodes_par_jour": 96,
   "setup": 2,
-  "nettoyage": 4,
-  "preparation": 4,
-  "transfert": 8,
+  "temps_voie": 4,
   "etage_max": 2,
   "types_voies": 3,
   "voies_par_type": [
