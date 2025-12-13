@@ -36,7 +36,7 @@ var int: CoutInactivite = sum(s in 1..SNb, p in 1..P)(
 
 % --- Fonction Objectif Composée ---
 solve minimize
-    TotalRetard * 100000
+    TotalRetard * 1000
     + Makespan * 100
     + EquityPenalty * 10
     + CoutInactivite;
@@ -44,6 +44,45 @@ solve minimize
 % ==============================================================================
 % Affichage GANTT - Trains
 % ==============================================================================
+
+output [
+  "==============================================================================\n",
+  "                       DÉTAILS DES MAINTENANCES ACTIVES\n",
+  "==============================================================================\n",
+  "ID | Train | Type | Voie | Début | Fin | Durée | Deadline | Retard | Ops (Type:Start-End-Tech)\n",
+  "------------------------------------------------------------------------------\n"
+];
+
+output [
+  if fix(varMActive[i]) then
+    let {
+      int: t = MInstanceRefT[i];
+      int: m_type = MInstanceRefType[i];
+      int: start = fix(varMStart[i]);
+      int: end = fix(varMEnd[i]);
+      int: deadline = fix(varDeadline[i]);
+      int: retard = max(0, end - deadline);
+    } in
+    show_int(2, i) ++ " | " ++
+    show_int(5, t) ++ " | " ++
+    show_int(4, m_type) ++ " | " ++
+    show_int(4, fix(varMVoieChoisie[i])) ++ " | " ++
+    show_int(5, start) ++ " | " ++
+    show_int(3, end) ++ " | " ++
+    show_int(5, end - start) ++ " | " ++
+    (if deadline >= SAFE_INFINITY then " INF  " else show_int(8, deadline) endif) ++ " | " ++
+    show_int(6, retard) ++ " | " ++
+    concat([
+      if fix(varODuree[i, o]) > 0 then
+        " (" ++ show(o) ++ ":" ++ show(fix(varOStart[i, o])) ++ "-" ++ show(fix(varOStart[i, o] + varODuree[i, o])) ++ "-T" ++ show(fix(varOAffectation[i, o])) ++ ")"
+      else "" endif
+      | o in 1..OTNb
+    ]) ++ "\n"
+  else "" endif
+  | i in 1..MInstanceNb
+];
+
+output ["------------------------------------------------------------------------------\n"];
 
 output [
   "\n==============================================================================\n",

@@ -13,7 +13,7 @@ array[1..MInstanceNb, 1..OTNb] of var 0..MaxHorizonFutur: varOStart;         % D
 array[1..MInstanceNb, 1..OTNb] of var 0..MaxDureePossible: varODuree;        % Durée opération.
 array[1..MInstanceNb, 1..OTNb] of var 0..SNb: varOAffectation;               % Technicien assigné.
 
-int: SAFE_INFINITY = MaxHorizonFutur * 100;                                  % Infini sécurisé.
+int: SAFE_INFINITY = MaxHorizonFutur * 2;                                    % Infini sécurisé.
 array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDerniereFois; % Dernière exécution.
 array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDeadline;     % Deadline.
 
