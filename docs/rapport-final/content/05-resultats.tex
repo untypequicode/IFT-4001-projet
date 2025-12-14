@@ -1,44 +1,100 @@
 \section{Résultats}
 \label{sec:resultats}
 
-Cette section présente les résultats expérimentaux de la comparaison des deux modèles sur Chuffed et Gecode.
+Cette section présente les résultats expérimentaux de la comparaison des deux modèles sur trois solveurs : Chuffed, Gecode et OR-Tools, avec un timeout de 10 minutes (600 secondes).
 
 \subsection{Performance globale}
 
-Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour chaque combinaison instance-modèle-solveur. Les timeouts (dépassement du temps limite de 300 secondes) sont indiqués par \textbf{TO}.
+Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour chaque combinaison instance-modèle-solveur. Les timeouts (dépassement du temps limite de 600 secondes) sont indiqués par \textbf{TO}, et les résultats non encore disponibles par \textbf{---}.
 
 \begin{table}[h]
-\centering
-\caption{Temps de résolution (secondes) pour chaque combinaison instance-modèle-solveur}
-\label{tab:resultats_temps}
-\begin{tabular}{lcccc}
-\toprule
-Instance & Modèle 1 & Modèle 1 & Modèle 2 & Modèle 2 \\
-         & (Chuffed) & (Gecode) & (Chuffed) & (Gecode) \\
-\midrule
-small\_01 & [À compléter] & [À compléter] & 0.6 & 0.3 \\
-small\_02 & [À compléter] & [À compléter] & 1.9 & 4.8 \\
-medium\_01 & [À compléter] & [À compléter] & \textbf{UNSAT} (1.5s) & \textbf{UNSAT} (1.4s) \\
-medium\_02 & [À compléter] & [À compléter] & \textbf{UNSAT} (2.6s) & \textbf{TO} \\
-medium\_03 & [À compléter] & [À compléter] & \textbf{UNSAT} (4.0s) & \textbf{TO} \\
-large\_01 & [À compléter] & [À compléter] & \textbf{UNSAT} (5.9s) & \textbf{UNSAT} (26.5s) \\
-large\_02 & [À compléter] & [À compléter] & \textbf{UNSAT} (14.1s) & \textbf{UNSAT} (12.8s) \\
-large\_03 & [À compléter] & [À compléter] & \textbf{UNSAT} (13.5s) & \textbf{UNSAT} (12.6s) \\
-\bottomrule
-\end{tabular}
+	\centering
+	\small
+	\caption{Temps de résolution (secondes) pour chaque combinaison instance-modèle-solveur}
+	\label{tab:resultats_temps}
+	\begin{tabular}{lcccccc}
+		\toprule
+		           & \multicolumn{3}{c}{\textbf{l-v1 (Léa)}} & \multicolumn{3}{c}{\textbf{e-v1 (Ethan)}}                                                      \\
+		\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+		Instance   & Chuffed                                 & Gecode                                    & OR-Tools & Chuffed     & Gecode      & OR-Tools    \\
+		\midrule
+		small\_01  & 5.1                                     & 0.4                                       & 0.4      & 1.8         & 0.8         & 1.7         \\
+		small\_02  & 5.1                                     & 0.4                                       & 0.5      & 8.8         & \textbf{TO} & 4.4         \\
+		\midrule
+		medium\_01 & 4.7                                     & 0.6                                       & 0.9      & 37.1        & ---         & 22.1        \\
+		medium\_02 & 0.5                                     & 0.5                                       & 0.6      & 5.0         & ---         & 6.7         \\
+		medium\_03 & 94.0                                    & \textbf{TO}                               & 5.5      & \textbf{TO} & ---         & 42.3        \\
+		\midrule
+		large\_01  & 0.9                                     & 0.9                                       & 1.5      & 8.2         & ---         & 16.9        \\
+		large\_02  & 14.7                                    & \textbf{TO}                               & 45.4     & \textbf{TO} & ---         & \textbf{TO} \\
+		large\_03  & 238.0                                   & \textbf{TO}                               & 5.9      & \textbf{TO} & ---         & 175.0       \\
+		\bottomrule
+	\end{tabular}
 \end{table}
 
-\textbf{Note :} TO = Timeout (> 300s), UNSAT = Instance insatisfiable (aucune solution n'existe). Les valeurs entre parenthèses indiquent le temps nécessaire pour prouver l'insatisfiabilité.
+\textbf{Note :} TO = Timeout (> 600s), --- = Résultats non encore disponibles. Les temps sont arrondis à la première décimale.
+
+\subsection{Qualité des solutions}
+
+Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction objectif (retard pondéré total) obtenues pour chaque instance résolue.
+
+\begin{table}[h]
+	\centering
+	\small
+	\caption{Valeurs de la fonction objectif pour chaque combinaison instance-modèle-solveur}
+	\label{tab:resultats_objectifs}
+	\begin{tabular}{lcccccc}
+		\toprule
+		           & \multicolumn{3}{c}{\textbf{l-v1 (Léa)}} & \multicolumn{3}{c}{\textbf{e-v1 (Ethan)}}                                          \\
+		\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+		Instance   & Chuffed                                 & Gecode                                    & OR-Tools & Chuffed & Gecode & OR-Tools \\
+		\midrule
+		small\_01  & 2300                                    & 2300                                      & 2300     & 72090   & 72090  & 72090    \\
+		small\_02  & 2300                                    & 2520                                      & 2520     & 5722    & ---    & 5722     \\
+		\midrule
+		medium\_01 & 1720                                    & 1720                                      & 1720     & 23938   & 229864 & 23938    \\
+		medium\_02 & 0                                       & 0                                         & 0        & 0       & ---    & 0        \\
+		medium\_03 & 6010                                    & ---                                       & 6010     & ---     & ---    & 120019   \\
+		\midrule
+		large\_01  & 0                                       & 0                                         & 0        & 0       & ---    & 0        \\
+		large\_02  & 0                                       & ---                                       & 0        & ---     & ---    & ---      \\
+		large\_03  & 10360                                   & ---                                       & 10360    & ---     & ---    & 23791    \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\textbf{Important :} Ces valeurs ne sont \textbf{pas directement comparables} entre les deux modèles pour plusieurs raisons :
+\begin{itemize}
+	\item Les \textbf{instances diffèrent} : e-v1 et l-v1 utilisent des fichiers .dzn distincts générés à partir des mêmes configurations, mais avec des formats de données différents adaptés à chaque modèle.
+	\item Les \textbf{contraintes diffèrent} : e-v1 inclut des contraintes strictes sur les blocs de travail, pauses, et temps min/max des techniciens que l-v1 n'a pas.
+	\item Les \textbf{fonctions objectif diffèrent} : l-v1 minimise le retard simple pondéré par priorité, tandis que e-v1 utilise des poids différenciés (100 pour urgente, 1 pour préventive) et applique des pénalités (10000) pour les maintenances non planifiées.
+	\item Les \textbf{deadlines diffèrent} : e-v1 calcule dynamiquement les deadlines avec propagation, tandis que l-v1 utilise des deadlines statiques.
+\end{itemize}
+
+Néanmoins, ces valeurs permettent de vérifier que les solveurs trouvent des solutions cohérentes pour un même modèle (par exemple, tous les solveurs trouvent 0 pour large\_01 avec l-v1).
 
 \subsection{Comparaison des modèles}
 
-[À compléter avec l'analyse comparative des deux modèles : quel modèle est le plus rapide en moyenne, y a-t-il des instances où un modèle excelle et l'autre échoue, quel est l'impact de la modélisation sur la performance ?]
+\textbf{Modèle l-v1 (Léa) :} Le modèle l-v1 montre des performances globalement meilleures sur les instances small et medium. Sur les 8 instances testées, il résout toutes les instances small en moins de 6 secondes avec tous les solveurs. Les instances medium sont également bien gérées, avec des temps variant de 0.5s à 94s selon le solveur. Les instances large présentent plus de difficultés, avec 2 timeouts sur Gecode (large\_02, large\_03).
+
+\textbf{Modèle e-v1 (Ethan) :} Le modèle e-v1 présente des temps de résolution systématiquement plus élevés que l-v1, reflétant sa complexité accrue due à la modélisation fine des blocs de travail des techniciens. Sur les instances small, les temps varient de 0.8s à 8.8s, soit environ 2 à 20 fois plus lents que l-v1. Les instances medium et large présentent 4 timeouts (small\_02 avec Gecode, medium\_03 avec Chuffed, large\_02 et large\_03 avec Chuffed).
+
+\textbf{Impact de la modélisation :} La différence de performance s'explique par le nombre de variables : l-v1 utilise $O(|OP|)$ variables (temps et voies uniquement), tandis que e-v1 ajoute $O(|S| \times J \times B)$ variables pour les blocs de travail des techniciens, où $S$ est le nombre de techniciens, $J$ le nombre de jours, et $B$ le nombre de blocs par jour. Cette explosion combinatoire rend la résolution significativement plus difficile, au prix d'une modélisation plus réaliste des contraintes humaines.
 
 \subsection{Comparaison des solveurs}
 
-[À compléter avec l'analyse comparative de Chuffed vs Gecode : pour chaque modèle, quel solveur est le plus performant, y a-t-il des différences selon le modèle utilisé, quel est le taux de succès par solveur et par modèle ?]
+\textbf{Pour l-v1 :}
+\begin{itemize}
+	\item \textbf{OR-Tools} : Le plus performant globalement, aucun timeout. Excellentes performances sur large\_03 (5.9s) et medium\_03 (5.5s) où les autres échouent ou sont lents.
+	\item \textbf{Gecode} : Très rapide sur small (<0.5s) et certaines medium (0.5-0.6s), mais 3 timeouts sur les instances plus complexes.
+	\item \textbf{Chuffed} : Performances intermédiaires, mais parfois lent sur small (5.1s) comparé aux autres. Timeout sur medium\_03 (94s) mais résout large\_03 en 238s.
+\end{itemize}
 
-\subsection{Observations principales}
+\textbf{Pour e-v1 :}
+\begin{itemize}
+	\item \textbf{OR-Tools} : Le plus robuste avec seulement 1 timeout (large\_02). Résout toutes les instances small et medium, ainsi que large\_01 et large\_03.
+	\item \textbf{Chuffed} : 3 timeouts (medium\_03, large\_02, large\_03). Temps élevés même sur medium (37s pour medium\_01).
+	\item \textbf{Gecode} : Sur small, timeout sur small\_02 (>600s) mais résout small\_01 en 0.8s.
+\end{itemize}
 
-[À compléter avec les observations clés : à partir de quelle taille les solveurs commencent-ils à échouer, y a-t-il des patterns dans les instances difficiles, quel est l'impact de la modélisation sur la résolubilité ?]
-
+\textbf{Observation générale :} OR-Tools se révèle le solveur le plus stable sur les deux modèles, avec une capacité à résoudre des instances que les autres abandonnent. Gecode excelle sur les petites instances de l-v1 mais peine sur e-v1 et les grandes instances. Chuffed montre des performances variables selon l'instance.
