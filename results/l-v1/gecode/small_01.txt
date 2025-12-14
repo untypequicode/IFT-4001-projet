@@ -1,0 +1,23 @@
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=460min, Départ=1310min
+Train 2: Arrivée=300min, Départ=1440min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=460min, Fin=490min, Retard=490min
+Maintenance 2 (Train 1, Priorité=2): Début=500min, Fin=530min, Retard=0min
+Maintenance 3 (Train 2, Priorité=2): Début=300min, Fin=330min, Retard=330min
+Maintenance 4 (Train 2, Priorité=2): Début=300min, Fin=330min, Retard=330min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=460min, Fin=490min, Durée=30min
+Opération 2 (Maint 2, Voie 1): Début=500min, Fin=530min, Durée=30min
+Opération 3 (Maint 3, Voie 2): Début=300min, Fin=330min, Durée=30min
+Opération 4 (Maint 4, Voie 1): Début=300min, Fin=330min, Durée=30min
+
+--- Objectif ---
+Retard pondéré total: 2300
+----------
+==========
+Finished in 115msec.
