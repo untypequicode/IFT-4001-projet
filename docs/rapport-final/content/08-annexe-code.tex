@@ -20,8 +20,8 @@ Les codes complets des deux modèles MiniZinc sont disponibles dans le dossier \
 
 Les outils de génération d'instances sont disponibles dans le dossier \texttt{instances/generator/} :
 \begin{itemize}
+	\item \texttt{generer\_data.py} : génère les fichiers de données (.dzn) pour les deux modèles à partir de configurations
 	\item \texttt{creer\_config.py} : crée les fichiers de configuration des instances
-	\item \texttt{generer\_data.py} : génère les fichiers de données (.dzn) pour les deux modèles à partir de configurations d'instances
 \end{itemize}
 
 \subsection{Instances de test}
@@ -35,6 +35,8 @@ Les instances de données sont disponibles dans le dossier \texttt{instances/} a
 
 Chaque instance existe en deux versions : \texttt{*\_l-v1.dzn} pour le modèle l-v1 et \texttt{*\_e-v1.dzn} pour le modèle e-v1. Le dossier \texttt{instances/configs/} contient les configurations JSON utilisées pour générer ces instances.
 
+\textbf{Instances multi-jours (e-v1 uniquement) :} Des instances supplémentaires exploitant les capacités spécifiques du modèle e-v1 (intervalles multiples, horizons étendus sur plusieurs jours) sont disponibles dans le dossier \texttt{instances/multiday/} avec leurs configurations dans \texttt{instances/configs/multiday/}.
+
 \subsection{Résultats expérimentaux}
 
 Les résultats des expérimentations sont organisés dans le dossier \texttt{results/} par modèle et par solveur :
@@ -44,3 +46,10 @@ Les résultats des expérimentations sont organisés dans le dossier \texttt{res
 \end{itemize}
 
 Chaque fichier de résultat contient les sorties complètes de MiniZinc incluant les temps de résolution, les solutions trouvées, et les statistiques d'exécution.
+
+\textbf{Résultats multi-jours (e-v1 uniquement) :} Les résultats pour les instances multi-jours démontrant les capacités avancées du modèle e-v1 sont disponibles dans un dossier séparé :
+\begin{itemize}
+	\item \texttt{results/e-v1/multiday/chuffed/}
+	\item \texttt{results/e-v1/multiday/gecode/}
+	\item \texttt{results/e-v1/multiday/or-tools/}
+\end{itemize}

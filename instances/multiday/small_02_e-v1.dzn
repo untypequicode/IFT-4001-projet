@@ -1,0 +1,119 @@
+% ============================================================================
+% DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ)
+% Modèle basé sur des PÉRIODES discrètes.
+% ============================================================================
+
+% --- Temps et Unités ---
+% J: Nombre de jours de simulation
+% PJ: Nombre de périodes par jour
+J = 5; PJ = 144;
+% PSetup: Temps de setup entre opérations (en périodes)
+% PVoie: Temps de sécurité entre trains sur une voie (en périodes)
+PSetup = 1; PVoie = 4;
+% EtageMax: Nombre maximum d'étages (caténaires) possibles
+EtageMax = 3;
+
+% --- Voies (Infrastructures) ---
+% VTNb: Nombre de TYPES de voies
+VTNb = 2;
+% VNbT: Nombre de voies pour chaque type
+VNbT = [2, 2];
+% VEtage: Étage (équipement caténaire) de chaque voie physique
+VEtage = [3, 3, 1, 1];
+
+% --- Équipements ---
+% ENb: Nombre de types d'équipements
+ENb = 2;
+% ECapacite: Capacité simultanée (combien d'ops en // sur cet équipement)
+ECapacite = [4, 2];
+% EQuantite: Nombre total d'unités de cet équipement
+EQuantite = [2, 2];
+% VEDisponible: Matrice [Voie, Equipement] -> Est-ce dispo sur cette voie ?
+VEDisponible = [|
+  false, false |
+  true, false |
+  true, true |
+  false, true
+|];
+
+% --- Techniciens ---
+% STNb: Nombre de types de techniciens (spécialités)
+STNb = 3;
+% SNbT: Nombre de techniciens par spécialité
+SNbT = [8, 6, 8];
+% STTempsMin/Max: Temps de travail min/max journalier (en périodes)
+STTempsMin = [28, 24, 24];
+STTempsMax = [32, 36, 40];
+
+% --- Trains ---
+% TTNb: Nombre de TYPES de trains
+TTNb = 1;
+% TNbT: Nombre de trains par type
+TNbT = [3];
+% TEtage: Étage requis par type de train
+TEtage = [2];
+
+% --- Gares et Trajets ---
+% GNb: Nombre de gares périphériques
+GNb = 3;
+% GTemps: Temps de trajet Gare <-> Centre (en périodes)
+GTemps = [3, 6, 1];
+
+% --- Intervalles de Disponibilité (Input) ---
+% Liste plate des intervalles où les trains sont présents au centre.
+% Gare=0 signifie 'Au Centre'.
+% InputNbIntervallesParTrain: Combien d'intervalles par train [1..TNb]
+InputNbIntervallesParTrain = [12, 14, 11];
+% InputIntervallesDebut: Période de début de chaque intervalle
+InputIntervallesDebut = [92, 140, 218, 249, 282, 319, 382, 452, 498, 560, 609, 683, 43, 88, 149, 183, 242, 286, 318, 376, 418, 473, 533, 560, 622, 694, 113, 164, 217, 258, 302, 381, 445, 500, 560, 619, 689];
+% InputIntervallesFin: Période de fin de chaque intervalle
+InputIntervallesFin = [107, 186, 234, 270, 293, 343, 421, 467, 522, 577, 652, 718, 76, 108, 161, 204, 255, 298, 352, 388, 456, 512, 549, 606, 657, 720, 138, 204, 233, 274, 348, 407, 479, 540, 592, 648, 720];
+% InputIntervallesGareDebut: Gare de provenance (0=Centre)
+InputIntervallesGareDebut = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+% InputIntervallesGareFin: Gare de destination (0=Centre)
+InputIntervallesGareFin = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+% --- Opérations ---
+% OTNb: Nombre de TYPES d'opérations
+OTNb = 2;
+% OEquipement: Matrice [OpType, EquipType] -> Besoin équipement ?
+OEquipement = [|
+  true, true |
+  false, true
+|];
+% OTemps: Matrice [OpType, Etage] -> Durée (périodes)
+OTemps = [|
+  1, 4, 4 |
+  1, 2, 3
+|];
+% ODependance: Matrice [OpA, OpB] -> OpA dépend de OpB ?
+ODependance = [|
+  false, false |
+  false, false
+|];
+% OShift: Type de technicien requis pour l'opération
+OShift = [2, 2];
+% OVoie: Matrice [OpType, VoieType] -> Compatible ?
+OVoie = [|
+  true, false |
+  true, true
+|];
+
+% --- Maintenances ---
+% MTNb: Nombre de TYPES de maintenances
+MTNb = 2;
+% MOperation: Matrice [MaintType, OpType] -> L'opération est-elle requise ?
+MOperation = [|
+  true, false |
+  false, true
+|];
+% MTPeriode: Périodicité [TrainType, MaintType] (périodes, 0=Urgente, infinity=Jamais)
+MTPeriode = [|
+  infinity, 12960
+|];
+% MDerniereFois: Date dernière maintenance [TrainInstance, MaintType] (négatif = passé)
+MDerniereFois = [|
+  -232, -115 |
+  -2585, -2882 |
+  -741, -2226
+|];

@@ -1,0 +1,132 @@
+% ============================================================================
+% DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ)
+% Modèle basé sur des PÉRIODES discrètes.
+% ============================================================================
+
+% --- Temps et Unités ---
+% J: Nombre de jours de simulation
+% PJ: Nombre de périodes par jour
+J = 2; PJ = 144;
+% PSetup: Temps de setup entre opérations (en périodes)
+% PVoie: Temps de sécurité entre trains sur une voie (en périodes)
+PSetup = 1; PVoie = 4;
+% EtageMax: Nombre maximum d'étages (caténaires) possibles
+EtageMax = 3;
+
+% --- Voies (Infrastructures) ---
+% VTNb: Nombre de TYPES de voies
+VTNb = 2;
+% VNbT: Nombre de voies pour chaque type
+VNbT = [3, 3];
+% VEtage: Étage (équipement caténaire) de chaque voie physique
+VEtage = [3, 3, 3, 3, 3, 3];
+
+% --- Équipements ---
+% ENb: Nombre de types d'équipements
+ENb = 2;
+% ECapacite: Capacité simultanée (combien d'ops en // sur cet équipement)
+ECapacite = [4, 4];
+% EQuantite: Nombre total d'unités de cet équipement
+EQuantite = [2, 6];
+% VEDisponible: Matrice [Voie, Equipement] -> Est-ce dispo sur cette voie ?
+VEDisponible = [|
+  false, true |
+  false, true |
+  true, true |
+  false, true |
+  true, true |
+  false, true
+|];
+
+% --- Techniciens ---
+% STNb: Nombre de types de techniciens (spécialités)
+STNb = 3;
+% SNbT: Nombre de techniciens par spécialité
+SNbT = [4, 8, 5];
+% STTempsMin/Max: Temps de travail min/max journalier (en périodes)
+STTempsMin = [24, 28, 28];
+STTempsMax = [32, 40, 40];
+
+% --- Trains ---
+% TTNb: Nombre de TYPES de trains
+TTNb = 1;
+% TNbT: Nombre de trains par type
+TNbT = [10];
+% TEtage: Étage requis par type de train
+TEtage = [1];
+
+% --- Gares et Trajets ---
+% GNb: Nombre de gares périphériques
+GNb = 8;
+% GTemps: Temps de trajet Gare <-> Centre (en périodes)
+GTemps = [2, 5, 2, 4, 6, 5, 5, 4];
+
+% --- Intervalles de Disponibilité (Input) ---
+% Liste plate des intervalles où les trains sont présents au centre.
+% Gare=0 signifie 'Au Centre'.
+% InputNbIntervallesParTrain: Combien d'intervalles par train [1..TNb]
+InputNbIntervallesParTrain = [5, 5, 5, 5, 6, 6, 5, 6, 5, 4];
+% InputIntervallesDebut: Période de début de chaque intervalle
+InputIntervallesDebut = [32, 66, 140, 197, 244, 37, 84, 140, 204, 273, 36, 99, 170, 221, 263, 30, 86, 151, 198, 269, 28, 79, 157, 220, 243, 277, 16, 94, 153, 191, 239, 283, 55, 87, 171, 230, 287, 35, 67, 106, 168, 219, 287, 18, 94, 163, 208, 267, 70, 111, 179, 237];
+% InputIntervallesFin: Période de fin de chaque intervalle
+InputIntervallesFin = [55, 109, 180, 211, 264, 61, 111, 164, 233, 288, 78, 139, 193, 242, 286, 57, 124, 185, 239, 288, 56, 126, 190, 231, 257, 288, 60, 123, 179, 219, 272, 288, 74, 130, 208, 250, 288, 50, 81, 132, 190, 257, 288, 55, 128, 186, 229, 288, 83, 142, 209, 280];
+% InputIntervallesGareDebut: Gare de provenance (0=Centre)
+InputIntervallesGareDebut = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+% InputIntervallesGareFin: Gare de destination (0=Centre)
+InputIntervallesGareFin = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+% --- Opérations ---
+% OTNb: Nombre de TYPES d'opérations
+OTNb = 3;
+% OEquipement: Matrice [OpType, EquipType] -> Besoin équipement ?
+OEquipement = [|
+  true, true |
+  false, false |
+  false, true
+|];
+% OTemps: Matrice [OpType, Etage] -> Durée (périodes)
+OTemps = [|
+  3, 3, 4 |
+  2, 4, 3 |
+  1, 4, 3
+|];
+% ODependance: Matrice [OpA, OpB] -> OpA dépend de OpB ?
+ODependance = [|
+  false, false, false |
+  false, false, false |
+  false, true, false
+|];
+% OShift: Type de technicien requis pour l'opération
+OShift = [2, 2, 2];
+% OVoie: Matrice [OpType, VoieType] -> Compatible ?
+OVoie = [|
+  true, true |
+  false, false |
+  false, false
+|];
+
+% --- Maintenances ---
+% MTNb: Nombre de TYPES de maintenances
+MTNb = 2;
+% MOperation: Matrice [MaintType, OpType] -> L'opération est-elle requise ?
+MOperation = [|
+  false, true, false |
+  true, false, false
+|];
+% MTPeriode: Périodicité [TrainType, MaintType] (périodes, 0=Urgente, infinity=Jamais)
+MTPeriode = [|
+  0, infinity
+|];
+% MDerniereFois: Date dernière maintenance [TrainInstance, MaintType] (négatif = passé)
+MDerniereFois = [|
+  -355, -3060 |
+  -837, -3507 |
+  -832, -4056 |
+  -3214, -2370 |
+  -3074, -3609 |
+  -1403, -3220 |
+  -3787, -2275 |
+  -3456, -1885 |
+  -1410, -2662 |
+  -3206, -1143
+|];

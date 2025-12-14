@@ -1,0 +1,125 @@
+% ============================================================================
+% DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ)
+% Modèle basé sur des PÉRIODES discrètes.
+% ============================================================================
+
+% --- Temps et Unités ---
+% J: Nombre de jours de simulation
+% PJ: Nombre de périodes par jour
+J = 3; PJ = 144;
+% PSetup: Temps de setup entre opérations (en périodes)
+% PVoie: Temps de sécurité entre trains sur une voie (en périodes)
+PSetup = 1; PVoie = 4;
+% EtageMax: Nombre maximum d'étages (caténaires) possibles
+EtageMax = 3;
+
+% --- Voies (Infrastructures) ---
+% VTNb: Nombre de TYPES de voies
+VTNb = 2;
+% VNbT: Nombre de voies pour chaque type
+VNbT = [2, 2];
+% VEtage: Étage (équipement caténaire) de chaque voie physique
+VEtage = [3, 3, 1, 1];
+
+% --- Équipements ---
+% ENb: Nombre de types d'équipements
+ENb = 2;
+% ECapacite: Capacité simultanée (combien d'ops en // sur cet équipement)
+ECapacite = [1, 3];
+% EQuantite: Nombre total d'unités de cet équipement
+EQuantite = [4, 4];
+% VEDisponible: Matrice [Voie, Equipement] -> Est-ce dispo sur cette voie ?
+VEDisponible = [|
+  true, true |
+  true, true |
+  true, true |
+  true, true
+|];
+
+% --- Techniciens ---
+% STNb: Nombre de types de techniciens (spécialités)
+STNb = 3;
+% SNbT: Nombre de techniciens par spécialité
+SNbT = [3, 3, 4];
+% STTempsMin/Max: Temps de travail min/max journalier (en périodes)
+STTempsMin = [24, 24, 28];
+STTempsMax = [40, 32, 36];
+
+% --- Trains ---
+% TTNb: Nombre de TYPES de trains
+TTNb = 1;
+% TNbT: Nombre de trains par type
+TNbT = [5];
+% TEtage: Étage requis par type de train
+TEtage = [2];
+
+% --- Gares et Trajets ---
+% GNb: Nombre de gares périphériques
+GNb = 5;
+% GTemps: Temps de trajet Gare <-> Centre (en périodes)
+GTemps = [5, 5, 1, 2, 4];
+
+% --- Intervalles de Disponibilité (Input) ---
+% Liste plate des intervalles où les trains sont présents au centre.
+% Gare=0 signifie 'Au Centre'.
+% InputNbIntervallesParTrain: Combien d'intervalles par train [1..TNb]
+InputNbIntervallesParTrain = [7, 7, 9, 8, 7];
+% InputIntervallesDebut: Période de début de chaque intervalle
+InputIntervallesDebut = [97, 148, 186, 239, 290, 326, 391, 57, 103, 162, 222, 269, 333, 385, 26, 111, 169, 223, 257, 303, 343, 374, 424, 58, 109, 161, 207, 264, 296, 364, 430, 32, 85, 153, 226, 267, 343, 396];
+% InputIntervallesFin: Période de fin de chaque intervalle
+InputIntervallesFin = [108, 168, 201, 262, 310, 357, 427, 69, 134, 206, 248, 299, 351, 418, 70, 138, 210, 244, 277, 332, 356, 402, 432, 75, 147, 193, 249, 279, 340, 406, 432, 70, 117, 188, 254, 309, 361, 432];
+% InputIntervallesGareDebut: Gare de provenance (0=Centre)
+InputIntervallesGareDebut = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+% InputIntervallesGareFin: Gare de destination (0=Centre)
+InputIntervallesGareFin = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+% --- Opérations ---
+% OTNb: Nombre de TYPES d'opérations
+OTNb = 3;
+% OEquipement: Matrice [OpType, EquipType] -> Besoin équipement ?
+OEquipement = [|
+  false, false |
+  true, false |
+  true, false
+|];
+% OTemps: Matrice [OpType, Etage] -> Durée (périodes)
+OTemps = [|
+  4, 2, 1 |
+  2, 1, 1 |
+  1, 1, 3
+|];
+% ODependance: Matrice [OpA, OpB] -> OpA dépend de OpB ?
+ODependance = [|
+  false, false, false |
+  false, false, false |
+  false, false, false
+|];
+% OShift: Type de technicien requis pour l'opération
+OShift = [3, 1, 2];
+% OVoie: Matrice [OpType, VoieType] -> Compatible ?
+OVoie = [|
+  true, false |
+  false, false |
+  false, true
+|];
+
+% --- Maintenances ---
+% MTNb: Nombre de TYPES de maintenances
+MTNb = 2;
+% MOperation: Matrice [MaintType, OpType] -> L'opération est-elle requise ?
+MOperation = [|
+  false, true, false |
+  false, true, false
+|];
+% MTPeriode: Périodicité [TrainType, MaintType] (périodes, 0=Urgente, infinity=Jamais)
+MTPeriode = [|
+  4320, infinity
+|];
+% MDerniereFois: Date dernière maintenance [TrainInstance, MaintType] (négatif = passé)
+MDerniereFois = [|
+  -1624, -47 |
+  -2037, -113 |
+  -4260, -2863 |
+  -4058, -340 |
+  -3220, -4073
+|];
