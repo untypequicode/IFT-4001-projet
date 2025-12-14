@@ -1,12 +1,12 @@
-% =====================================================================
-% Enumerations and Generic Types
-% =====================================================================
+% ====================================
+% Énumérations et Types Génériques
+% ====================================
 
-enum GSens = { aller, retour, gare }; % Train direction.
+enum GSens = { aller, retour, gare }; % Direction du train.
 
-% =====================================================================
-% Global Configuration Parameters
-% =====================================================================
+% ====================================
+% Configuration Globale
+% ====================================
 
-0..: MinPauses = 1;               % Min breaks (if working).
-0..: MaxPauses = 3;               % Max breaks allowed.
+0..: MinPauses = 1;                   % Nombre minimum de pauses.
+0..: MaxPauses = 3;                   % Nombre maximum de pauses.

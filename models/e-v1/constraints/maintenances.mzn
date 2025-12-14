@@ -1,26 +1,25 @@
 include "../constant.mzn";
 
 % ===========================================================================
-% Variables de Décision - Maintenances
+% % Variables de Décision - Maintenances
 % ===========================================================================
 
-array[1..MInstanceNb] of var bool: varMActive;
-array[1..MInstanceNb] of var 0..MaxHorizonFutur: varMStart;
-array[1..MInstanceNb] of var 0..MaxHorizonFutur: varMEnd;
-array[1..MInstanceNb] of var 0..VNb: varMVoieChoisie;
+array[1..MInstanceNb] of var bool: varMActive;                               % Activation de la maintenance.
+array[1..MInstanceNb] of var 0..MaxHorizonFutur: varMStart;                  % Début de la maintenance.
+array[1..MInstanceNb] of var 0..MaxHorizonFutur: varMEnd;                    % Fin de la maintenance.
+array[1..MInstanceNb] of var 0..VNb: varMVoieChoisie;                        % Voie affectée.
 
-array[1..MInstanceNb, 1..OTNb] of var 0..MaxHorizonFutur: varOStart;
-array[1..MInstanceNb, 1..OTNb] of var 0..MaxDureePossible: varODuree;
-array[1..MInstanceNb, 1..OTNb] of var 0..SNb: varOAffectation;
+array[1..MInstanceNb, 1..OTNb] of var 0..MaxHorizonFutur: varOStart;         % Début de l'opération.
+array[1..MInstanceNb, 1..OTNb] of var 0..MaxDureePossible: varODuree;        % Durée de l'opération.
+array[1..MInstanceNb, 1..OTNb] of var 0..SNb: varOAffectation;               % Technicien affecté.
 
-% Définition d'un infini "sûr" pour le solveur (assez grand mais fini)
-int: SAFE_INFINITY = MaxHorizonFutur * 2;
+int: SAFE_INFINITY = MaxHorizonFutur * 2;                                    % Constante infini sûre pour le solveur.
 
-array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDerniereFois;
-array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDeadline;
+array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDerniereFois; % Dernière exécution.
+array[1..MInstanceNb] of var -SAFE_INFINITY..SAFE_INFINITY: varDeadline;     % Deadline calculée.
 
 % ===========================================================================
-% Contrainte 1 : Logique d'Activation et Fenêtres
+% Logique d'Activation et Fenêtres
 % ===========================================================================
 
 constraint forall(i in 1..MInstanceNb) (
@@ -50,12 +49,11 @@ constraint forall(i in 1..MInstanceNb) (
 );
 
 % ===========================================================================
-% Contrainte 2 : Propagation des Deadlines (AVEC GESTION INFINITY)
+% Propagation des Deadlines
 % ===========================================================================
 
 constraint forall(i in 1..MInstanceNb) (
     let { int: t = MInstanceRefT[i]; int: m_type = MInstanceRefType[i]; } in
-    % Dernière fois
     (if MInstanceRepetition[i] == 1 then
         varDerniereFois[i] = MDerniereFois[t, m_type]
      else
@@ -63,7 +61,6 @@ constraint forall(i in 1..MInstanceNb) (
         varDerniereFois[i] = if varMActive[prev] then varMEnd[prev] else varDerniereFois[prev] endif
     endif)
      /\
-     % Deadline : Conversion de 'infinity' (entrée) vers SAFE_INFINITY (variable)
      (let { int: p = MTPeriode[TTRef[t], m_type]; } in
       if p == infinity then
           varDeadline[i] = SAFE_INFINITY
@@ -76,7 +73,7 @@ constraint forall(i in 1..MInstanceNb) (
 );
 
 % ===========================================================================
-% Contrainte 3 : Opérations
+% Opérations
 % ===========================================================================
 
 constraint forall(i in 1..MInstanceNb) (
@@ -107,7 +104,7 @@ constraint forall(i in 1..MInstanceNb) (
 );
 
 % ===========================================================================
-% Contrainte 4 : Compatibilité Voies
+% Compatibilité Voies
 % ===========================================================================
 
 constraint forall(i in 1..MInstanceNb) (
@@ -119,7 +116,7 @@ constraint forall(i in 1..MInstanceNb) (
 );
 
 % ===========================================================================
-% Contrainte 5 : Disjonction Voies
+% Disjonction Voies
 % ===========================================================================
 
 constraint forall(i, j in 1..MInstanceNb where i < j) (
@@ -129,7 +126,7 @@ constraint forall(i, j in 1..MInstanceNb where i < j) (
 );
 
 % ===========================================================================
-% Contrainte 6 : Disjonction Trains
+% Disjonction Trains
 % ===========================================================================
 
 constraint forall(i, j in 1..MInstanceNb where i < j) (

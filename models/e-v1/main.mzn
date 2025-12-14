@@ -3,11 +3,11 @@ include "computed.mzn";
 include "constraints/maintenances.mzn";
 include "constraints/techniciens.mzn";
 
-% ==============================================================================
+% ===============================================
 % Objectifs d'Optimisation
-% ==============================================================================
+% ===============================================
 
-var int: TotalRetard = sum(i in 1..MInstanceNb)(
+var int: TotalRetard = sum(i in 1..MInstanceNb)( % Retard total pondéré.
     let {
         int: p_type = MTPeriode[TTRef[MInstanceRefT[i]], MInstanceRefType[i]];
         int: weight = if p_type == 0 then 100 else 1 endif;
@@ -19,22 +19,20 @@ var int: TotalRetard = sum(i in 1..MInstanceNb)(
     endif
 );
 
-% On revient à l'objectif simple : Minimiser le retard.
-% La contrainte "Pas d'opération -> Pas de travail" est gérée dans techniciens.mzn.
 solve minimize TotalRetard;
 
-% ==============================================================================
-% Affichage GANTT - Trains
-% ==============================================================================
+% ===============================================
+% Affichage Texte
+% ===============================================
 
 output [
-  "=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===\n\n",
+=================================================
   "--- Trains ---\n"
 ];
 
 output [
-  "Train " ++ show(TIntervallesTRef[k]) ++ 
-  ": Arrivée=" ++ show(TIntervallesPDebut[k]) ++ 
+  "Train " ++ show(TIntervallesTRef[k]) ++
+  ": Arrivée=" ++ show(TIntervallesPDebut[k]) ++
   " périodes, Départ=" ++ show(TIntervallesPFin[k]) ++ " périodes\n"
   | k in 1..TIntervallesNbTotal
 ];
@@ -48,11 +46,11 @@ output [
         int: weight = if MTPeriode[TTRef[t], MInstanceRefType[i]] == 0 then 100 else 1 endif;
         int: retard = max(0, fix(varMEnd[i]) - fix(varDeadline[i]));
     } in
-    "Maintenance " ++ show(i) ++ 
-    " (Train " ++ show(t) ++ 
-    ", Priorité=" ++ show(weight) ++ 
-    "): Début=" ++ show(fix(varMStart[i])) ++ 
-    ", Fin=" ++ show(fix(varMEnd[i])) ++ 
+    "Maintenance " ++ show(i) ++
+    " (Train " ++ show(t) ++
+    ", Priorité=" ++ show(weight) ++
+    "): Début=" ++ show(fix(varMStart[i])) ++
+    ", Fin=" ++ show(fix(varMEnd[i])) ++
     ", Retard=" ++ show(retard) ++ " périodes\n"
   else "" endif
   | i in 1..MInstanceNb
@@ -71,11 +69,11 @@ output [
   if fix(varMActive[i]) then
     concat([
       if fix(varODuree[i, o]) > 0 then
-        "Opération " ++ show(o) ++ 
-        " (Maint " ++ show(i) ++ 
-        ", Voie " ++ show(fix(varMVoieChoisie[i])) ++ 
-        "): Début=" ++ show(fix(varOStart[i, o])) ++ 
-        ", Fin=" ++ show(fix(varOStart[i, o] + varODuree[i, o])) ++ 
+        "Opération " ++ show(o) ++
+        " (Maint " ++ show(i) ++
+        ", Voie " ++ show(fix(varMVoieChoisie[i])) ++
+        "): Début=" ++ show(fix(varOStart[i, o])) ++
+        ", Fin=" ++ show(fix(varOStart[i, o] + varODuree[i, o])) ++
         ", Durée=" ++ show(fix(varODuree[i, o])) ++ " périodes\n"
       else "" endif
       | o in 1..OTNb
@@ -88,17 +86,17 @@ output ["\n--- Techniciens ---\n"];
 
 output [
   let {
-      int: max_blocs = MaxPauses + 1; 
-      
+      int: max_blocs = MaxPauses + 1;
+
       int: start_shift = min([P+1] ++ [
-          fix(varShiftStart[s, j, b]) 
-          | j in 1..J, b in 1..max_blocs 
+          fix(varShiftStart[s, j, b])
+          | j in 1..J, b in 1..max_blocs
           where fix(varShiftEnd[s, j, b]) > fix(varShiftStart[s, j, b])
       ]);
-      
+
       int: end_shift = max([0] ++ [
-          fix(varShiftEnd[s, j, b]) 
-          | j in 1..J, b in 1..max_blocs 
+          fix(varShiftEnd[s, j, b])
+          | j in 1..J, b in 1..max_blocs
           where fix(varShiftEnd[s, j, b]) > fix(varShiftStart[s, j, b])
       ]);
 
@@ -125,14 +123,14 @@ output [
 
 output ["------------------------------------------------------------------------------\n"];
 
-% ==============================================================================
-% Affichage GANTT - Trains
-% ==============================================================================
+% ===============================================
+% Affichage GANTT Trains
+% ===============================================
 
 output [
-  "\n==============================================================================\n",
+=================================================
   "                            GANTT TRAINS\n",
-  "==============================================================================\n",
+=================================================
   "Légende Présence : [ ] = Au centre de maintenance, . = En circulation/Ailleurs\n",
   "Légende Maint    : Chiffre = Type de maintenance en cours\n",
   "Légende Op       : Chiffre = Type d'opération en cours\n"
@@ -193,14 +191,14 @@ output [
   | t in 1..TNb
 ];
 
-% ==============================================================================
-% Affichage GANTT - Techniciens
-% ==============================================================================
+% ===============================================
+% Affichage GANTT Techniciens
+% ===============================================
 
 output [
-  "\n==============================================================================\n",
+=================================================
   "                            GANTT TECHNICIENS\n",
-  "==============================================================================\n",
+=================================================
   "Légende: [0-9] = Opération, # = Attente, . = Repos\n"
 ];
 
@@ -210,22 +208,22 @@ output [
     (if p > 1 /\ (p-1) mod PJ == 0 then "|" else "" endif) ++
     let {
        int: j_curr = (p-1) div PJ + 1;
-       
+
        bool: is_working = exists(b in 1..(MaxPauses+1))(
-           p >= fix(varShiftStart[s, j_curr, b]) /\ 
+           p >= fix(varShiftStart[s, j_curr, b]) /\
            p <  fix(varShiftEnd[s, j_curr, b])
        );
-       
+
        int: op_type = sum(i in 1..MInstanceNb, o in 1..OTNb)(
             if fix(varMActive[i]) /\
                fix(varOAffectation[i, o]) == s /\
-               p > fix(varOStart[i, o]) /\ 
+               p > fix(varOStart[i, o]) /\
                p <= fix(varOStart[i, o]) + fix(varODuree[i, o])
             then o else 0 endif
        );
     } in
-    if op_type > 0 then show(op_type mod 10) 
-    elseif is_working then "#" 
+    if op_type > 0 then show(op_type mod 10)
+    elseif is_working then "#"
     else "." endif
     | p in 1..P
   ]) ++
