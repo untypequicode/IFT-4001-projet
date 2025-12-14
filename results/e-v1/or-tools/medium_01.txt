@@ -1,3 +1,8 @@
+
+￼
+Running main.mzn, medium_01_e-v1.dzn
+22s 112msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -16,193 +21,132 @@ Train 5: Arrivée=45 périodes, Départ=71 périodes
 Train 5: Arrivée=110 périodes, Départ=132 périodes
 
 --- Maintenances Planifiées (Actives) ---
-Maintenance 1 (Train 1, Priorité=1): Début=62, Fin=63, Retard=0 périodes
-Maintenance 2 (Train 1, Priorité=1): Début=92, Fin=93, Retard=0 périodes
-Maintenance 3 (Train 1, Priorité=1): Début=60, Fin=61, Retard=0 périodes
-Maintenance 4 (Train 1, Priorité=1): Début=64, Fin=69, Retard=0 périodes
-Maintenance 5 (Train 1, Priorité=1): Début=96, Fin=101, Retard=0 périodes
-Maintenance 6 (Train 1, Priorité=1): Début=54, Fin=59, Retard=0 périodes
-Maintenance 7 (Train 2, Priorité=1): Début=51, Fin=52, Retard=0 périodes
-Maintenance 8 (Train 2, Priorité=1): Début=89, Fin=90, Retard=0 périodes
+Maintenance 1 (Train 1, Priorité=1): Début=60, Fin=61, Retard=0 périodes
+Maintenance 2 (Train 1, Priorité=1): Début=91, Fin=92, Retard=0 périodes
+Maintenance 3 (Train 1, Priorité=1): Début=68, Fin=69, Retard=0 périodes
+Maintenance 4 (Train 1, Priorité=1): Début=54, Fin=59, Retard=0 périodes
+Maintenance 5 (Train 1, Priorité=1): Début=96, Fin=118, Retard=0 périodes
+Maintenance 6 (Train 1, Priorité=1): Début=62, Fin=67, Retard=0 périodes
+Maintenance 7 (Train 2, Priorité=1): Début=34, Fin=35, Retard=0 périodes
+Maintenance 8 (Train 2, Priorité=1): Début=95, Fin=96, Retard=0 périodes
 Maintenance 9 (Train 2, Priorité=1): Début=136, Fin=137, Retard=0 périodes
-Maintenance 10 (Train 2, Priorité=1): Début=34, Fin=42, Retard=0 périodes
-Maintenance 11 (Train 2, Priorité=1): Début=91, Fin=96, Retard=0 périodes
+Maintenance 10 (Train 2, Priorité=1): Début=18, Fin=31, Retard=0 périodes
+Maintenance 11 (Train 2, Priorité=1): Début=85, Fin=90, Retard=0 périodes
 Maintenance 12 (Train 2, Priorité=1): Début=130, Fin=135, Retard=0 périodes
-Maintenance 13 (Train 3, Priorité=1): Début=50, Fin=51, Retard=0 périodes
-Maintenance 14 (Train 3, Priorité=1): Début=85, Fin=86, Retard=0 périodes
-Maintenance 15 (Train 3, Priorité=1): Début=137, Fin=138, Retard=0 périodes
+Maintenance 13 (Train 3, Priorité=1): Début=39, Fin=40, Retard=0 périodes
+Maintenance 14 (Train 3, Priorité=1): Début=97, Fin=98, Retard=0 périodes
+Maintenance 15 (Train 3, Priorité=1): Début=135, Fin=136, Retard=0 périodes
 Maintenance 16 (Train 3, Priorité=1): Début=33, Fin=38, Retard=2292 périodes
-Maintenance 17 (Train 3, Priorité=1): Début=72, Fin=84, Retard=0 périodes
-Maintenance 18 (Train 3, Priorité=1): Début=139, Fin=144, Retard=0 périodes
-Maintenance 19 (Train 4, Priorité=1): Début=39, Fin=40, Retard=0 périodes
-Maintenance 20 (Train 4, Priorité=1): Début=90, Fin=91, Retard=0 périodes
-Maintenance 22 (Train 4, Priorité=1): Début=42, Fin=47, Retard=0 périodes
-Maintenance 23 (Train 4, Priorité=1): Début=84, Fin=89, Retard=0 périodes
-Maintenance 25 (Train 5, Priorité=1): Début=52, Fin=53, Retard=0 périodes
-Maintenance 26 (Train 5, Priorité=1): Début=110, Fin=111, Retard=0 périodes
-Maintenance 27 (Train 5, Priorité=1): Début=65, Fin=66, Retard=0 périodes
+Maintenance 17 (Train 3, Priorité=1): Début=90, Fin=95, Retard=0 périodes
+Maintenance 18 (Train 3, Priorité=1): Début=137, Fin=142, Retard=0 périodes
+Maintenance 19 (Train 4, Priorité=1): Début=54, Fin=55, Retard=0 périodes
+Maintenance 20 (Train 4, Priorité=1): Début=86, Fin=87, Retard=0 périodes
+Maintenance 22 (Train 4, Priorité=1): Début=40, Fin=45, Retard=0 périodes
+Maintenance 23 (Train 4, Priorité=1): Début=118, Fin=123, Retard=0 périodes
+Maintenance 25 (Train 5, Priorité=1): Début=69, Fin=70, Retard=0 périodes
+Maintenance 26 (Train 5, Priorité=1): Début=123, Fin=124, Retard=0 périodes
+Maintenance 27 (Train 5, Priorité=1): Début=67, Fin=68, Retard=0 périodes
 Maintenance 28 (Train 5, Priorité=1): Début=45, Fin=50, Retard=1646 périodes
-Maintenance 29 (Train 5, Priorité=1): Début=122, Fin=127, Retard=0 périodes
-Maintenance 30 (Train 5, Priorité=1): Début=59, Fin=64, Retard=0 périodes
+Maintenance 29 (Train 5, Priorité=1): Début=110, Fin=115, Retard=0 périodes
+Maintenance 30 (Train 5, Priorité=1): Début=55, Fin=62, Retard=0 périodes
 Maintenance 21 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
 Maintenance 24 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
 
 --- Opérations ---
-Opération 1 (Maint 1, Voie 1): Début=62, Fin=63, Durée=1 périodes
-Opération 1 (Maint 2, Voie 1): Début=92, Fin=93, Durée=1 périodes
-Opération 1 (Maint 3, Voie 1): Début=60, Fin=61, Durée=1 périodes
-Opération 1 (Maint 4, Voie 1): Début=64, Fin=65, Durée=1 périodes
-Opération 3 (Maint 4, Voie 1): Début=66, Fin=69, Durée=3 périodes
+Opération 1 (Maint 1, Voie 2): Début=60, Fin=61, Durée=1 périodes
+Opération 1 (Maint 2, Voie 1): Début=91, Fin=92, Durée=1 périodes
+Opération 1 (Maint 3, Voie 1): Début=68, Fin=69, Durée=1 périodes
+Opération 1 (Maint 4, Voie 2): Début=54, Fin=55, Durée=1 périodes
+Opération 3 (Maint 4, Voie 2): Début=56, Fin=59, Durée=3 périodes
 Opération 1 (Maint 5, Voie 1): Début=96, Fin=97, Durée=1 périodes
-Opération 3 (Maint 5, Voie 1): Début=98, Fin=101, Durée=3 périodes
-Opération 1 (Maint 6, Voie 1): Début=54, Fin=55, Durée=1 périodes
-Opération 3 (Maint 6, Voie 1): Début=56, Fin=59, Durée=3 périodes
-Opération 1 (Maint 7, Voie 1): Début=51, Fin=52, Durée=1 périodes
-Opération 1 (Maint 8, Voie 2): Début=89, Fin=90, Durée=1 périodes
+Opération 3 (Maint 5, Voie 1): Début=115, Fin=118, Durée=3 périodes
+Opération 1 (Maint 6, Voie 1): Début=62, Fin=63, Durée=1 périodes
+Opération 3 (Maint 6, Voie 1): Début=64, Fin=67, Durée=3 périodes
+Opération 1 (Maint 7, Voie 1): Début=34, Fin=35, Durée=1 périodes
+Opération 1 (Maint 8, Voie 1): Début=95, Fin=96, Durée=1 périodes
 Opération 1 (Maint 9, Voie 1): Début=136, Fin=137, Durée=1 périodes
-Opération 1 (Maint 10, Voie 2): Début=34, Fin=35, Durée=1 périodes
-Opération 3 (Maint 10, Voie 2): Début=39, Fin=42, Durée=3 périodes
-Opération 1 (Maint 11, Voie 2): Début=91, Fin=92, Durée=1 périodes
-Opération 3 (Maint 11, Voie 2): Début=93, Fin=96, Durée=3 périodes
-Opération 1 (Maint 12, Voie 1): Début=130, Fin=131, Durée=1 périodes
-Opération 3 (Maint 12, Voie 1): Début=132, Fin=135, Durée=3 périodes
-Opération 1 (Maint 13, Voie 1): Début=50, Fin=51, Durée=1 périodes
-Opération 1 (Maint 14, Voie 2): Début=85, Fin=86, Durée=1 périodes
-Opération 1 (Maint 15, Voie 2): Début=137, Fin=138, Durée=1 périodes
-Opération 1 (Maint 16, Voie 1): Début=33, Fin=34, Durée=1 périodes
-Opération 3 (Maint 16, Voie 1): Début=35, Fin=38, Durée=3 périodes
-Opération 1 (Maint 17, Voie 2): Début=72, Fin=73, Durée=1 périodes
-Opération 3 (Maint 17, Voie 2): Début=81, Fin=84, Durée=3 périodes
-Opération 1 (Maint 18, Voie 2): Début=139, Fin=140, Durée=1 périodes
-Opération 3 (Maint 18, Voie 2): Début=141, Fin=144, Durée=3 périodes
-Opération 1 (Maint 19, Voie 1): Début=39, Fin=40, Durée=1 périodes
-Opération 1 (Maint 20, Voie 2): Début=90, Fin=91, Durée=1 périodes
-Opération 1 (Maint 22, Voie 1): Début=42, Fin=43, Durée=1 périodes
-Opération 3 (Maint 22, Voie 1): Début=44, Fin=47, Durée=3 périodes
-Opération 1 (Maint 23, Voie 1): Début=84, Fin=85, Durée=1 périodes
-Opération 3 (Maint 23, Voie 1): Début=86, Fin=89, Durée=3 périodes
-Opération 1 (Maint 25, Voie 1): Début=52, Fin=53, Durée=1 périodes
-Opération 1 (Maint 26, Voie 2): Début=110, Fin=111, Durée=1 périodes
-Opération 1 (Maint 27, Voie 2): Début=65, Fin=66, Durée=1 périodes
+Opération 1 (Maint 10, Voie 1): Début=18, Fin=19, Durée=1 périodes
+Opération 3 (Maint 10, Voie 1): Début=28, Fin=31, Durée=3 périodes
+Opération 1 (Maint 11, Voie 2): Début=85, Fin=86, Durée=1 périodes
+Opération 3 (Maint 11, Voie 2): Début=87, Fin=90, Durée=3 périodes
+Opération 1 (Maint 12, Voie 2): Début=130, Fin=131, Durée=1 périodes
+Opération 3 (Maint 12, Voie 2): Début=132, Fin=135, Durée=3 périodes
+Opération 1 (Maint 13, Voie 1): Début=39, Fin=40, Durée=1 périodes
+Opération 1 (Maint 14, Voie 2): Début=97, Fin=98, Durée=1 périodes
+Opération 1 (Maint 15, Voie 2): Début=135, Fin=136, Durée=1 périodes
+Opération 1 (Maint 16, Voie 2): Début=33, Fin=34, Durée=1 périodes
+Opération 3 (Maint 16, Voie 2): Début=35, Fin=38, Durée=3 périodes
+Opération 1 (Maint 17, Voie 2): Début=90, Fin=91, Durée=1 périodes
+Opération 3 (Maint 17, Voie 2): Début=92, Fin=95, Durée=3 périodes
+Opération 1 (Maint 18, Voie 1): Début=137, Fin=138, Durée=1 périodes
+Opération 3 (Maint 18, Voie 1): Début=139, Fin=142, Durée=3 périodes
+Opération 1 (Maint 19, Voie 1): Début=54, Fin=55, Durée=1 périodes
+Opération 1 (Maint 20, Voie 1): Début=86, Fin=87, Durée=1 périodes
+Opération 1 (Maint 22, Voie 1): Début=40, Fin=41, Durée=1 périodes
+Opération 3 (Maint 22, Voie 1): Début=42, Fin=45, Durée=3 périodes
+Opération 1 (Maint 23, Voie 1): Début=118, Fin=119, Durée=1 périodes
+Opération 3 (Maint 23, Voie 1): Début=120, Fin=123, Durée=3 périodes
+Opération 1 (Maint 25, Voie 1): Début=69, Fin=70, Durée=1 périodes
+Opération 1 (Maint 26, Voie 1): Début=123, Fin=124, Durée=1 périodes
+Opération 1 (Maint 27, Voie 1): Début=67, Fin=68, Durée=1 périodes
 Opération 1 (Maint 28, Voie 2): Début=45, Fin=46, Durée=1 périodes
 Opération 3 (Maint 28, Voie 2): Début=47, Fin=50, Durée=3 périodes
-Opération 1 (Maint 29, Voie 1): Début=122, Fin=123, Durée=1 périodes
-Opération 3 (Maint 29, Voie 1): Début=124, Fin=127, Durée=3 périodes
-Opération 1 (Maint 30, Voie 2): Début=59, Fin=60, Durée=1 périodes
-Opération 3 (Maint 30, Voie 2): Début=61, Fin=64, Durée=3 périodes
+Opération 1 (Maint 29, Voie 2): Début=110, Fin=111, Durée=1 périodes
+Opération 3 (Maint 29, Voie 2): Début=112, Fin=115, Durée=3 périodes
+Opération 1 (Maint 30, Voie 1): Début=55, Fin=56, Durée=1 périodes
+Opération 3 (Maint 30, Voie 1): Début=59, Fin=62, Durée=3 périodes
 
 --- Techniciens ---
-Technicien 7 (Type 3): Activité globale de 86 à 144 périodes
-   -> Exécute Op 1 (Maint 2): 92 à 93
+Technicien 7 (Type 3): Activité globale de 109 à 142 périodes
+   -> Exécute Op 3 (Maint 5): 115 à 118
    -> Exécute Op 1 (Maint 9): 136 à 137
-   -> Exécute Op 1 (Maint 11): 91 à 92
-   -> Exécute Op 3 (Maint 11): 93 à 96
    -> Exécute Op 1 (Maint 12): 130 à 131
    -> Exécute Op 3 (Maint 12): 132 à 135
-   -> Exécute Op 1 (Maint 18): 139 à 140
-   -> Exécute Op 3 (Maint 18): 141 à 144
-   -> Exécute Op 3 (Maint 23): 86 à 89
-   -> Exécute Op 1 (Maint 29): 122 à 123
-   -> Exécute Op 3 (Maint 29): 124 à 127
-Technicien 8 (Type 3): Activité globale de 39 à 91 périodes
-   -> Exécute Op 1 (Maint 4): 64 à 65
-   -> Exécute Op 3 (Maint 4): 66 à 69
-   -> Exécute Op 1 (Maint 8): 89 à 90
-   -> Exécute Op 3 (Maint 10): 39 à 42
-   -> Exécute Op 1 (Maint 20): 90 à 91
-   -> Exécute Op 3 (Maint 22): 44 à 47
-   -> Exécute Op 1 (Maint 25): 52 à 53
-   -> Exécute Op 1 (Maint 27): 65 à 66
-   -> Exécute Op 3 (Maint 30): 61 à 64
-Technicien 9 (Type 3): Activité globale de 42 à 111 périodes
-   -> Exécute Op 1 (Maint 5): 96 à 97
-   -> Exécute Op 3 (Maint 5): 98 à 101
-   -> Exécute Op 1 (Maint 14): 85 à 86
-   -> Exécute Op 1 (Maint 17): 72 à 73
-   -> Exécute Op 3 (Maint 17): 81 à 84
-   -> Exécute Op 1 (Maint 22): 42 à 43
-   -> Exécute Op 1 (Maint 23): 84 à 85
-   -> Exécute Op 1 (Maint 26): 110 à 111
-Technicien 10 (Type 3): Activité globale de 32 à 138 périodes
-   -> Exécute Op 1 (Maint 1): 62 à 63
-   -> Exécute Op 1 (Maint 3): 60 à 61
-   -> Exécute Op 1 (Maint 6): 54 à 55
-   -> Exécute Op 3 (Maint 6): 56 à 59
-   -> Exécute Op 1 (Maint 7): 51 à 52
-   -> Exécute Op 1 (Maint 10): 34 à 35
-   -> Exécute Op 1 (Maint 13): 50 à 51
-   -> Exécute Op 1 (Maint 15): 137 à 138
-   -> Exécute Op 1 (Maint 16): 33 à 34
-   -> Exécute Op 3 (Maint 16): 35 à 38
-   -> Exécute Op 1 (Maint 19): 39 à 40
+   -> Exécute Op 1 (Maint 15): 135 à 136
+   -> Exécute Op 1 (Maint 18): 137 à 138
+   -> Exécute Op 3 (Maint 18): 139 à 142
+   -> Exécute Op 1 (Maint 23): 118 à 119
+   -> Exécute Op 3 (Maint 23): 120 à 123
+   -> Exécute Op 1 (Maint 26): 123 à 124
+Technicien 8 (Type 3): Activité globale de 60 à 92 périodes
+   -> Exécute Op 1 (Maint 1): 60 à 61
+   -> Exécute Op 1 (Maint 2): 91 à 92
+   -> Exécute Op 1 (Maint 3): 68 à 69
+   -> Exécute Op 3 (Maint 6): 64 à 67
+   -> Exécute Op 1 (Maint 11): 85 à 86
+   -> Exécute Op 3 (Maint 11): 87 à 90
+   -> Exécute Op 1 (Maint 17): 90 à 91
+   -> Exécute Op 1 (Maint 20): 86 à 87
+   -> Exécute Op 1 (Maint 25): 69 à 70
+   -> Exécute Op 1 (Maint 27): 67 à 68
+Technicien 9 (Type 3): Activité globale de 28 à 63 périodes
+   -> Exécute Op 1 (Maint 4): 54 à 55
+   -> Exécute Op 3 (Maint 4): 56 à 59
+   -> Exécute Op 1 (Maint 6): 62 à 63
+   -> Exécute Op 3 (Maint 10): 28 à 31
+   -> Exécute Op 1 (Maint 22): 40 à 41
+   -> Exécute Op 3 (Maint 22): 42 à 45
    -> Exécute Op 1 (Maint 28): 45 à 46
    -> Exécute Op 3 (Maint 28): 47 à 50
-   -> Exécute Op 1 (Maint 30): 59 à 60
+   -> Exécute Op 1 (Maint 30): 55 à 56
+   -> Exécute Op 3 (Maint 30): 59 à 62
+Technicien 10 (Type 3): Activité globale de 18 à 115 périodes
+   -> Exécute Op 1 (Maint 5): 96 à 97
+   -> Exécute Op 1 (Maint 7): 34 à 35
+   -> Exécute Op 1 (Maint 8): 95 à 96
+   -> Exécute Op 1 (Maint 10): 18 à 19
+   -> Exécute Op 1 (Maint 13): 39 à 40
+   -> Exécute Op 1 (Maint 14): 97 à 98
+   -> Exécute Op 1 (Maint 16): 33 à 34
+   -> Exécute Op 3 (Maint 16): 35 à 38
+   -> Exécute Op 3 (Maint 17): 92 à 95
+   -> Exécute Op 1 (Maint 19): 54 à 55
+   -> Exécute Op 1 (Maint 29): 110 à 111
+   -> Exécute Op 3 (Maint 29): 112 à 115
 
 --- Objectif ---
 Retard pondéré total: 23938
 ------------------------------------------------------------------------------
-
-==============================================================================
-                            GANTT TRAINS
-==============================================================================
-Légende Présence : [ ] = Au centre de maintenance, . = En circulation/Ailleurs
-Légende Maint    : Chiffre = Type de maintenance en cours
-Légende Op       : Chiffre = Type d'opération en cours
-TRAIN 1 (Type 1)
-  Dispo : .....................................................[[[[[[[[[[[[[[[[.....................[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[........
-  Maint : ......................................................22222.1.1.22222.......................1...22222...........................................
-  Op  1 : ......................................................1.....1.1.1...........................1...1...............................................
-  Op  2 : ................................................................................................................................................
-  Op  3 : ........................................................333.......333.............................333...........................................
-------------------------------------------------------------------------------
-TRAIN 2 (Type 1)
-  Dispo : .................[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...............................[[[[[[[[[[[[.................................[[[[[[[[[[[[[[[
-  Maint : ..................................22222222.........1.....................................1.22222..................................22222.1.......
-  Op  1 : ..................................1................1.....................................1.1......................................1.....1.......
-  Op  2 : ................................................................................................................................................
-  Op  3 : .......................................333...................................................333....................................333.........
-------------------------------------------------------------------------------
-TRAIN 3 (Type 1)
-  Dispo : ................................[[[[[[[[[[[[[[[[[[[[[[.................[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[.................................[[[[[[[[[[
-  Maint : .................................22222............1.....................222222222222.1...................................................1.22222
-  Op  1 : .................................1................1.....................1............1...................................................1.1....
-  Op  2 : ................................................................................................................................................
-  Op  3 : ...................................333...........................................333.........................................................333
-------------------------------------------------------------------------------
-TRAIN 4 (Type 1)
-  Dispo : ......................................[[[[[[[[[[[[[[[[[...........................[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[................[
-  Maint : .......................................1..22222.....................................22222.1.....................................................
-  Op  1 : .......................................1..1.........................................1.....1.....................................................
-  Op  2 : ................................................................................................................................................
-  Op  3 : ............................................333.......................................333.......................................................
-------------------------------------------------------------------------------
-TRAIN 5 (Type 1)
-  Dispo : ............................................[[[[[[[[[[[[[[[[[[[[[[[[[[[......................................[[[[[[[[[[[[[[[[[[[[[[[............
-  Maint : .............................................22222..1......22222.1............................................1...........22222.................
-  Op  1 : .............................................1......1......1.....1............................................1...........1.....................
-  Op  2 : ................................................................................................................................................
-  Op  3 : ...............................................333...........333............................................................333.................
-------------------------------------------------------------------------------
-
-==============================================================================
-                            GANTT TECHNICIENS
-==============================================================================
-Légende: [0-9] = Opération, # = Attente, . = Repos
-Tech  1 (Type 1) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  2 (Type 1) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  3 (Type 1) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  4 (Type 2) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  5 (Type 2) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  6 (Type 2) : ................................................................................................................................................  [Périodes/Jour: J1:0]
-Tech  7 (Type 3) : .....................................................................................#333##11333.........................#1#333###1#333#1##1#333  [Périodes/Jour: J1:32]
-Tech  8 (Type 3) : ......................................#333##333#####1########33311333...................#11.....................................................  [Périodes/Jour: J1:32]
-Tech  9 (Type 3) : .........................................#1............................#1.......#33311##########1#333#########1.................................  [Périodes/Jour: J1:32]
-Tech 10 (Type 3) : ...............................##11333#1#####1#33311##1#33311#1.........................................................................#1......  [Périodes/Jour: J1:32]
-
-DIAGNOSTIC:
-Retard Total       : 23938
-Maintenances       : 28 / 30
 ----------
 ==========
-Finished in 7s 105msec.
+Finished in 22s 112msec.

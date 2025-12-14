@@ -1,4 +1,8 @@
 
+￼
+Running model.mzn, small_01_l-v1.dzn
+377msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -14,11 +18,11 @@ Maintenance 4 (Train 2, Priorité=2): Début=300min, Fin=330min, Retard=330min
 --- Opérations ---
 Opération 1 (Maint 1, Voie 1): Début=460min, Fin=490min, Durée=30min
 Opération 2 (Maint 2, Voie 2): Début=490min, Fin=520min, Durée=30min
-Opération 3 (Maint 3, Voie 3): Début=300min, Fin=330min, Durée=30min
+Opération 3 (Maint 3, Voie 1): Début=300min, Fin=330min, Durée=30min
 Opération 4 (Maint 4, Voie 2): Début=300min, Fin=330min, Durée=30min
 
 --- Objectif ---
 Retard pondéré total: 2300
 ----------
 ==========
-Finished in 148msec.
+Finished in 377msec.

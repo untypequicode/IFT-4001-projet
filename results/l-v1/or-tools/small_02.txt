@@ -1,4 +1,8 @@
 
+￼
+Running model.mzn, small_02_l-v1.dzn
+453msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -10,15 +14,15 @@ Train 3: Arrivée=410min, Départ=1440min
 Maintenance 1 (Train 1, Priorité=2): Début=490min, Fin=500min, Retard=500min
 Maintenance 2 (Train 1, Priorité=2): Début=500min, Fin=510min, Retard=0min
 Maintenance 3 (Train 2, Priorité=2): Début=330min, Fin=340min, Retard=340min
-Maintenance 4 (Train 2, Priorité=2): Début=461min, Fin=471min, Retard=0min
+Maintenance 4 (Train 2, Priorité=2): Début=460min, Fin=470min, Retard=0min
 Maintenance 5 (Train 3, Priorité=2): Début=430min, Fin=440min, Retard=0min
 Maintenance 6 (Train 3, Priorité=2): Début=410min, Fin=420min, Retard=420min
 
 --- Opérations ---
-Opération 1 (Maint 1, Voie 2): Début=490min, Fin=500min, Durée=10min
-Opération 2 (Maint 2, Voie 1): Début=500min, Fin=510min, Durée=10min
+Opération 1 (Maint 1, Voie 1): Début=490min, Fin=500min, Durée=10min
+Opération 2 (Maint 2, Voie 2): Début=500min, Fin=510min, Durée=10min
 Opération 3 (Maint 3, Voie 1): Début=330min, Fin=340min, Durée=10min
-Opération 4 (Maint 4, Voie 1): Début=461min, Fin=471min, Durée=10min
+Opération 4 (Maint 4, Voie 1): Début=460min, Fin=470min, Durée=10min
 Opération 5 (Maint 5, Voie 1): Début=430min, Fin=440min, Durée=10min
 Opération 6 (Maint 6, Voie 1): Début=410min, Fin=420min, Durée=10min
 
@@ -26,4 +30,4 @@ Opération 6 (Maint 6, Voie 1): Début=410min, Fin=420min, Durée=10min
 Retard pondéré total: 2520
 ----------
 ==========
-Finished in 200msec.
+Finished in 453msec.

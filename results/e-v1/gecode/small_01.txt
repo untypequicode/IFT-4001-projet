@@ -1,0 +1,51 @@
+
+￼
+Running main.mzn, small_01_e-v1.dzn
+816msec
+
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=47 périodes, Départ=88 périodes
+Train 1: Arrivée=113 périodes, Départ=131 périodes
+Train 2: Arrivée=31 périodes, Départ=64 périodes
+Train 2: Arrivée=82 périodes, Départ=109 périodes
+Train 2: Arrivée=120 périodes, Départ=144 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 4 (Train 1, Priorité=1): Début=47, Fin=50, Retard=0 périodes
+Maintenance 5 (Train 1, Priorité=1): Début=113, Fin=116, Retard=0 périodes
+Maintenance 6 (Train 1, Priorité=1): Début=51, Fin=54, Retard=0 périodes
+Maintenance 10 (Train 2, Priorité=1): Début=31, Fin=34, Retard=2643 périodes
+Maintenance 11 (Train 2, Priorité=1): Début=106, Fin=109, Retard=0 périodes
+Maintenance 12 (Train 2, Priorité=1): Début=120, Fin=123, Retard=0 périodes
+Maintenance 1 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 2 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 3 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 7 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 8 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 9 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+
+--- Opérations ---
+Opération 2 (Maint 4, Voie 2): Début=47, Fin=50, Durée=3 périodes
+Opération 2 (Maint 5, Voie 2): Début=113, Fin=116, Durée=3 périodes
+Opération 2 (Maint 6, Voie 2): Début=51, Fin=54, Durée=3 périodes
+Opération 2 (Maint 10, Voie 2): Début=31, Fin=34, Durée=3 périodes
+Opération 2 (Maint 11, Voie 2): Début=106, Fin=109, Durée=3 périodes
+Opération 2 (Maint 12, Voie 2): Début=120, Fin=123, Durée=3 périodes
+
+--- Techniciens ---
+Technicien 4 (Type 2): Activité globale de 31 à 123 périodes
+   -> Exécute Op 2 (Maint 4): 47 à 50
+   -> Exécute Op 2 (Maint 5): 113 à 116
+   -> Exécute Op 2 (Maint 6): 51 à 54
+   -> Exécute Op 2 (Maint 10): 31 à 34
+   -> Exécute Op 2 (Maint 11): 106 à 109
+   -> Exécute Op 2 (Maint 12): 120 à 123
+
+--- Objectif ---
+Retard pondéré total: 72090
+------------------------------------------------------------------------------
+----------
+==========
+Finished in 816msec.

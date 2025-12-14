@@ -1,0 +1,57 @@
+
+￼
+Running main.mzn, small_02_e-v1.dzn
+10m 0s
+
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=50 périodes, Départ=77 périodes
+Train 1: Arrivée=118 périodes, Départ=144 périodes
+Train 2: Arrivée=34 périodes, Départ=73 périodes
+Train 2: Arrivée=99 périodes, Départ=112 périodes
+Train 3: Arrivée=42 périodes, Départ=83 périodes
+Train 3: Arrivée=106 périodes, Départ=120 périodes
+Train 3: Arrivée=134 périodes, Départ=144 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 3 (Train 1, Priorité=1): Début=50, Fin=51, Retard=2212 périodes
+Maintenance 6 (Train 1, Priorité=1): Début=53, Fin=54, Retard=0 périodes
+Maintenance 9 (Train 2, Priorité=1): Début=50, Fin=51, Retard=2194 périodes
+Maintenance 12 (Train 2, Priorité=1): Début=52, Fin=53, Retard=0 périodes
+Maintenance 18 (Train 3, Priorité=1): Début=134, Fin=135, Retard=1424 périodes
+Maintenance 1 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 2 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 4 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 5 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 7 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 8 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 10 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 11 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 13 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 14 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 15 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 16 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 17 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+
+--- Opérations ---
+Opération 1 (Maint 3, Voie 4): Début=50, Fin=51, Durée=1 périodes
+Opération 1 (Maint 6, Voie 3): Début=53, Fin=54, Durée=1 périodes
+Opération 1 (Maint 9, Voie 3): Début=50, Fin=51, Durée=1 périodes
+Opération 1 (Maint 12, Voie 3): Début=52, Fin=53, Durée=1 périodes
+Opération 1 (Maint 18, Voie 3): Début=134, Fin=135, Durée=1 périodes
+
+--- Techniciens ---
+Technicien 1 (Type 1): Activité globale de 50 à 135 périodes
+   -> Exécute Op 1 (Maint 6): 53 à 54
+   -> Exécute Op 1 (Maint 9): 50 à 51
+   -> Exécute Op 1 (Maint 12): 52 à 53
+   -> Exécute Op 1 (Maint 18): 134 à 135
+Technicien 2 (Type 1): Activité globale de 0 à 51 périodes
+   -> Exécute Op 1 (Maint 3): 50 à 51
+
+--- Objectif ---
+Retard pondéré total: 147880
+------------------------------------------------------------------------------
+----------
+Finished in 10m 0s.

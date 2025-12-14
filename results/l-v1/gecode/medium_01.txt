@@ -1,3 +1,8 @@
+
+￼
+Running model.mzn, medium_01_l-v1.dzn
+590msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -40,4 +45,4 @@ Opération 15 (Maint 10, Voie 1): Début=460min, Fin=490min, Durée=30min
 Retard pondéré total: 1720
 ----------
 ==========
-Finished in 204msec.
+Finished in 590msec.

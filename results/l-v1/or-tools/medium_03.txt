@@ -1,3 +1,8 @@
+
+￼
+Running model.mzn, medium_03_l-v1.dzn
+5s 523msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -8,41 +13,41 @@ Train 4: Arrivée=440min, Départ=1430min
 Train 5: Arrivée=370min, Départ=1440min
 
 --- Maintenances ---
-Maintenance 1 (Train 1, Priorité=1): Début=420min, Fin=440min, Retard=440min
-Maintenance 2 (Train 1, Priorité=2): Début=350min, Fin=390min, Retard=0min
+Maintenance 1 (Train 1, Priorité=1): Début=380min, Fin=400min, Retard=400min
+Maintenance 2 (Train 1, Priorité=2): Début=390min, Fin=430min, Retard=0min
 Maintenance 3 (Train 1, Priorité=2): Début=350min, Fin=370min, Retard=370min
 Maintenance 4 (Train 2, Priorité=1): Début=310min, Fin=330min, Retard=330min
-Maintenance 5 (Train 2, Priorité=2): Début=351min, Fin=391min, Retard=0min
+Maintenance 5 (Train 2, Priorité=2): Début=310min, Fin=350min, Retard=0min
 Maintenance 6 (Train 2, Priorité=2): Début=310min, Fin=330min, Retard=330min
-Maintenance 7 (Train 3, Priorité=1): Début=380min, Fin=400min, Retard=400min
-Maintenance 8 (Train 3, Priorité=2): Début=372min, Fin=412min, Retard=0min
+Maintenance 7 (Train 3, Priorité=1): Début=420min, Fin=440min, Retard=440min
+Maintenance 8 (Train 3, Priorité=2): Début=330min, Fin=370min, Retard=0min
 Maintenance 9 (Train 3, Priorité=2): Début=350min, Fin=370min, Retard=370min
 Maintenance 10 (Train 4, Priorité=1): Début=460min, Fin=480min, Retard=480min
-Maintenance 11 (Train 4, Priorité=2): Début=520min, Fin=560min, Retard=0min
+Maintenance 11 (Train 4, Priorité=2): Début=570min, Fin=610min, Retard=0min
 Maintenance 12 (Train 4, Priorité=2): Début=460min, Fin=480min, Retard=480min
 Maintenance 13 (Train 5, Priorité=1): Début=420min, Fin=440min, Retard=440min
-Maintenance 14 (Train 5, Priorité=2): Début=421min, Fin=461min, Retard=0min
+Maintenance 14 (Train 5, Priorité=2): Début=510min, Fin=550min, Retard=0min
 Maintenance 15 (Train 5, Priorité=2): Début=390min, Fin=410min, Retard=410min
 
 --- Opérations ---
-Opération 1 (Maint 1, Voie 1): Début=420min, Fin=440min, Durée=20min
-Opération 2 (Maint 2, Voie 4): Début=350min, Fin=390min, Durée=40min
+Opération 1 (Maint 1, Voie 3): Début=380min, Fin=400min, Durée=20min
+Opération 2 (Maint 2, Voie 2): Début=390min, Fin=430min, Durée=40min
 Opération 3 (Maint 3, Voie 3): Début=350min, Fin=370min, Durée=20min
-Opération 4 (Maint 4, Voie 1): Début=310min, Fin=330min, Durée=20min
-Opération 5 (Maint 5, Voie 5): Début=351min, Fin=391min, Durée=40min
-Opération 6 (Maint 6, Voie 3): Début=310min, Fin=330min, Durée=20min
-Opération 7 (Maint 7, Voie 1): Début=380min, Fin=400min, Durée=20min
-Opération 8 (Maint 8, Voie 2): Début=372min, Fin=412min, Durée=40min
+Opération 4 (Maint 4, Voie 3): Début=310min, Fin=330min, Durée=20min
+Opération 5 (Maint 5, Voie 4): Début=310min, Fin=350min, Durée=40min
+Opération 6 (Maint 6, Voie 1): Début=310min, Fin=330min, Durée=20min
+Opération 7 (Maint 7, Voie 3): Début=420min, Fin=440min, Durée=20min
+Opération 8 (Maint 8, Voie 5): Début=330min, Fin=370min, Durée=40min
 Opération 9 (Maint 9, Voie 1): Début=350min, Fin=370min, Durée=20min
-Opération 10 (Maint 10, Voie 3): Début=460min, Fin=480min, Durée=20min
-Opération 11 (Maint 11, Voie 2): Début=520min, Fin=560min, Durée=40min
-Opération 12 (Maint 12, Voie 1): Début=460min, Fin=480min, Durée=20min
-Opération 13 (Maint 13, Voie 3): Début=420min, Fin=440min, Durée=20min
-Opération 14 (Maint 14, Voie 4): Début=421min, Fin=461min, Durée=40min
-Opération 15 (Maint 15, Voie 3): Début=390min, Fin=410min, Durée=20min
+Opération 10 (Maint 10, Voie 1): Début=460min, Fin=480min, Durée=20min
+Opération 11 (Maint 11, Voie 5): Début=570min, Fin=610min, Durée=40min
+Opération 12 (Maint 12, Voie 3): Début=460min, Fin=480min, Durée=20min
+Opération 13 (Maint 13, Voie 1): Début=420min, Fin=440min, Durée=20min
+Opération 14 (Maint 14, Voie 5): Début=510min, Fin=550min, Durée=40min
+Opération 15 (Maint 15, Voie 1): Début=390min, Fin=410min, Durée=20min
 
 --- Objectif ---
 Retard pondéré total: 6010
 ----------
 ==========
-Finished in 3s 582msec.
+Finished in 5s 523msec.

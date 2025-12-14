@@ -1,0 +1,7 @@
+
+￼
+Running main.mzn, large_02_e-v1.dzn
+10m 7s
+
+=====UNKNOWN=====
+Finished in 10m 7s.

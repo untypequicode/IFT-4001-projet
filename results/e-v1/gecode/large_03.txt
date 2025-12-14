@@ -1,0 +1,152 @@
+
+￼
+Running main.mzn, large_03_e-v1.dzn
+10m 5s
+
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=25 périodes, Départ=59 périodes
+Train 1: Arrivée=73 périodes, Départ=84 périodes
+Train 1: Arrivée=99 périodes, Départ=132 périodes
+Train 2: Arrivée=44 périodes, Départ=70 périodes
+Train 2: Arrivée=99 périodes, Départ=138 périodes
+Train 3: Arrivée=46 périodes, Départ=86 périodes
+Train 3: Arrivée=108 périodes, Départ=144 périodes
+Train 4: Arrivée=32 périodes, Départ=70 périodes
+Train 4: Arrivée=81 périodes, Départ=95 périodes
+Train 4: Arrivée=123 périodes, Départ=144 périodes
+Train 5: Arrivée=44 périodes, Départ=82 périodes
+Train 5: Arrivée=120 périodes, Départ=144 périodes
+Train 6: Arrivée=30 périodes, Départ=63 périodes
+Train 6: Arrivée=81 périodes, Départ=93 périodes
+Train 6: Arrivée=124 périodes, Départ=138 périodes
+Train 7: Arrivée=38 périodes, Départ=68 périodes
+Train 7: Arrivée=86 périodes, Départ=129 périodes
+Train 8: Arrivée=30 périodes, Départ=70 périodes
+Train 8: Arrivée=102 périodes, Départ=132 périodes
+Train 9: Arrivée=63 périodes, Départ=87 périodes
+Train 9: Arrivée=118 périodes, Départ=144 périodes
+Train 10: Arrivée=26 périodes, Départ=51 périodes
+Train 10: Arrivée=69 périodes, Départ=104 périodes
+Train 10: Arrivée=129 périodes, Départ=144 périodes
+Train 11: Arrivée=28 périodes, Départ=67 périodes
+Train 11: Arrivée=101 périodes, Départ=144 périodes
+Train 12: Arrivée=51 périodes, Départ=84 périodes
+Train 12: Arrivée=116 périodes, Départ=138 périodes
+Train 13: Arrivée=49 périodes, Départ=67 périodes
+Train 13: Arrivée=82 périodes, Départ=116 périodes
+Train 13: Arrivée=127 périodes, Départ=144 périodes
+Train 14: Arrivée=42 périodes, Départ=82 périodes
+Train 14: Arrivée=101 périodes, Départ=139 périodes
+Train 15: Arrivée=22 périodes, Départ=48 périodes
+Train 15: Arrivée=75 périodes, Départ=120 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 12 (Train 2, Priorité=1): Début=33, Fin=37, Retard=0 périodes
+Maintenance 18 (Train 3, Priorité=1): Début=25, Fin=29, Retard=2559 périodes
+Maintenance 30 (Train 5, Priorité=1): Début=29, Fin=33, Retard=3281 périodes
+Maintenance 1 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 2 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 3 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 4 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 5 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 6 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 7 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 8 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 9 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 10 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 11 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 13 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 14 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 15 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 16 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 17 (Train 3) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 19 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 20 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 21 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 22 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 23 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 24 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 25 (Train 5) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 26 (Train 5) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 27 (Train 5) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 28 (Train 5) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 29 (Train 5) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 31 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 32 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 33 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 34 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 35 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 36 (Train 6) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 37 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 38 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 39 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 40 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 41 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 42 (Train 7) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 43 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 44 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 45 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 46 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 47 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 48 (Train 8) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 49 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 50 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 51 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 52 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 53 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 54 (Train 9) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 55 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 56 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 57 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 58 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 59 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 60 (Train 10) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 61 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 62 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 63 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 64 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 65 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 66 (Train 11) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 67 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 68 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 69 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 70 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 71 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 72 (Train 12) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 73 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 74 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 75 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 76 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 77 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 78 (Train 13) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 79 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 80 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 81 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 82 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 83 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 84 (Train 14) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 85 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 86 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 87 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 88 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 89 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 90 (Train 15) : NON PLANIFIÉE (Pénalité appliquée)
+
+--- Opérations ---
+Opération 3 (Maint 12, Voie 5): Début=33, Fin=37, Durée=4 périodes
+Opération 3 (Maint 18, Voie 5): Début=25, Fin=29, Durée=4 périodes
+Opération 3 (Maint 30, Voie 5): Début=29, Fin=33, Durée=4 périodes
+
+--- Techniciens ---
+Technicien 2 (Type 1): Activité globale de 0 à 37 périodes
+   -> Exécute Op 3 (Maint 12): 33 à 37
+   -> Exécute Op 3 (Maint 18): 25 à 29
+   -> Exécute Op 3 (Maint 30): 29 à 33
+
+--- Objectif ---
+Retard pondéré total: 944852
+------------------------------------------------------------------------------
+----------
+Finished in 10m 5s.

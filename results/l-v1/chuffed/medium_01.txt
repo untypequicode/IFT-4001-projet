@@ -1,0 +1,50 @@
+
+￼
+Running model.mzn, medium_01_l-v1.dzn
+4s 671msec
+
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=530min, Départ=1360min
+Train 2: Arrivée=170min, Départ=1440min
+Train 3: Arrivée=320min, Départ=1440min
+Train 4: Arrivée=380min, Départ=1440min
+Train 5: Arrivée=440min, Départ=1320min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=1250min, Fin=1260min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=1310min, Fin=1360min, Retard=0min
+Maintenance 3 (Train 2, Priorité=2): Début=1430min, Fin=1440min, Retard=0min
+Maintenance 4 (Train 2, Priorité=2): Début=1390min, Fin=1440min, Retard=0min
+Maintenance 5 (Train 3, Priorité=2): Début=1280min, Fin=1290min, Retard=0min
+Maintenance 6 (Train 3, Priorité=2): Début=320min, Fin=370min, Retard=370min
+Maintenance 7 (Train 4, Priorité=2): Début=1429min, Fin=1439min, Retard=0min
+Maintenance 8 (Train 4, Priorité=2): Début=1390min, Fin=1440min, Retard=0min
+Maintenance 9 (Train 5, Priorité=2): Début=1309min, Fin=1319min, Retard=0min
+Maintenance 10 (Train 5, Priorité=2): Début=440min, Fin=490min, Retard=490min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 4): Début=1250min, Fin=1260min, Durée=10min
+Opération 2 (Maint 2, Voie 4): Début=1310min, Fin=1320min, Durée=10min
+Opération 3 (Maint 2, Voie 4): Début=1330min, Fin=1360min, Durée=30min
+Opération 4 (Maint 3, Voie 1): Début=1430min, Fin=1440min, Durée=10min
+Opération 5 (Maint 4, Voie 2): Début=1390min, Fin=1400min, Durée=10min
+Opération 6 (Maint 4, Voie 2): Début=1410min, Fin=1440min, Durée=30min
+Opération 7 (Maint 5, Voie 4): Début=1280min, Fin=1290min, Durée=10min
+Opération 8 (Maint 6, Voie 4): Début=320min, Fin=330min, Durée=10min
+Opération 9 (Maint 6, Voie 4): Début=340min, Fin=370min, Durée=30min
+Opération 10 (Maint 7, Voie 4): Début=1429min, Fin=1439min, Durée=10min
+Opération 11 (Maint 8, Voie 4): Début=1390min, Fin=1400min, Durée=10min
+Opération 12 (Maint 8, Voie 3): Début=1410min, Fin=1440min, Durée=30min
+Opération 13 (Maint 9, Voie 3): Début=1309min, Fin=1319min, Durée=10min
+Opération 14 (Maint 10, Voie 4): Début=440min, Fin=450min, Durée=10min
+Opération 15 (Maint 10, Voie 3): Début=460min, Fin=490min, Durée=30min
+
+--- Objectif ---
+Retard pondéré total: 1720
+----------
+==========
+% [<UNKNOWN>]
+Finished in 4s 671msec.

@@ -1,0 +1,153 @@
+
+￼
+Running main.mzn, medium_01_e-v1.dzn
+37s 89msec
+
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=54 périodes, Départ=69 périodes
+Train 1: Arrivée=91 périodes, Départ=136 périodes
+Train 2: Arrivée=18 périodes, Départ=53 périodes
+Train 2: Arrivée=85 périodes, Départ=96 périodes
+Train 2: Arrivée=130 périodes, Départ=144 périodes
+Train 3: Arrivée=33 périodes, Départ=54 périodes
+Train 3: Arrivée=72 périodes, Départ=101 périodes
+Train 3: Arrivée=135 périodes, Départ=144 périodes
+Train 4: Arrivée=39 périodes, Départ=55 périodes
+Train 4: Arrivée=83 périodes, Départ=127 périodes
+Train 4: Arrivée=144 périodes, Départ=144 périodes
+Train 5: Arrivée=45 périodes, Départ=71 périodes
+Train 5: Arrivée=110 périodes, Départ=132 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 1 (Train 1, Priorité=1): Début=68, Fin=69, Retard=0 périodes
+Maintenance 2 (Train 1, Priorité=1): Début=91, Fin=92, Retard=0 périodes
+Maintenance 3 (Train 1, Priorité=1): Début=60, Fin=61, Retard=0 périodes
+Maintenance 4 (Train 1, Priorité=1): Début=54, Fin=59, Retard=0 périodes
+Maintenance 5 (Train 1, Priorité=1): Début=126, Fin=136, Retard=0 périodes
+Maintenance 6 (Train 1, Priorité=1): Début=62, Fin=67, Retard=0 périodes
+Maintenance 7 (Train 2, Priorité=1): Début=42, Fin=43, Retard=0 périodes
+Maintenance 8 (Train 2, Priorité=1): Début=92, Fin=93, Retard=0 périodes
+Maintenance 9 (Train 2, Priorité=1): Début=136, Fin=137, Retard=0 périodes
+Maintenance 10 (Train 2, Priorité=1): Début=34, Fin=41, Retard=0 périodes
+Maintenance 11 (Train 2, Priorité=1): Début=86, Fin=91, Retard=0 périodes
+Maintenance 12 (Train 2, Priorité=1): Début=138, Fin=144, Retard=0 périodes
+Maintenance 13 (Train 3, Priorité=1): Début=50, Fin=51, Retard=0 périodes
+Maintenance 14 (Train 3, Priorité=1): Début=72, Fin=73, Retard=0 périodes
+Maintenance 15 (Train 3, Priorité=1): Début=143, Fin=144, Retard=0 périodes
+Maintenance 16 (Train 3, Priorité=1): Début=33, Fin=38, Retard=2292 périodes
+Maintenance 17 (Train 3, Priorité=1): Début=81, Fin=86, Retard=0 périodes
+Maintenance 18 (Train 3, Priorité=1): Début=137, Fin=142, Retard=0 périodes
+Maintenance 19 (Train 4, Priorité=1): Début=41, Fin=42, Retard=0 périodes
+Maintenance 20 (Train 4, Priorité=1): Début=87, Fin=88, Retard=0 périodes
+Maintenance 22 (Train 4, Priorité=1): Début=46, Fin=54, Retard=0 périodes
+Maintenance 23 (Train 4, Priorité=1): Début=120, Fin=126, Retard=0 périodes
+Maintenance 25 (Train 5, Priorité=1): Début=70, Fin=71, Retard=0 périodes
+Maintenance 26 (Train 5, Priorité=1): Début=131, Fin=132, Retard=0 périodes
+Maintenance 27 (Train 5, Priorité=1): Début=61, Fin=62, Retard=0 périodes
+Maintenance 28 (Train 5, Priorité=1): Début=45, Fin=50, Retard=1646 périodes
+Maintenance 29 (Train 5, Priorité=1): Début=121, Fin=130, Retard=0 périodes
+Maintenance 30 (Train 5, Priorité=1): Début=64, Fin=69, Retard=0 périodes
+Maintenance 21 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 24 (Train 4) : NON PLANIFIÉE (Pénalité appliquée)
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 1): Début=68, Fin=69, Durée=1 périodes
+Opération 1 (Maint 2, Voie 1): Début=91, Fin=92, Durée=1 périodes
+Opération 1 (Maint 3, Voie 2): Début=60, Fin=61, Durée=1 périodes
+Opération 1 (Maint 4, Voie 2): Début=54, Fin=55, Durée=1 périodes
+Opération 3 (Maint 4, Voie 2): Début=56, Fin=59, Durée=3 périodes
+Opération 1 (Maint 5, Voie 2): Début=126, Fin=127, Durée=1 périodes
+Opération 3 (Maint 5, Voie 2): Début=133, Fin=136, Durée=3 périodes
+Opération 1 (Maint 6, Voie 1): Début=62, Fin=63, Durée=1 périodes
+Opération 3 (Maint 6, Voie 1): Début=64, Fin=67, Durée=3 périodes
+Opération 1 (Maint 7, Voie 2): Début=42, Fin=43, Durée=1 périodes
+Opération 1 (Maint 8, Voie 2): Début=92, Fin=93, Durée=1 périodes
+Opération 1 (Maint 9, Voie 2): Début=136, Fin=137, Durée=1 périodes
+Opération 1 (Maint 10, Voie 2): Début=34, Fin=35, Durée=1 périodes
+Opération 3 (Maint 10, Voie 2): Début=38, Fin=41, Durée=3 périodes
+Opération 1 (Maint 11, Voie 2): Début=86, Fin=87, Durée=1 périodes
+Opération 3 (Maint 11, Voie 2): Début=88, Fin=91, Durée=3 périodes
+Opération 1 (Maint 12, Voie 1): Début=138, Fin=139, Durée=1 périodes
+Opération 3 (Maint 12, Voie 1): Début=141, Fin=144, Durée=3 périodes
+Opération 1 (Maint 13, Voie 1): Début=50, Fin=51, Durée=1 périodes
+Opération 1 (Maint 14, Voie 1): Début=72, Fin=73, Durée=1 périodes
+Opération 1 (Maint 15, Voie 2): Début=143, Fin=144, Durée=1 périodes
+Opération 1 (Maint 16, Voie 1): Début=33, Fin=34, Durée=1 périodes
+Opération 3 (Maint 16, Voie 1): Début=35, Fin=38, Durée=3 périodes
+Opération 1 (Maint 17, Voie 1): Début=81, Fin=82, Durée=1 périodes
+Opération 3 (Maint 17, Voie 1): Début=83, Fin=86, Durée=3 périodes
+Opération 1 (Maint 18, Voie 2): Début=137, Fin=138, Durée=1 périodes
+Opération 3 (Maint 18, Voie 2): Début=139, Fin=142, Durée=3 périodes
+Opération 1 (Maint 19, Voie 1): Début=41, Fin=42, Durée=1 périodes
+Opération 1 (Maint 20, Voie 1): Début=87, Fin=88, Durée=1 périodes
+Opération 1 (Maint 22, Voie 2): Début=46, Fin=47, Durée=1 périodes
+Opération 3 (Maint 22, Voie 2): Début=51, Fin=54, Durée=3 périodes
+Opération 1 (Maint 23, Voie 2): Début=120, Fin=121, Durée=1 périodes
+Opération 3 (Maint 23, Voie 2): Début=123, Fin=126, Durée=3 périodes
+Opération 1 (Maint 25, Voie 2): Début=70, Fin=71, Durée=1 périodes
+Opération 1 (Maint 26, Voie 1): Début=131, Fin=132, Durée=1 périodes
+Opération 1 (Maint 27, Voie 2): Début=61, Fin=62, Durée=1 périodes
+Opération 1 (Maint 28, Voie 1): Début=45, Fin=46, Durée=1 périodes
+Opération 3 (Maint 28, Voie 1): Début=47, Fin=50, Durée=3 périodes
+Opération 1 (Maint 29, Voie 1): Début=121, Fin=122, Durée=1 périodes
+Opération 3 (Maint 29, Voie 1): Début=127, Fin=130, Durée=3 périodes
+Opération 1 (Maint 30, Voie 2): Début=64, Fin=65, Durée=1 périodes
+Opération 3 (Maint 30, Voie 2): Début=66, Fin=69, Durée=3 périodes
+
+--- Techniciens ---
+Technicien 7 (Type 3): Activité globale de 33 à 142 périodes
+   -> Exécute Op 1 (Maint 5): 126 à 127
+   -> Exécute Op 3 (Maint 5): 133 à 136
+   -> Exécute Op 1 (Maint 7): 42 à 43
+   -> Exécute Op 1 (Maint 9): 136 à 137
+   -> Exécute Op 1 (Maint 10): 34 à 35
+   -> Exécute Op 3 (Maint 10): 38 à 41
+   -> Exécute Op 1 (Maint 12): 138 à 139
+   -> Exécute Op 1 (Maint 16): 33 à 34
+   -> Exécute Op 3 (Maint 16): 35 à 38
+   -> Exécute Op 1 (Maint 18): 137 à 138
+   -> Exécute Op 3 (Maint 18): 139 à 142
+   -> Exécute Op 1 (Maint 19): 41 à 42
+   -> Exécute Op 1 (Maint 23): 120 à 121
+   -> Exécute Op 3 (Maint 23): 123 à 126
+   -> Exécute Op 1 (Maint 26): 131 à 132
+   -> Exécute Op 1 (Maint 29): 121 à 122
+   -> Exécute Op 3 (Maint 29): 127 à 130
+Technicien 9 (Type 3): Activité globale de 64 à 144 périodes
+   -> Exécute Op 1 (Maint 2): 91 à 92
+   -> Exécute Op 1 (Maint 8): 92 à 93
+   -> Exécute Op 1 (Maint 11): 86 à 87
+   -> Exécute Op 3 (Maint 11): 88 à 91
+   -> Exécute Op 1 (Maint 15): 143 à 144
+   -> Exécute Op 1 (Maint 17): 81 à 82
+   -> Exécute Op 3 (Maint 17): 83 à 86
+   -> Exécute Op 1 (Maint 20): 87 à 88
+   -> Exécute Op 1 (Maint 30): 64 à 65
+   -> Exécute Op 3 (Maint 30): 66 à 69
+Technicien 10 (Type 3): Activité globale de 45 à 144 périodes
+   -> Exécute Op 1 (Maint 1): 68 à 69
+   -> Exécute Op 1 (Maint 3): 60 à 61
+   -> Exécute Op 1 (Maint 4): 54 à 55
+   -> Exécute Op 3 (Maint 4): 56 à 59
+   -> Exécute Op 1 (Maint 6): 62 à 63
+   -> Exécute Op 3 (Maint 6): 64 à 67
+   -> Exécute Op 3 (Maint 12): 141 à 144
+   -> Exécute Op 1 (Maint 13): 50 à 51
+   -> Exécute Op 1 (Maint 14): 72 à 73
+   -> Exécute Op 1 (Maint 22): 46 à 47
+   -> Exécute Op 3 (Maint 22): 51 à 54
+   -> Exécute Op 1 (Maint 25): 70 à 71
+   -> Exécute Op 1 (Maint 27): 61 à 62
+   -> Exécute Op 1 (Maint 28): 45 à 46
+   -> Exécute Op 3 (Maint 28): 47 à 50
+
+--- Objectif ---
+Retard pondéré total: 23938
+------------------------------------------------------------------------------
+----------
+==========
+% [TotalRetard > 23937]
+Finished in 37s 89msec.

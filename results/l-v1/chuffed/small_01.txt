@@ -1,0 +1,30 @@
+
+￼
+Running model.mzn, small_01_l-v1.dzn
+5s 79msec
+
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=460min, Départ=1310min
+Train 2: Arrivée=300min, Départ=1440min
+
+--- Maintenances ---
+Maintenance 1 (Train 1, Priorité=2): Début=460min, Fin=490min, Retard=490min
+Maintenance 2 (Train 1, Priorité=2): Début=1280min, Fin=1310min, Retard=0min
+Maintenance 3 (Train 2, Priorité=2): Début=300min, Fin=330min, Retard=330min
+Maintenance 4 (Train 2, Priorité=2): Début=300min, Fin=330min, Retard=330min
+
+--- Opérations ---
+Opération 1 (Maint 1, Voie 3): Début=460min, Fin=490min, Durée=30min
+Opération 2 (Maint 2, Voie 3): Début=1280min, Fin=1310min, Durée=30min
+Opération 3 (Maint 3, Voie 3): Début=300min, Fin=330min, Durée=30min
+Opération 4 (Maint 4, Voie 2): Début=300min, Fin=330min, Durée=30min
+
+--- Objectif ---
+Retard pondéré total: 2300
+----------
+==========
+% [<UNKNOWN>]
+Finished in 5s 79msec.

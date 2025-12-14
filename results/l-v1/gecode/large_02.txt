@@ -1,0 +1,7 @@
+
+￼
+Running model.mzn, large_02_l-v1.dzn
+10m 2s
+
+=====UNKNOWN=====
+Finished in 10m 2s.

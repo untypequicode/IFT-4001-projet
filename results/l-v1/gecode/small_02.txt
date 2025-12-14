@@ -1,4 +1,8 @@
 
+￼
+Running model.mzn, small_02_l-v1.dzn
+423msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -26,4 +30,4 @@ Opération 6 (Maint 6, Voie 1): Début=410min, Fin=420min, Durée=10min
 Retard pondéré total: 2520
 ----------
 ==========
-Finished in 141msec.
+Finished in 423msec.

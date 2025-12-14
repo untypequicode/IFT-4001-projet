@@ -1,0 +1,56 @@
+
+￼
+Running main.mzn, small_01_e-v1.dzn
+1s 831msec
+
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=47 périodes, Départ=88 périodes
+Train 1: Arrivée=113 périodes, Départ=131 périodes
+Train 2: Arrivée=31 périodes, Départ=64 périodes
+Train 2: Arrivée=82 périodes, Départ=109 périodes
+Train 2: Arrivée=120 périodes, Départ=144 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 4 (Train 1, Priorité=1): Début=81, Fin=84, Retard=0 périodes
+Maintenance 5 (Train 1, Priorité=1): Début=128, Fin=131, Retard=0 périodes
+Maintenance 6 (Train 1, Priorité=1): Début=85, Fin=88, Retard=0 périodes
+Maintenance 10 (Train 2, Priorité=1): Début=31, Fin=34, Retard=2643 périodes
+Maintenance 11 (Train 2, Priorité=1): Début=106, Fin=109, Retard=0 périodes
+Maintenance 12 (Train 2, Priorité=1): Début=139, Fin=142, Retard=0 périodes
+Maintenance 1 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 2 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 3 (Train 1) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 7 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 8 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+Maintenance 9 (Train 2) : NON PLANIFIÉE (Pénalité appliquée)
+
+--- Opérations ---
+Opération 2 (Maint 4, Voie 3): Début=81, Fin=84, Durée=3 périodes
+Opération 2 (Maint 5, Voie 2): Début=128, Fin=131, Durée=3 périodes
+Opération 2 (Maint 6, Voie 2): Début=85, Fin=88, Durée=3 périodes
+Opération 2 (Maint 10, Voie 2): Début=31, Fin=34, Durée=3 périodes
+Opération 2 (Maint 11, Voie 3): Début=106, Fin=109, Durée=3 périodes
+Opération 2 (Maint 12, Voie 3): Début=139, Fin=142, Durée=3 périodes
+
+--- Techniciens ---
+Technicien 4 (Type 2): Activité globale de 85 à 144 périodes
+   -> Exécute Op 2 (Maint 6): 85 à 88
+Technicien 6 (Type 2): Activité globale de 31 à 144 périodes
+   -> Exécute Op 2 (Maint 10): 31 à 34
+Technicien 7 (Type 2): Activité globale de 81 à 144 périodes
+   -> Exécute Op 2 (Maint 4): 81 à 84
+Technicien 10 (Type 2): Activité globale de 106 à 144 périodes
+   -> Exécute Op 2 (Maint 5): 128 à 131
+   -> Exécute Op 2 (Maint 11): 106 à 109
+   -> Exécute Op 2 (Maint 12): 139 à 142
+
+--- Objectif ---
+Retard pondéré total: 72090
+------------------------------------------------------------------------------
+----------
+==========
+% [TotalRetard > 72089]
+Finished in 1s 831msec.

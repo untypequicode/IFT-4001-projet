@@ -1,0 +1,102 @@
+
+￼
+Running main.mzn, medium_02_e-v1.dzn
+5s 49msec
+
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
+=== PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
+
+--- Trains ---
+Train 1: Arrivée=30 périodes, Départ=54 périodes
+Train 1: Arrivée=74 périodes, Départ=118 périodes
+Train 1: Arrivée=136 périodes, Départ=144 périodes
+Train 2: Arrivée=38 périodes, Départ=76 périodes
+Train 2: Arrivée=101 périodes, Départ=112 périodes
+Train 3: Arrivée=36 périodes, Départ=72 périodes
+Train 3: Arrivée=91 périodes, Départ=134 périodes
+Train 4: Arrivée=42 périodes, Départ=68 périodes
+Train 4: Arrivée=106 périodes, Départ=144 périodes
+Train 5: Arrivée=50 périodes, Départ=87 périodes
+Train 5: Arrivée=128 périodes, Départ=144 périodes
+Train 6: Arrivée=44 périodes, Départ=89 périodes
+Train 6: Arrivée=125 périodes, Départ=139 périodes
+Train 7: Arrivée=50 périodes, Départ=78 périodes
+Train 7: Arrivée=103 périodes, Départ=136 périodes
+
+--- Maintenances Planifiées (Actives) ---
+Maintenance 1 (Train 1, Priorité=1): Début=47, Fin=48, Retard=0 périodes
+Maintenance 2 (Train 1, Priorité=1): Début=112, Fin=113, Retard=0 périodes
+Maintenance 3 (Train 1, Priorité=1): Début=142, Fin=143, Retard=0 périodes
+Maintenance 4 (Train 2, Priorité=1): Début=62, Fin=63, Retard=0 périodes
+Maintenance 5 (Train 2, Priorité=1): Début=111, Fin=112, Retard=0 périodes
+Maintenance 6 (Train 2, Priorité=1): Début=53, Fin=54, Retard=0 périodes
+Maintenance 7 (Train 3, Priorité=1): Début=65, Fin=66, Retard=0 périodes
+Maintenance 8 (Train 3, Priorité=1): Début=114, Fin=115, Retard=0 périodes
+Maintenance 9 (Train 3, Priorité=1): Début=50, Fin=51, Retard=0 périodes
+Maintenance 10 (Train 4, Priorité=1): Début=67, Fin=68, Retard=0 périodes
+Maintenance 11 (Train 4, Priorité=1): Début=141, Fin=142, Retard=0 périodes
+Maintenance 12 (Train 4, Priorité=1): Début=52, Fin=53, Retard=0 périodes
+Maintenance 13 (Train 5, Priorité=1): Début=66, Fin=67, Retard=0 périodes
+Maintenance 14 (Train 5, Priorité=1): Début=143, Fin=144, Retard=0 périodes
+Maintenance 15 (Train 5, Priorité=1): Début=51, Fin=52, Retard=0 périodes
+Maintenance 16 (Train 6, Priorité=1): Début=63, Fin=64, Retard=0 périodes
+Maintenance 17 (Train 6, Priorité=1): Début=138, Fin=139, Retard=0 périodes
+Maintenance 18 (Train 6, Priorité=1): Début=49, Fin=50, Retard=0 périodes
+Maintenance 19 (Train 7, Priorité=1): Début=64, Fin=65, Retard=0 périodes
+Maintenance 20 (Train 7, Priorité=1): Début=115, Fin=116, Retard=0 périodes
+Maintenance 21 (Train 7, Priorité=1): Début=48, Fin=49, Retard=0 périodes
+
+--- Opérations ---
+Opération 2 (Maint 1, Voie 1): Début=47, Fin=48, Durée=1 périodes
+Opération 2 (Maint 2, Voie 1): Début=112, Fin=113, Durée=1 périodes
+Opération 2 (Maint 3, Voie 1): Début=142, Fin=143, Durée=1 périodes
+Opération 2 (Maint 4, Voie 1): Début=62, Fin=63, Durée=1 périodes
+Opération 2 (Maint 5, Voie 2): Début=111, Fin=112, Durée=1 périodes
+Opération 2 (Maint 6, Voie 1): Début=53, Fin=54, Durée=1 périodes
+Opération 2 (Maint 7, Voie 1): Début=65, Fin=66, Durée=1 périodes
+Opération 2 (Maint 8, Voie 1): Début=114, Fin=115, Durée=1 périodes
+Opération 2 (Maint 9, Voie 1): Début=50, Fin=51, Durée=1 périodes
+Opération 2 (Maint 10, Voie 1): Début=67, Fin=68, Durée=1 périodes
+Opération 2 (Maint 11, Voie 2): Début=141, Fin=142, Durée=1 périodes
+Opération 2 (Maint 12, Voie 1): Début=52, Fin=53, Durée=1 périodes
+Opération 2 (Maint 13, Voie 1): Début=66, Fin=67, Durée=1 périodes
+Opération 2 (Maint 14, Voie 1): Début=143, Fin=144, Durée=1 périodes
+Opération 2 (Maint 15, Voie 1): Début=51, Fin=52, Durée=1 périodes
+Opération 2 (Maint 16, Voie 1): Début=63, Fin=64, Durée=1 périodes
+Opération 2 (Maint 17, Voie 1): Début=138, Fin=139, Durée=1 périodes
+Opération 2 (Maint 18, Voie 1): Début=49, Fin=50, Durée=1 périodes
+Opération 2 (Maint 19, Voie 1): Début=64, Fin=65, Durée=1 périodes
+Opération 2 (Maint 20, Voie 1): Début=115, Fin=116, Durée=1 périodes
+Opération 2 (Maint 21, Voie 2): Début=48, Fin=49, Durée=1 périodes
+
+--- Techniciens ---
+Technicien 5 (Type 1): Activité globale de 47 à 144 périodes
+   -> Exécute Op 2 (Maint 1): 47 à 48
+   -> Exécute Op 2 (Maint 2): 112 à 113
+   -> Exécute Op 2 (Maint 3): 142 à 143
+   -> Exécute Op 2 (Maint 4): 62 à 63
+   -> Exécute Op 2 (Maint 5): 111 à 112
+   -> Exécute Op 2 (Maint 6): 53 à 54
+   -> Exécute Op 2 (Maint 7): 65 à 66
+   -> Exécute Op 2 (Maint 8): 114 à 115
+   -> Exécute Op 2 (Maint 9): 50 à 51
+   -> Exécute Op 2 (Maint 10): 67 à 68
+   -> Exécute Op 2 (Maint 11): 141 à 142
+   -> Exécute Op 2 (Maint 12): 52 à 53
+   -> Exécute Op 2 (Maint 13): 66 à 67
+   -> Exécute Op 2 (Maint 14): 143 à 144
+   -> Exécute Op 2 (Maint 15): 51 à 52
+   -> Exécute Op 2 (Maint 16): 63 à 64
+   -> Exécute Op 2 (Maint 17): 138 à 139
+   -> Exécute Op 2 (Maint 18): 49 à 50
+   -> Exécute Op 2 (Maint 19): 64 à 65
+   -> Exécute Op 2 (Maint 20): 115 à 116
+   -> Exécute Op 2 (Maint 21): 48 à 49
+
+--- Objectif ---
+Retard pondéré total: 0
+------------------------------------------------------------------------------
+----------
+==========
+% [<UNKNOWN>]
+Finished in 5s 49msec.

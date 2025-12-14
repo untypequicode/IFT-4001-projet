@@ -1,3 +1,8 @@
+
+￼
+Running model.mzn, large_02_l-v1.dzn
+45s 385msec
+
 === PLANIFICATION DE MAINTENANCE FERROVIAIRE ===
 
 --- Trains ---
@@ -13,101 +18,101 @@ Train 9: Arrivée=340min, Départ=1350min
 Train 10: Arrivée=170min, Départ=1440min
 
 --- Maintenances ---
-Maintenance 1 (Train 1, Priorité=2): Début=1221min, Fin=1440min, Retard=0min
-Maintenance 2 (Train 1, Priorité=2): Début=1070min, Fin=1410min, Retard=0min
-Maintenance 3 (Train 1, Priorité=2): Début=620min, Fin=711min, Retard=0min
-Maintenance 4 (Train 2, Priorité=2): Début=731min, Fin=880min, Retard=0min
-Maintenance 5 (Train 2, Priorité=2): Début=310min, Fin=910min, Retard=0min
-Maintenance 6 (Train 2, Priorité=2): Début=280min, Fin=1023min, Retard=0min
-Maintenance 7 (Train 3, Priorité=2): Début=291min, Fin=1001min, Retard=0min
-Maintenance 8 (Train 3, Priorité=2): Début=321min, Fin=1210min, Retard=0min
-Maintenance 9 (Train 3, Priorité=2): Début=711min, Fin=820min, Retard=0min
-Maintenance 10 (Train 4, Priorité=2): Début=470min, Fin=501min, Retard=0min
-Maintenance 11 (Train 4, Priorité=2): Début=510min, Fin=1051min, Retard=0min
-Maintenance 12 (Train 4, Priorité=2): Début=770min, Fin=1000min, Retard=0min
-Maintenance 13 (Train 5, Priorité=2): Début=900min, Fin=1300min, Retard=0min
-Maintenance 14 (Train 5, Priorité=2): Début=413min, Fin=860min, Retard=0min
-Maintenance 15 (Train 5, Priorité=2): Début=1151min, Fin=1330min, Retard=0min
-Maintenance 16 (Train 6, Priorité=2): Début=412min, Fin=980min, Retard=0min
-Maintenance 17 (Train 6, Priorité=2): Début=362min, Fin=762min, Retard=0min
-Maintenance 18 (Train 6, Priorité=2): Début=392min, Fin=1151min, Retard=0min
-Maintenance 19 (Train 7, Priorité=2): Début=620min, Fin=1080min, Retard=0min
-Maintenance 20 (Train 7, Priorité=2): Début=740min, Fin=1042min, Retard=0min
-Maintenance 21 (Train 7, Priorité=2): Début=930min, Fin=1050min, Retard=0min
-Maintenance 22 (Train 8, Priorité=2): Début=580min, Fin=1201min, Retard=0min
-Maintenance 23 (Train 8, Priorité=2): Début=550min, Fin=740min, Retard=0min
-Maintenance 24 (Train 8, Priorité=2): Début=1150min, Fin=1210min, Retard=0min
-Maintenance 25 (Train 9, Priorité=2): Début=1230min, Fin=1290min, Retard=0min
-Maintenance 26 (Train 9, Priorité=2): Début=361min, Fin=421min, Retard=0min
-Maintenance 27 (Train 9, Priorité=2): Début=810min, Fin=1130min, Retard=0min
-Maintenance 28 (Train 10, Priorité=2): Début=170min, Fin=260min, Retard=0min
-Maintenance 29 (Train 10, Priorité=2): Début=660min, Fin=1431min, Retard=0min
-Maintenance 30 (Train 10, Priorité=2): Début=210min, Fin=1380min, Retard=0min
+Maintenance 1 (Train 1, Priorité=2): Début=700min, Fin=802min, Retard=0min
+Maintenance 2 (Train 1, Priorité=2): Début=620min, Fin=782min, Retard=0min
+Maintenance 3 (Train 1, Priorité=2): Début=741min, Fin=771min, Retard=0min
+Maintenance 4 (Train 2, Priorité=2): Début=854min, Fin=1117min, Retard=0min
+Maintenance 5 (Train 2, Priorité=2): Début=330min, Fin=1129min, Retard=0min
+Maintenance 6 (Train 2, Priorité=2): Début=1077min, Fin=1129min, Retard=0min
+Maintenance 7 (Train 3, Priorité=2): Début=1037min, Fin=1099min, Retard=0min
+Maintenance 8 (Train 3, Priorité=2): Début=996min, Fin=1138min, Retard=0min
+Maintenance 9 (Train 3, Priorité=2): Début=944min, Fin=1157min, Retard=0min
+Maintenance 10 (Train 4, Priorité=2): Début=750min, Fin=1259min, Retard=0min
+Maintenance 11 (Train 4, Priorité=2): Début=590min, Fin=721min, Retard=0min
+Maintenance 12 (Train 4, Priorité=2): Début=945min, Fin=1076min, Retard=0min
+Maintenance 13 (Train 5, Priorité=2): Début=1047min, Fin=1098min, Retard=0min
+Maintenance 14 (Train 5, Priorité=2): Début=380min, Fin=1299min, Retard=0min
+Maintenance 15 (Train 5, Priorité=2): Début=420min, Fin=976min, Retard=0min
+Maintenance 16 (Train 6, Priorité=2): Début=751min, Fin=1379min, Retard=0min
+Maintenance 17 (Train 6, Priorité=2): Début=280min, Fin=720min, Retard=0min
+Maintenance 18 (Train 6, Priorité=2): Début=1149min, Fin=1259min, Retard=0min
+Maintenance 19 (Train 7, Priorité=2): Début=540min, Fin=1250min, Retard=0min
+Maintenance 20 (Train 7, Priorité=2): Début=541min, Fin=833min, Retard=0min
+Maintenance 21 (Train 7, Priorité=2): Début=1177min, Fin=1250min, Retard=0min
+Maintenance 22 (Train 8, Priorité=2): Début=853min, Fin=1026min, Retard=0min
+Maintenance 23 (Train 8, Priorité=2): Début=480min, Fin=1017min, Retard=0min
+Maintenance 24 (Train 8, Priorité=2): Début=1017min, Fin=1048min, Retard=0min
+Maintenance 25 (Train 9, Priorité=2): Début=895min, Fin=976min, Retard=0min
+Maintenance 26 (Train 9, Priorité=2): Début=650min, Fin=1014min, Retard=0min
+Maintenance 27 (Train 9, Priorité=2): Début=1069min, Fin=1188min, Retard=0min
+Maintenance 28 (Train 10, Priorité=2): Début=170min, Fin=1339min, Retard=0min
+Maintenance 29 (Train 10, Priorité=2): Début=894min, Fin=1209min, Retard=0min
+Maintenance 30 (Train 10, Priorité=2): Début=650min, Fin=822min, Retard=0min
 
 --- Opérations ---
-Opération 1 (Maint 1, Voie 1): Début=1221min, Fin=1241min, Durée=20min
-Opération 2 (Maint 1, Voie 1): Début=1410min, Fin=1440min, Durée=30min
-Opération 3 (Maint 2, Voie 2): Début=1070min, Fin=1090min, Durée=20min
-Opération 4 (Maint 2, Voie 3): Début=1380min, Fin=1410min, Durée=30min
-Opération 5 (Maint 3, Voie 2): Début=620min, Fin=640min, Durée=20min
-Opération 6 (Maint 3, Voie 5): Début=681min, Fin=711min, Durée=30min
-Opération 7 (Maint 4, Voie 2): Début=860min, Fin=880min, Durée=20min
-Opération 8 (Maint 4, Voie 5): Début=731min, Fin=761min, Durée=30min
-Opération 9 (Maint 5, Voie 2): Début=890min, Fin=910min, Durée=20min
-Opération 10 (Maint 5, Voie 1): Début=310min, Fin=340min, Durée=30min
-Opération 11 (Maint 6, Voie 1): Début=280min, Fin=300min, Durée=20min
-Opération 12 (Maint 6, Voie 1): Début=993min, Fin=1023min, Durée=30min
-Opération 13 (Maint 7, Voie 2): Début=291min, Fin=311min, Durée=20min
-Opération 14 (Maint 7, Voie 5): Début=971min, Fin=1001min, Durée=30min
-Opération 15 (Maint 8, Voie 2): Début=321min, Fin=341min, Durée=20min
-Opération 16 (Maint 8, Voie 3): Début=1180min, Fin=1210min, Durée=30min
-Opération 17 (Maint 9, Voie 6): Début=711min, Fin=731min, Durée=20min
-Opération 18 (Maint 9, Voie 1): Début=790min, Fin=820min, Durée=30min
-Opération 19 (Maint 10, Voie 1): Début=481min, Fin=501min, Durée=20min
-Opération 20 (Maint 10, Voie 2): Début=470min, Fin=500min, Durée=30min
-Opération 21 (Maint 11, Voie 2): Début=510min, Fin=530min, Durée=20min
-Opération 22 (Maint 11, Voie 3): Début=1021min, Fin=1051min, Durée=30min
-Opération 23 (Maint 12, Voie 2): Début=770min, Fin=790min, Durée=20min
-Opération 24 (Maint 12, Voie 2): Début=970min, Fin=1000min, Durée=30min
-Opération 25 (Maint 13, Voie 1): Début=1280min, Fin=1300min, Durée=20min
-Opération 26 (Maint 13, Voie 5): Début=900min, Fin=930min, Durée=30min
-Opération 27 (Maint 14, Voie 1): Début=840min, Fin=860min, Durée=20min
-Opération 28 (Maint 14, Voie 3): Début=413min, Fin=443min, Durée=30min
-Opération 29 (Maint 15, Voie 2): Début=1310min, Fin=1330min, Durée=20min
-Opération 30 (Maint 15, Voie 5): Début=1151min, Fin=1181min, Durée=30min
-Opération 31 (Maint 16, Voie 1): Début=412min, Fin=432min, Durée=20min
-Opération 32 (Maint 16, Voie 3): Début=950min, Fin=980min, Durée=30min
-Opération 33 (Maint 17, Voie 3): Début=362min, Fin=382min, Durée=20min
-Opération 34 (Maint 17, Voie 3): Début=732min, Fin=762min, Durée=30min
-Opération 35 (Maint 18, Voie 4): Début=392min, Fin=412min, Durée=20min
-Opération 36 (Maint 18, Voie 1): Début=1121min, Fin=1151min, Durée=30min
-Opération 37 (Maint 19, Voie 4): Début=620min, Fin=640min, Durée=20min
-Opération 38 (Maint 19, Voie 5): Début=1050min, Fin=1080min, Durée=30min
-Opération 39 (Maint 20, Voie 6): Début=1022min, Fin=1042min, Durée=20min
-Opération 40 (Maint 20, Voie 1): Début=740min, Fin=770min, Durée=30min
-Opération 41 (Maint 21, Voie 2): Début=930min, Fin=950min, Durée=20min
-Opération 42 (Maint 21, Voie 2): Début=1020min, Fin=1050min, Durée=30min
-Opération 43 (Maint 22, Voie 2): Début=580min, Fin=600min, Durée=20min
-Opération 44 (Maint 22, Voie 1): Début=1171min, Fin=1201min, Durée=30min
-Opération 45 (Maint 23, Voie 2): Début=550min, Fin=570min, Durée=20min
-Opération 46 (Maint 23, Voie 2): Début=710min, Fin=740min, Durée=30min
-Opération 47 (Maint 24, Voie 2): Début=1190min, Fin=1210min, Durée=20min
-Opération 48 (Maint 24, Voie 2): Début=1150min, Fin=1180min, Durée=30min
-Opération 49 (Maint 25, Voie 2): Début=1270min, Fin=1290min, Durée=20min
-Opération 50 (Maint 25, Voie 2): Début=1230min, Fin=1260min, Durée=30min
-Opération 51 (Maint 26, Voie 2): Début=401min, Fin=421min, Durée=20min
-Opération 52 (Maint 26, Voie 2): Début=361min, Fin=391min, Durée=30min
-Opération 53 (Maint 27, Voie 2): Début=1110min, Fin=1130min, Durée=20min
-Opération 54 (Maint 27, Voie 2): Début=810min, Fin=840min, Durée=30min
-Opération 55 (Maint 28, Voie 2): Début=240min, Fin=260min, Durée=20min
-Opération 56 (Maint 28, Voie 2): Début=170min, Fin=200min, Durée=30min
-Opération 57 (Maint 29, Voie 2): Début=1411min, Fin=1431min, Durée=20min
-Opération 58 (Maint 29, Voie 2): Début=660min, Fin=690min, Durée=30min
-Opération 59 (Maint 30, Voie 2): Début=210min, Fin=230min, Durée=20min
-Opération 60 (Maint 30, Voie 2): Début=1350min, Fin=1380min, Durée=30min
+Opération 1 (Maint 1, Voie 2): Début=782min, Fin=802min, Durée=20min
+Opération 2 (Maint 1, Voie 1): Début=700min, Fin=730min, Durée=30min
+Opération 3 (Maint 2, Voie 1): Début=762min, Fin=782min, Durée=20min
+Opération 4 (Maint 2, Voie 1): Début=620min, Fin=650min, Durée=30min
+Opération 5 (Maint 3, Voie 2): Début=742min, Fin=762min, Durée=20min
+Opération 6 (Maint 3, Voie 3): Début=741min, Fin=771min, Durée=30min
+Opération 7 (Maint 4, Voie 1): Début=854min, Fin=874min, Durée=20min
+Opération 8 (Maint 4, Voie 1): Début=1087min, Fin=1117min, Durée=30min
+Opération 9 (Maint 5, Voie 4): Début=1109min, Fin=1129min, Durée=20min
+Opération 10 (Maint 5, Voie 5): Début=330min, Fin=360min, Durée=30min
+Opération 11 (Maint 6, Voie 6): Début=1077min, Fin=1097min, Durée=20min
+Opération 12 (Maint 6, Voie 2): Début=1099min, Fin=1129min, Durée=30min
+Opération 13 (Maint 7, Voie 6): Début=1037min, Fin=1057min, Durée=20min
+Opération 14 (Maint 7, Voie 3): Début=1069min, Fin=1099min, Durée=30min
+Opération 15 (Maint 8, Voie 5): Début=1118min, Fin=1138min, Durée=20min
+Opération 16 (Maint 8, Voie 2): Début=996min, Fin=1026min, Durée=30min
+Opération 17 (Maint 9, Voie 6): Début=1137min, Fin=1157min, Durée=20min
+Opération 18 (Maint 9, Voie 1): Début=944min, Fin=974min, Durée=30min
+Opération 19 (Maint 10, Voie 4): Début=750min, Fin=770min, Durée=20min
+Opération 20 (Maint 10, Voie 1): Début=1229min, Fin=1259min, Durée=30min
+Opération 21 (Maint 11, Voie 2): Début=701min, Fin=721min, Durée=20min
+Opération 22 (Maint 11, Voie 2): Début=590min, Fin=620min, Durée=30min
+Opération 23 (Maint 12, Voie 3): Début=945min, Fin=965min, Durée=20min
+Opération 24 (Maint 12, Voie 2): Début=1046min, Fin=1076min, Durée=30min
+Opération 25 (Maint 13, Voie 1): Début=1047min, Fin=1067min, Durée=20min
+Opération 26 (Maint 13, Voie 5): Début=1068min, Fin=1098min, Durée=30min
+Opération 27 (Maint 14, Voie 1): Début=1279min, Fin=1299min, Durée=20min
+Opération 28 (Maint 14, Voie 1): Début=380min, Fin=410min, Durée=30min
+Opération 29 (Maint 15, Voie 4): Début=420min, Fin=440min, Durée=20min
+Opération 30 (Maint 15, Voie 2): Début=946min, Fin=976min, Durée=30min
+Opération 31 (Maint 16, Voie 1): Début=1359min, Fin=1379min, Durée=20min
+Opération 32 (Maint 16, Voie 5): Début=751min, Fin=781min, Durée=30min
+Opération 33 (Maint 17, Voie 3): Début=700min, Fin=720min, Durée=20min
+Opération 34 (Maint 17, Voie 1): Début=280min, Fin=310min, Durée=30min
+Opération 35 (Maint 18, Voie 2): Début=1149min, Fin=1169min, Durée=20min
+Opération 36 (Maint 18, Voie 3): Début=1229min, Fin=1259min, Durée=30min
+Opération 37 (Maint 19, Voie 4): Début=1230min, Fin=1250min, Durée=20min
+Opération 38 (Maint 19, Voie 1): Début=540min, Fin=570min, Durée=30min
+Opération 39 (Maint 20, Voie 4): Début=541min, Fin=561min, Durée=20min
+Opération 40 (Maint 20, Voie 3): Début=803min, Fin=833min, Durée=30min
+Opération 41 (Maint 21, Voie 6): Début=1230min, Fin=1250min, Durée=20min
+Opération 42 (Maint 21, Voie 3): Début=1177min, Fin=1207min, Durée=30min
+Opération 43 (Maint 22, Voie 2): Début=853min, Fin=873min, Durée=20min
+Opération 44 (Maint 22, Voie 5): Début=996min, Fin=1026min, Durée=30min
+Opération 45 (Maint 23, Voie 1): Début=997min, Fin=1017min, Durée=20min
+Opération 46 (Maint 23, Voie 1): Début=480min, Fin=510min, Durée=30min
+Opération 47 (Maint 24, Voie 4): Début=1017min, Fin=1037min, Durée=20min
+Opération 48 (Maint 24, Voie 3): Début=1018min, Fin=1048min, Durée=30min
+Opération 49 (Maint 25, Voie 2): Début=895min, Fin=915min, Durée=20min
+Opération 50 (Maint 25, Voie 5): Début=946min, Fin=976min, Durée=30min
+Opération 51 (Maint 26, Voie 6): Début=994min, Fin=1014min, Durée=20min
+Opération 52 (Maint 26, Voie 2): Début=650min, Fin=680min, Durée=30min
+Opération 53 (Maint 27, Voie 4): Début=1069min, Fin=1089min, Durée=20min
+Opération 54 (Maint 27, Voie 1): Début=1158min, Fin=1188min, Durée=30min
+Opération 55 (Maint 28, Voie 1): Début=1319min, Fin=1339min, Durée=20min
+Opération 56 (Maint 28, Voie 1): Début=170min, Fin=200min, Durée=30min
+Opération 57 (Maint 29, Voie 5): Début=1189min, Fin=1209min, Durée=20min
+Opération 58 (Maint 29, Voie 3): Début=894min, Fin=924min, Durée=30min
+Opération 59 (Maint 30, Voie 6): Début=802min, Fin=822min, Durée=20min
+Opération 60 (Maint 30, Voie 3): Début=650min, Fin=680min, Durée=30min
 
 --- Objectif ---
 Retard pondéré total: 0
 ----------
 ==========
-Finished in 14s 751msec.
+Finished in 45s 385msec.
