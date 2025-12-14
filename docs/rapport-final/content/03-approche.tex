@@ -5,33 +5,52 @@ Cette section présente la modélisation du problème en programmation par contr
 
 \subsection{Variables de décision}
 
-Les deux modèles utilisent les mêmes variables de décision :
+Les deux modèles partagent certaines variables communes pour les temps et les voies, mais diffèrent dans leur modélisation des ressources :
+
+\textbf{Variables communes :}
 \begin{itemize}
-    \item \texttt{start\_op[o]} : Temps de début de l'opération $o$ (domaine : $[0, H]$ où $H = 1440$ minutes)
-    \item \texttt{end\_op[o]} : Temps de fin de l'opération $o$ (domaine : $[0, H]$)
-    \item \texttt{start\_maint[m]} : Temps de début de la maintenance $m$ (domaine : $[0, H]$)
-    \item \texttt{end\_maint[m]} : Temps de fin de la maintenance $m$ (domaine : $[0, H]$)
-    \item \texttt{assigned\_track[o]} : Voie assignée à l'opération $o$ (domaine : ensemble des voies disponibles)
+    \item Temps de début et de fin des opérations et maintenances
+    \item Voie assignée à chaque opération/maintenance
 \end{itemize}
 
-\subsection{Modèle 1 :}
+\textbf{Variables spécifiques au Modèle 1 :} Le Modèle 1 utilise également des variables booléennes pour modéliser chaque technicien individuellement à chaque période (voir description ci-dessous).
 
-[À compléter avec la description du Modèle 1]
+\subsection{Modèle 1 : Modélisation fine des techniciens}
 
-\subsection{Modèle 2 : Approche alternative}
+Le Modèle 1 utilise une approche de modélisation fine où chaque technicien est modélisé individuellement avec des variables booléennes pour chaque période. Pour chaque technicien $s$ et chaque période $p$, le modèle utilise deux variables :
+\begin{itemize}
+    \item \texttt{varSTache[s, p]} : indique si le technicien $s$ est en train d'effectuer une tâche à la période $p$
+    \item \texttt{varSTravail[s, p]} : indique si le technicien $s$ est en travail (tâche ou attente) à la période $p$
+\end{itemize}
+
+Cette approche permet de modéliser finement les contraintes de travail des techniciens, incluant la gestion des pauses, des blocs de travail journaliers, et des limites de temps minimum et maximum par jour. Chaque technicien ne peut effectuer qu'une seule tâche à la fois (ubiquité), et les contraintes de temps de travail sont vérifiées par jour avec gestion des pauses.
+
+Pour les non-chevauchements, le Modèle 1 utilise des contraintes de disjonction sur les voies et les trains. Si deux maintenances utilisent la même voie, elles ne peuvent pas se chevaucher. Si elles sont du même train, il faut un temps de setup entre elles.
+
+\subsection{Modèle 2 : Vérification ponctuelle}
+
+Le Modèle 2 utilise une approche de vérification ponctuelle des contraintes de ressources. Pour chaque opération $o$ et chaque type de technicien $k$, le modèle vérifie la capacité totale utilisée au moment où l'opération $o$ commence. Cette vérification est effectuée en sommant le nombre de techniciens requis par toutes les opérations qui sont en cours à cet instant. Cette somme ne doit pas dépasser le nombre de techniciens disponibles $N_k$. La même logique s'applique aux équipements avec leur capacité simultanée $C_e$.
+
+Pour les non-chevauchements, le Modèle 2 utilise des contraintes disjonctives explicites sur les opérations. Si deux opérations utilisent la même voie, elles ne peuvent pas se chevaucher. Si elles sont du même train, il faut au moins $\sigma_{op}$ minutes entre la fin de l'une et le début de l'autre. Si elles sont de trains différents, il faut au moins $\sigma_{train}$ minutes.
 
 \subsection{Contraintes principales}
 
-Les deux modèles implémentent toutes les contraintes décrites dans la Section~\ref{sec:probleme}. La différence principale réside dans la modélisation des contraintes de ressources et des non-chevauchements.
+Les deux modèles implémentent toutes les contraintes décrites dans la Section~\ref{sec:probleme}. La différence principale réside dans la façon dont les contraintes de ressources sont exprimées et dans la structure des contraintes de non-chevauchement.
 
-Le Modèle 2 utilise une approche différente pour modéliser les contraintes de ressources. Les contraintes les plus importantes sont :
+\subsection{Heuristiques}
 
-\textbf{Capacité des ressources :} Pour vérifier que les ressources ne sont jamais dépassées, le modèle vérifie la capacité à chaque instant où une opération commence. Pour chaque opération $o$ et chaque type de technicien $k$, on somme le nombre de techniciens utilisés par toutes les opérations qui sont en cours au moment où $o$ commence. Cette somme ne doit pas dépasser le nombre de techniciens disponibles $N_k$. La même logique s'applique aux équipements avec leur capacité simultanée $C_e$.
-
-\textbf{Non-chevauchement :} Pour deux opérations qui utilisent la même voie, le modèle impose qu'elles ne se chevauchent pas. Si elles sont du même train, il faut au moins $\sigma_{op}$ minutes entre la fin de l'une et le début de l'autre. Si elles sont de trains différents, il faut au moins $\sigma_{train}$ minutes.
-
-\textbf{Heuristiques :} Le modèle utilise les heuristiques par défaut des solveurs MiniZinc. Chuffed utilise des techniques de propagation de contraintes et de recherche locale, tandis que Gecode utilise des stratégies de branchement (first-fail, domain splitting). Aucune heuristique personnalisée n'a été implémentée.
+Les deux modèles utilisent les heuristiques par défaut des solveurs MiniZinc. Chuffed utilise des techniques de propagation de contraintes et de recherche locale, tandis que Gecode utilise des stratégies de branchement (first-fail, domain splitting). Aucune heuristique personnalisée n'a été implémentée dans les modèles.
 
 \subsection{Fonction objectif}
 
-L'objectif est de minimiser le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité et $\delta_m$ la date butoir de la maintenance $m$.
+Les deux modèles ont des fonctions objectif différentes :
+
+\textbf{Modèle 1 :} Le Modèle 1 utilise une fonction objectif composée qui minimise plusieurs critères avec des poids différents :
+\begin{itemize}
+    \item Retard pondéré des maintenances (priorité absolue, poids 1000)
+    \item Makespan (tasser le planning, poids 100)
+    \item Équité de charge entre techniciens (poids 10)
+    \item Coût d'inactivité des techniciens (poids 1)
+\end{itemize}
+
+\textbf{Modèle 2 :} Le Modèle 2 minimise uniquement le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité et $\delta_m$ la date butoir de la maintenance $m$.
