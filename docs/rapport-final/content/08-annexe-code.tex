@@ -1,14 +1,46 @@
-\section{Annexe : Code}
+\section{Annexe : Code et ressources}
 
 \subsection{Modèles MiniZinc}
 
-Les codes complets des deux modèles MiniZinc sont disponibles :
+Les codes complets des deux modèles MiniZinc sont disponibles dans le dossier \texttt{models/} :
+
+\textbf{Modèle l-v1 (Léa) :} Architecture monolithique disponible dans \texttt{models/l-v1/model.mzn}
+
+\textbf{Modèle e-v1 (Ethan) :} Architecture modulaire disponible dans \texttt{models/e-v1/} avec :
 \begin{itemize}
-    \item \textbf{Modèle 1 (e-v1) :} Le code est disponible dans le dossier \texttt{models/e-v1/src/} avec les fichiers principaux \texttt{main.mzn}, \texttt{generic.mzn}, et les contraintes dans \texttt{constraints/maintenances.mzn} et \texttt{constraints/techniciens.mzn}
-    \item \textbf{Modèle 2 (l-v1) :} Le code est disponible dans le fichier \texttt{models/l-v1/model.mzn}
+	\item \texttt{main.mzn} : point d'entrée principal
+	\item \texttt{generic.mzn} : énumérations et constantes génériques
+	\item \texttt{constant.mzn} : paramètres d'entrée
+	\item \texttt{computed.mzn} : calculs préliminaires
+	\item \texttt{constraints/maintenances.mzn} : contraintes sur les maintenances
+	\item \texttt{constraints/techniciens.mzn} : contraintes sur les techniciens et blocs de travail
 \end{itemize}
 
-\subsection{Exemple de données}
+\subsection{Générateur d'instances}
 
-Des exemples de fichiers de données sont fournis dans le dossier \texttt{src/instances/} avec les instances small\_01, small\_02, medium\_01, medium\_02, medium\_03, large\_01, large\_02 et large\_03.
+Les outils de génération d'instances sont disponibles dans le dossier \texttt{instances/generator/} :
+\begin{itemize}
+	\item \texttt{creer\_config.py} : crée les fichiers de configuration des instances
+	\item \texttt{generer\_data.py} : génère les fichiers de données (.dzn) pour les deux modèles à partir de configurations d'instances
+\end{itemize}
 
+\subsection{Instances de test}
+
+Les instances de données sont disponibles dans le dossier \texttt{instances/} avec 8 instances de tailles variées :
+\begin{itemize}
+	\item \textbf{Small} : small\_01, small\_02 (2 trains, 2-3 maintenances)
+	\item \textbf{Medium} : medium\_01, medium\_02, medium\_03 (3-4 trains, 4-5 maintenances)
+	\item \textbf{Large} : large\_01, large\_02, large\_03 (5-6 trains, 6-8 maintenances)
+\end{itemize}
+
+Chaque instance existe en deux versions : \texttt{*\_l-v1.dzn} pour le modèle l-v1 et \texttt{*\_e-v1.dzn} pour le modèle e-v1. Le dossier \texttt{instances/configs/} contient les configurations JSON utilisées pour générer ces instances.
+
+\subsection{Résultats expérimentaux}
+
+Les résultats des expérimentations sont organisés dans le dossier \texttt{results/} par modèle et par solveur :
+\begin{itemize}
+	\item \texttt{results/l-v1/chuffed/}, \texttt{results/l-v1/gecode/}, \texttt{results/l-v1/or-tools/}
+	\item \texttt{results/e-v1/chuffed/}, \texttt{results/e-v1/gecode/}, \texttt{results/e-v1/or-tools/}
+\end{itemize}
+
+Chaque fichier de résultat contient les sorties complètes de MiniZinc incluant les temps de résolution, les solutions trouvées, et les statistiques d'exécution.
