@@ -1,10 +1,10 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Ce projet a permis de développer et comparer deux modèles distincts pour le problème de planification de maintenance ferroviaire, évalués sur deux solveurs MiniZinc (Chuffed et Gecode).
+Ce projet a permis de développer et comparer deux modèles distincts pour le problème de planification de maintenance ferroviaire, évalués sur trois solveurs MiniZinc (Chuffed, Gecode et OR-Tools).
 
-Les contributions principales sont : (1) le développement de deux modèles MiniZinc avec des approches différentes, (2) l'évaluation systématique sur 8 instances, (3) la comparaison des performances des deux modèles et des deux solveurs, et (4) l'identification des facteurs de difficulté.
+Les contributions principales sont : (1) le développement de deux modèles MiniZinc avec des approches différentes (modélisation fine des techniciens vs vérification ponctuelle), (2) l'évaluation sur 8 instances de différentes tailles, (3) la comparaison des performances sur trois solveurs, et (4) l'identification des facteurs de difficulté.
 
-La découverte principale est que Chuffed et Gecode ont des forces complémentaires : Chuffed excelle pour détecter l'insatisfiabilité rapidement (2.6s vs timeout), tandis que Gecode trouve des solutions de meilleure qualité sur les instances résolubles. Les résultats montrent aussi que la majorité des instances medium et large sont insatisfiables, suggérant que les contraintes sont très strictes pour ces configurations.
+Les résultats révèlent que OR-Tools est le solveur le plus robuste (15 instances sur 16 résolues), que le modèle l-v1 montre des performances supérieures à e-v1 (temps 2 à 20 fois plus rapides), mais que la complexité combinatoire de e-v1 impacte significativement les performances (4 timeouts vs 2). Toutes les instances small sont résolubles, tandis que les instances medium et large présentent des difficultés variables selon le modèle et le solveur.
 
-Les perspectives futures incluent tester d'autres solveurs et générer plus d'instances avec différentes caractéristiques pour mieux comprendre l'impact des choix de modélisation.
+Les perspectives futures incluent générer plus d'instances, développer des heuristiques personnalisées, et adapter les instances pour permettre une comparaison directe entre modèles.

@@ -21,23 +21,7 @@ Architecture \textbf{modulaire} (6 fichiers) utilisant les \textbf{périodes} co
 
 \textbf{Variables d'affectation :} En plus des variables de temps et voies, le modèle définit pour chaque instance de maintenance $i$ et opération $o$ une variable $\text{varOAffectation}[i, o]$ indiquant quel technicien spécifique (parmi tous les techniciens disponibles) est assigné à cette opération. La valeur 0 signifie que l'opération n'est pas applicable.
 
-\textbf{Blocs de travail des techniciens :} Ce qui distingue principalement e-v1 de l-v1. Plutôt que de simplement vérifier les capacités globales, ce modèle planifie explicitement les horaires de chaque technicien.
-
-Pour chaque technicien, chaque jour est divisé en blocs de travail continus séparés par des pauses. Un technicien peut avoir de 2 à 4 blocs par jour (donc 1 à 3 pauses). Pour chaque bloc, on définit :
-\begin{itemize}
-	\item Début et fin du bloc (en périodes depuis le début de l'horizon)
-	\item Durée du bloc (différence entre fin et début)
-\end{itemize}
-
-Les contraintes imposent que :
-\begin{itemize}
-	\item Les blocs d'un même jour ne se chevauchent pas et sont ordonnés chronologiquement
-	\item La somme des durées des blocs d'un jour respecte les temps minimum et maximum de travail quotidien
-	\item Chaque opération assignée à un technicien doit être entièrement contenue dans l'un de ses blocs de travail (pas de tâche à cheval sur une pause)
-	\item Un technicien ne travaille un jour donné que s'il a effectivement une opération à réaliser ce jour-là (évite les journées vides)
-\end{itemize}
-
-Cette modélisation permet de gérer de manière réaliste les contraintes de travail des techniciens avec pauses obligatoires, ce qui est impossible avec la vérification ponctuelle de l-v1. Cependant, l'ajout de ces contraintes augmente considérablement la complexité du modèle, tant en nombre de variables qu'en temps de résolution.
+\textbf{Blocs de travail des techniciens :} Ce qui distingue principalement e-v1 de l-v1. Le modèle planifie explicitement les horaires de chaque technicien : chaque jour est divisé en 2 à 4 blocs de travail continus séparés par des pauses. Les contraintes imposent que les blocs d'un même jour ne se chevauchent pas, que la somme des durées respecte les temps min/max quotidiens, et que chaque opération soit entièrement contenue dans un bloc (pas de tâche à cheval sur une pause). Cette modélisation permet de gérer de manière réaliste les contraintes de travail avec pauses obligatoires, mais augmente considérablement la complexité du modèle.
 
 \textbf{Objectif avec pénalités :} Contrairement à l-v1 qui considère toutes les maintenances obligatoires, e-v1 gère les maintenances optionnelles. Pour chaque instance active, on calcule le retard pondéré habituel. Pour chaque instance non planifiée, on applique une forte pénalité (10000) multipliée par le poids de la maintenance. Les maintenances urgentes ont un poids de 100, les préventives un poids de 1. Cela encourage fortement à planifier toutes les maintenances tout en permettant d'en omettre si vraiment nécessaire.
 

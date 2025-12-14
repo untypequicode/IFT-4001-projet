@@ -1,26 +1,42 @@
 \section{Discussion}
 \label{sec:discussion}
 
-Cette section discute les résultats expérimentaux et présente les découvertes concernant le comportement des solveurs Chuffed et Gecode sur les deux modèles.
+Cette section discute les résultats expérimentaux et présente les découvertes concernant le comportement des trois solveurs (Chuffed, Gecode et OR-Tools) sur les deux modèles.
 
 \subsection{Performance des solveurs}
 
-Les résultats montrent des différences importantes entre Chuffed et Gecode. [À compléter avec l'analyse comparative des solveurs sur les deux modèles : quel solveur est le plus performant pour chaque modèle, y a-t-il des différences selon le modèle utilisé ?]
+Les résultats montrent des différences importantes entre les trois solveurs, avec des comportements qui varient selon le modèle utilisé.
+
+\textbf{OR-Tools : Le solveur le plus robuste} OR-Tools se distingue comme le solveur le plus performant et stable sur les deux modèles. Pour l-v1, il résout toutes les instances sans timeout, avec des temps particulièrement remarquables sur les instances difficiles (large\_03 en 5.9s, medium\_03 en 5.5s). Pour e-v1, il résout 7 instances sur 8, avec seulement 1 timeout sur large\_02. Cette robustesse suggère qu'OR-Tools gère mieux la complexité combinatoire des deux modèles, probablement grâce à ses techniques avancées de propagation et de recherche.
+
+\textbf{Gecode : Performances variables selon le modèle} Gecode montre un comportement très différent selon le modèle. Pour l-v1, il excelle sur les petites instances (small\_01 et small\_02 en 0.4s) et certaines instances medium (medium\_01 et medium\_02 en 0.5-0.6s), mais échoue avec 3 timeouts sur les instances plus complexes (medium\_03, large\_02, large\_03). Pour e-v1, les résultats sont limités : il résout uniquement small\_01 en 0.8s et échoue sur small\_02 avec un timeout. Cette différence suggère que Gecode est sensible à la complexité du modèle e-v1, probablement due à l'explosion du nombre de variables liées aux blocs de travail des techniciens.
+
+\textbf{Chuffed : Performances intermédiaires et imprévisibles} Chuffed présente des performances variables et parfois surprenantes. Pour l-v1, il est relativement lent sur les petites instances (5.1s pour small\_01 et small\_02) comparé aux autres solveurs, mais résout large\_03 en 238s alors que Gecode échoue. Pour e-v1, il résout 4 instances sur 8, avec 3 timeouts (medium\_03, large\_02, large\_03). Les temps sont également élevés même sur des instances résolues (37.1s pour medium\_01). Cette variabilité suggère que Chuffed peut être efficace sur certaines structures de problèmes mais moins prévisible que OR-Tools.
 
 \subsection{Comparaison des modèles}
 
-[À compléter avec l'analyse comparative des deux modèles : quel modèle est le plus rapide en moyenne, y a-t-il des instances où un modèle excelle et l'autre échoue, quel est l'impact de la modélisation sur la performance ?]
+L'analyse comparative révèle un impact significatif de la modélisation sur les performances, avec des compromis clairs entre réalisme et résolubilité.
+
+\textbf{Performance globale : l-v1 plus rapide} Le modèle l-v1 montre des performances globalement supérieures à e-v1. Sur les instances small, l-v1 résout toutes les instances en moins de 6 secondes avec tous les solveurs, tandis qu'e-v1 nécessite jusqu'à 8.8s et présente 1 timeout. Sur les instances medium et large, l-v1 résout 6 instances sur 8 sans timeout, tandis qu'e-v1 présente 4 timeouts. Cette différence s'explique par la complexité combinatoire : l-v1 utilise $O(|OP|)$ variables (temps et voies), tandis qu'e-v1 ajoute $O(|S| \times J \times B)$ variables pour les blocs de travail des techniciens.
+
+\textbf{Instances où un modèle excelle} Il existe des cas où un modèle excelle et l'autre échoue. Par exemple, e-v1 résout large\_01 en 8.2s avec Chuffed et 16.9s avec OR-Tools, tandis que l-v1 le résout en 0.9s avec Chuffed et Gecode, et 1.5s avec OR-Tools. Inversement, sur medium\_03, l-v1 résout en 5.5s avec OR-Tools, tandis qu'e-v1 présente un timeout avec Chuffed mais résout en 42.3s avec OR-Tools. Ces différences suggèrent que la structure des instances peut favoriser un modèle ou l'autre selon les contraintes dominantes.
+
+\textbf{Impact de la modélisation sur la performance} La modélisation fine des techniciens dans e-v1 (blocs de travail, pauses, temps min/max) augmente significativement la complexité du problème. Cette complexité se traduit par des temps de résolution 2 à 20 fois plus élevés sur les instances small, et par 4 timeouts sur les instances medium et large. Cependant, cette modélisation offre une représentation plus réaliste des contraintes humaines, ce qui peut être crucial pour des applications pratiques où la conformité aux règles de travail est essentielle.
 
 \subsection{Facteurs de difficulté}
 
-Les résultats montrent un pattern clair : les instances small (8-12 opérations) sont résolubles, tandis que les instances medium et large sont principalement insatisfiables. Plusieurs facteurs expliquent cette observation :
+L'analyse des résultats révèle plusieurs facteurs qui influencent la difficulté de résolution :
 
-\begin{itemize}
-    \item Les fenêtres temporelles peuvent être trop serrées pour permettre une planification satisfaisante avec beaucoup d'opérations
-    \item Le ratio ressources/demande peut être insuffisant pour les instances plus grandes
-    \item Les contraintes de précédence et de compatibilité voie-équipement peuvent créer des conflits impossibles à résoudre
-\end{itemize}
+\textbf{Taille des instances} Les instances small (8-12 opérations) sont toutes résolubles avec tous les solveurs, avec des temps variant de 0.4s à 8.8s selon le modèle et le solveur. Les instances medium (30-45 opérations) présentent des temps plus variables (0.5s à 94s) et quelques timeouts, notamment avec Gecode sur l-v1 et Chuffed sur e-v1. Les instances large (60-90 opérations) sont les plus difficiles, avec plusieurs timeouts sur les deux modèles, particulièrement avec Gecode et Chuffed.
+
+\textbf{Impact du solveur} Le choix du solveur a un impact majeur sur la résolubilité. OR-Tools résout 15 instances sur 16 (94\%) sans timeout, tandis que Gecode résout 11 instances sur 16 (69\%) et Chuffed résout 12 instances sur 16 (75\%). Cette différence suggère que les techniques de propagation et de recherche d'OR-Tools sont mieux adaptées à ce type de problème.
+
+\textbf{Impact de la modélisation} Le modèle e-v1 présente systématiquement plus de difficultés que l-v1, avec 4 timeouts contre 2 pour l-v1. Cette différence s'explique par l'explosion combinatoire due aux variables de blocs de travail des techniciens. Cependant, les deux modèles montrent des patterns similaires : les instances small sont faciles, les medium sont modérées, et les large sont difficiles.
+
+\textbf{Structure des contraintes} Certaines instances présentent des valeurs d'objectif de 0 (large\_01 et large\_02 avec l-v1, medium\_02 et large\_01 avec e-v1), indiquant qu'il est possible de planifier toutes les maintenances sans retard. D'autres instances présentent des retards significatifs (jusqu'à 23791 pour large\_03 avec e-v1), suggérant que les contraintes sont serrées mais satisfaisables.
 
 \subsection{Limites et perspectives}
 
-Les limites de cette étude incluent le nombre limité d'instances (8) et seulement deux solveurs testés. Les perspectives futures incluent tester d'autres solveurs (OR-Tools, CP-SAT, etc.) et générer plus d'instances avec différentes caractéristiques pour mieux comprendre les facteurs de difficulté.
+\textbf{Limites de l'étude} Cette étude présente plusieurs limites. Premièrement, le nombre d'instances est limité (8 instances), ce qui peut limiter la généralisation des conclusions. Deuxièmement, certains résultats pour e-v1 avec Gecode ne sont pas encore disponibles (indiqués par --- dans les tableaux), ce qui empêche une comparaison complète. Troisièmement, les instances utilisent des formats de données différents pour chaque modèle, ce qui rend difficile une comparaison directe des valeurs d'objectif. Quatrièmement, le timeout de 600 secondes peut être trop court pour certaines instances difficiles qui pourraient être résolues avec plus de temps.
+
+\textbf{Perspectives futures} Plusieurs directions de recherche futures sont prometteuses. Premièrement, générer plus d'instances avec différentes caractéristiques (ratio ressources/demande, densité des contraintes, distribution des priorités) permettrait de mieux comprendre les facteurs de difficulté. Deuxièmement, développer des heuristiques personnalisées pour chaque modèle pourrait améliorer les performances. Enfin, adapter les instances pour qu'elles soient identiques entre les deux modèles permettrait une comparaison plus directe des valeurs d'objectif.

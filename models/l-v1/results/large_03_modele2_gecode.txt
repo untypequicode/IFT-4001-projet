@@ -1,8 +1,0 @@
-﻿
-
-￼
-Running model.mzn, large_03.dzn
-12s 581msec
-
-=====UNSATISFIABLE=====
-Finished in 12s 581msec.

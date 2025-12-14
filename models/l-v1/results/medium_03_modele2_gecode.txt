@@ -1,8 +1,0 @@
-﻿Running model.mzn, medium_03.dzn
-TIMEOUT après 300 secondes (5 minutes)
-Instance: medium_03
-Modèle: modele2
-Solveur: chuffed
-Statut: TIMEOUT
-Temps: > 300s
-Objectif: Non déterminé (timeout avant solution)

@@ -1,5 +1,0 @@
-﻿Running model.mzn, medium_02.dzn
-2s 634msec
-
-=====UNSATISFIABLE=====
-Finished in 2s 634msec.
