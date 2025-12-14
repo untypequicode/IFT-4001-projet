@@ -1,28 +1,61 @@
 \section{Protocole d'expérimentation}
 \label{sec:protocole}
 
-Cette section décrit le protocole expérimental pour comparer les deux modèles développés sur deux solveurs MiniZinc (Chuffed et Gecode).
+Cette section décrit le protocole expérimental pour comparer les deux modèles développés sur trois solveurs MiniZinc (Chuffed, Gecode et OR-Tools).
 
 \subsection{Instances du banc d'essai}
 
-Huit instances de test ont été générées automatiquement avec un script Python, couvrant différentes tailles :
+Huit instances de test ont été générées automatiquement à l'aide d'un script Python paramétrable, couvrant différentes tailles et complexités :
+
 \begin{itemize}
-    \item \textbf{Small :} 2 instances (small\_01 : 2 trains, 8 opérations ; small\_02 : 3 trains, 10 opérations)
-    \item \textbf{Medium :} 3 instances (30 à 45 opérations, 5 à 7 trains)
-    \item \textbf{Large :} 3 instances (60 à 90 opérations, 10 à 15 trains)
+	\item \textbf{Small :} 2 instances
+	      \begin{itemize}
+		      \item \texttt{small\_01} : 2 trains, 2 types d'opérations, 2 types de maintenances
+		      \item \texttt{small\_02} : 3 trains, 2 types d'opérations, 2 types de maintenances
+	      \end{itemize}
+
+	\item \textbf{Medium :} 3 instances
+	      \begin{itemize}
+		      \item \texttt{medium\_01} : 5 trains, 3 types d'opérations, 2 types de maintenances
+		      \item \texttt{medium\_02} : 7 trains, 3 types d'opérations, 2 types de maintenances
+		      \item \texttt{medium\_03} : 5 trains, 3 types d'opérations, 3 types de maintenances
+	      \end{itemize}
+
+	\item \textbf{Large :} 3 instances
+	      \begin{itemize}
+		      \item \texttt{large\_01} : 10 trains, 3 types d'opérations, 2 types de maintenances
+		      \item \texttt{large\_02} : 10 trains, 3 types d'opérations, 3 types de maintenances
+		      \item \texttt{large\_03} : 15 trains, 3 types d'opérations, 2 types de maintenances
+	      \end{itemize}
 \end{itemize}
 
-Toutes les instances ont un horizon de 24 heures (1440 minutes), des temps de setup de 10 minutes entre opérations et 30 minutes entre trains différents, et un mélange de maintenances urgentes et préventives.
+Toutes les instances partagent les mêmes paramètres temporels :
+\begin{itemize}
+	\item Horizon de planification : 1 jour (144 périodes de 10 minutes = 1440 minutes)
+	\item Temps de setup entre opérations : 1 période (10 minutes)
+	\item Temps de sécurité entre trains sur une voie : 4 périodes (40 minutes)
+\end{itemize}
+
+Chaque instance comprend également des ressources variables (voies de types différents avec étages caténaires, équipements avec capacités limitées, techniciens de différentes spécialités avec contraintes de temps de travail) ainsi qu'un mélange de maintenances urgentes et préventives avec des périodicités et échéances différentes.
 
 \subsection{Métriques}
 
 Pour chaque instance et chaque solveur, nous mesurons :
 \begin{itemize}
-    \item \textbf{Temps de résolution :} Temps total pour trouver une solution ou prouver l'insatisfiabilité (en secondes)
-    \item \textbf{Statut :} Résolu, insatisfiable (UNSAT), ou timeout (> 300 secondes)
-    \item \textbf{Qualité de la solution :} Valeur de l'objectif (retard pondéré) pour les instances résolubles
+	\item \textbf{Temps de résolution :} Temps total pour trouver une solution optimale ou atteindre le timeout (en secondes)
+	\item \textbf{Statut :} Optimal, satisfiable, insatisfiable (UNSAT), ou timeout
+	\item \textbf{Qualité de la solution :} Valeur de la fonction objectif (minimisation du retard pondéré) pour les instances résolues
 \end{itemize}
 
 \subsection{Environnement}
 
-Les tests sont effectués sur une machine Windows 11 avec un processeur Intel i7-11800H et 16 Go de RAM. MiniZinc version 2.9.4 est utilisé avec Chuffed 0.13.2 et Gecode 6.3.0. Le temps limite est fixé à 300 secondes par instance. Pour chaque combinaison instance-modèle-solveur (8 instances × 2 modèles × 2 solveurs = 32 combinaisons), les métriques sont collectées et enregistrées.
+Les tests sont effectués sur une machine virtuelle Windows 11 (Oracle VirtualBox) hébergée sur un système avec processeur Intel Core i7-1260P et 16 Go de RAM. La machine virtuelle est configurée avec 4 cœurs CPU et 6 Go de RAM allouée.
+
+Les solveurs utilisés sont :
+\begin{itemize}
+	\item \textbf{Chuffed 0.13.2} : solveur lazy clause generation
+	\item \textbf{Gecode 6.3.0} : solveur à base de propagation de contraintes avec 4 threads
+	\item \textbf{OR-Tools CP-SAT 9.14.6206} : solveur SAT avec 4 threads
+\end{itemize}
+
+Le temps limite est fixé à 600 secondes (10 minutes) par instance. Pour chaque combinaison instance-modèle-solveur (8 instances × 2 modèles × 3 solveurs = 48 combinaisons), les métriques sont collectées et enregistrées.
