@@ -1,54 +1,80 @@
 \section{Description du problème}
 \label{sec:probleme}
 
-Cette section présente le problème de planification de maintenance ferroviaire. Le problème consiste à planifier les opérations de maintenance sur un horizon de 24 heures en respectant les contraintes de ressources et les fenêtres temporelles des trains.
+Le problème de planification de maintenance ferroviaire consiste à organiser les opérations de maintenance sur un horizon temporel donné, tout en respectant de nombreuses contraintes de ressources et de disponibilité des trains. L'objectif principal est de minimiser les retards des maintenances par rapport à leurs dates butoirs, en tenant compte des priorités.
 
-\subsection{Paramètres d'entrée}
+\subsection{Entités et paramètres}
 
-Une instance du problème contient les éléments suivants :
+Les \textbf{trains} constituent l'élément central : chaque train possède une ou plusieurs fenêtres de présence au centre de maintenance, définies par des temps d'arrivée et de départ. Les trains sont caractérisés par leur type, qui détermine leurs propriétés techniques (étage requis, complexité influençant les temps de setup).
 
-\textbf{Trains :} Chaque train $t$ a un temps d'arrivée $a_t$ et un temps de départ $d_t$ (en minutes). Les maintenances doivent être effectuées pendant que le train est présent à la gare.
-
-\textbf{Maintenances :} Chaque maintenance $m$ est associée à un train, a une priorité (1 = urgente, 2 = préventive) et une date butoir idéale $\delta_m$. L'objectif est de minimiser les retards par rapport à cette date butoir, en donnant plus d'importance aux maintenances urgentes.
-
-\textbf{Opérations :} Chaque maintenance est composée de plusieurs opérations. Chaque opération $o$ a une durée $dur_o$, peut avoir un prédécesseur (contrainte de précédence), et nécessite une voie spécifique et des ressources (techniciens et équipements).
-
-\textbf{Ressources :}
+Les \textbf{maintenances} sont organisées en types, chacun défini par :
 \begin{itemize}
-	\item \textbf{Techniciens :} Il y a plusieurs types de techniciens. Chaque type $k$ a un nombre limité $N_k$ de techniciens disponibles, et chaque technicien peut travailler au maximum $T_{max,k}$ minutes.
-	\item \textbf{Équipements :} Il y a plusieurs types d'équipements. Chaque type $e$ a une capacité simultanée maximale $C_e$ (nombre d'opérations qui peuvent utiliser cet équipement en même temps).
-	\item \textbf{Voies :} Les opérations doivent être assignées à des voies. Certains équipements ne sont disponibles que sur certaines voies.
+	\item Une \textbf{périodicité} : intervalle entre deux exécutions (0 pour urgente, $\infty$ pour non applicable)
+	\item Un \textbf{ensemble d'opérations} requises
+	\item Une \textbf{priorité/pondération} pour la fonction objectif
 \end{itemize}
 
-\textbf{Setup :} Il y a des temps de setup entre opérations ($\sigma_{op}$ minutes) et entre trains différents ($\sigma_{train}$ minutes, plus long car il faut changer de train).
+Chaque \textbf{opération} spécifie :
+\begin{itemize}
+	\item Une \textbf{durée} $dur_o$ (variable selon le type de train)
+	\item Des \textbf{relations de précédence} avec d'autres opérations
+	\item Des \textbf{exigences en ressources} : type de technicien, équipements requis, compatibilité avec certains types de voies
+\end{itemize}
+
+Les \textbf{ressources} se répartissent en trois catégories :
+\begin{itemize}
+	\item \textbf{Voies} : caractérisées par leur type et étage, ne peuvent accueillir qu'une opération à la fois. Certains équipements ne sont disponibles que sur certaines voies.
+	\item \textbf{Techniciens} : organisés par types (spécialités) avec un nombre limité $N_k$ par type et des contraintes de temps de travail ($T_{min,k}$, $T_{max,k}$ par jour).
+	\item \textbf{Équipements} : quantité totale et capacité simultanée maximale $C_e$ (nombre d'opérations pouvant l'utiliser simultanément).
+\end{itemize}
+
+Les \textbf{paramètres temporels} incluent :
+\begin{itemize}
+	\item L'horizon de planification (plusieurs jours)
+	\item L'unité temporelle (minutes ou périodes)
+	\item Deux temps de setup : $\sigma_{op}$ (entre opérations d'un même train) et $\sigma_{train}$ (pour les changements de trains, plus long)
+\end{itemize}
 
 \subsection{Variables de décision}
 
-Pour résoudre le problème, nous devons décider :
+Pour résoudre le problème, on doit déterminer :
 \begin{itemize}
-	\item Le temps de début $s_o$ et de fin $f_o$ de chaque opération $o$
-	\item Le temps de début $s_m$ et de fin $f_m$ de chaque maintenance $m$
-	\item La voie $x_o$ assignée à chaque opération $o$
+	\item $s_o, f_o$ : temps de début et de fin de chaque opération $o$
+	\item $s_m, f_m$ : temps de début et de fin de chaque maintenance $m$
+	\item $x_o$ : voie assignée à chaque opération $o$
 \end{itemize}
+
+Selon la variante du problème, d'autres variables peuvent être nécessaires : allocation spécifique de techniciens aux opérations, activation/désactivation de maintenances optionnelles, horaires de travail détaillés des techniciens.
 
 \subsection{Contraintes}
 
-Une solution est valide si elle respecte toutes les contraintes suivantes :
+Une solution valide doit respecter les contraintes suivantes :
 
-\textbf{Cohérence temporelle :} La fin d'une opération est égale à son début plus sa durée : $f_o = s_o + dur_o$. Le début d'une maintenance est le minimum des débuts de ses opérations, et sa fin est le maximum des fins de ses opérations.
+\textbf{Contraintes temporelles :}
+\begin{itemize}
+	\item Cohérence : $f_o = s_o + dur_o$ pour chaque opération $o$
+	\item Fenêtres : les maintenances dans les fenêtres de présence des trains
+	\item Précédence : $s_o \geq f_{pred(o)} + \sigma_{op}$ si l'opération $o$ a un prédécesseur $pred(o)$
+	\item Hiérarchie : opérations dans la fenêtre de leur maintenance
+\end{itemize}
 
-\textbf{Fenêtres temporelles :} Toutes les opérations d'une maintenance doivent être effectuées pendant que le train est présent : $a_t \leq s_m \leq f_m \leq d_t$ où $t$ est le train associé à la maintenance $m$.
+\textbf{Contraintes de ressources :}
+À tout instant, le nombre de techniciens de type $k$ utilisés $\leq N_k$ et l'utilisation simultanée d'équipement $e$ $\leq C_e$. Les techniciens respectent les temps min/max par jour et ne peuvent effectuer qu'une tâche à la fois (ubiquité).
 
-\textbf{Précédence :} Si une opération a un prédécesseur, elle doit commencer après la fin du prédécesseur plus le temps de setup : $s_o \geq f_{pred(o)} + \sigma_{op}$.
+\textbf{Contraintes de compatibilité :}
+Équipements disponibles sur les voies choisies, types de techniciens correspondant aux besoins des opérations.
 
-\textbf{Non-chevauchement sur les voies :} Deux opérations ne peuvent pas utiliser la même voie en même temps. Si elles sont du même train, il faut un setup de $\sigma_{op}$ minutes entre elles. Si elles sont de trains différents, il faut un setup de $\sigma_{train}$ minutes.
+\textbf{Contraintes de non-chevauchement :}
+Deux opérations $o_1$ et $o_2$ sur la même voie (i.e., $x_{o_1} = x_{o_2}$) doivent être disjointes :
+\begin{equation}
+	f_{o_1} + \sigma \leq s_{o_2} \text{ ou } f_{o_2} + \sigma \leq s_{o_1}
+\end{equation}
+où $\sigma = \sigma_{op}$ si même train, $\sigma = \sigma_{train}$ sinon.
 
-\textbf{Capacité des ressources :} À tout moment, le nombre de techniciens de chaque type utilisés ne doit pas dépasser le nombre disponible. De même, le nombre d'équipements de chaque type utilisés simultanément ne doit pas dépasser la capacité maximale.
+\subsection{Objectif}
 
-\textbf{Compatibilité voie-équipement :} Si une opération nécessite un équipement, elle doit être assignée à une voie où cet équipement est disponible.
-
-\textbf{Limite de charge de travail :} La charge totale de travail (somme des durées × nombre de techniciens) pour chaque type de technicien ne doit pas dépasser la capacité totale disponible.
-
-\subsection{Fonction objectif}
-
-L'objectif est de minimiser le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité de la maintenance $m$ et $\delta_m$ est sa date butoir. Dans ce modèle, les maintenances préventives (priorité 2) ont un poids plus élevé que les urgentes (priorité 1) dans le calcul du retard pondéré.
+L'objectif est de minimiser le retard pondéré :
+\begin{equation}
+	\min \sum_{m} w_m \cdot \max(0, f_m - \delta_m)
+\end{equation}
+où $w_m$ est un poids reflétant la priorité de la maintenance $m$, et $\delta_m$ sa deadline (calculée comme la dernière fois où elle a été effectuée plus sa périodicité). Les maintenances non planifiées peuvent recevoir une forte pénalité selon la variante du problème.

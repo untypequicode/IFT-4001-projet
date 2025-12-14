@@ -1,56 +1,66 @@
 \section{Approche proposée}
 \label{sec:approche}
 
-Cette section présente la modélisation du problème en programmation par contraintes avec MiniZinc. Deux modèles distincts ont été développés, chacun avec une approche différente pour modéliser les contraintes de ressources et les non-chevauchements.
+Deux modèles MiniZinc ont été développés : \textbf{l-v1} (Léa) avec vérification ponctuelle des ressources, et \textbf{e-v1} (Ethan) avec modélisation fine par blocs de travail. Les deux utilisent les solveurs standards (Chuffed, Gecode, OR-Tools) sans heuristiques personnalisées.
 
-\subsection{Variables de décision}
+\subsection{Modèle l-v1 : Vérification ponctuelle}
 
-Les deux modèles partagent certaines variables communes pour les temps et les voies, mais diffèrent dans leur modélisation des ressources :
+Architecture \textbf{monolithique} (1 fichier) utilisant les \textbf{minutes} comme unité temporelle. Chaque train a une \textbf{fenêtre unique} définie par son arrivée et son départ.
 
-\textbf{Variables communes :}
+\textbf{Gestion des ressources par vérification ponctuelle :} Au lieu de créer une variable pour chaque technicien à chaque instant (ce qui nécessiterait un nombre de variables proportionnel au produit du nombre d'opérations, de types de techniciens, et de l'horizon temporel), le modèle vérifie simplement qu'à chaque début d'opération, la demande totale en techniciens ne dépasse pas la capacité disponible. Concrètement, pour chaque type de technicien et chaque opération, on compte combien de techniciens de ce type sont requis par toutes les opérations en cours à cet instant, et on vérifie que ce total ne dépasse pas le nombre disponible. Cette approche réduit le nombre de variables à seulement les temps et voies des opérations. La même logique s'applique aux équipements.
+
+\textbf{Simplifications :} Toutes les maintenances doivent être planifiées (pas d'optionnalité), les pauses des techniciens ne sont pas modélisées, et les contraintes de temps minimum de travail sont désactivées pour éviter l'infaisabilité. L'objectif minimise simplement le retard pondéré par priorité.
+
+\subsection{Modèle e-v1 : Modélisation fine et modulaire}
+
+Architecture \textbf{modulaire} (6 fichiers) utilisant les \textbf{périodes} comme unité temporelle (typiquement 15 minutes). L'horizon total $P$ (en périodes) est le produit du nombre de jours $J$ et du nombre de périodes par jour $PJ$.
+
+\textbf{Intervalles multiples :} Contrairement à l-v1 où chaque train a une seule fenêtre de présence, un train peut avoir plusieurs intervalles de présence durant l'horizon. Par exemple, un train peut arriver le matin, repartir l'après-midi, puis revenir le soir. Le modèle gère automatiquement les temps passés en gare qui sont retranchés de la fenêtre utilisable pour la maintenance.
+
+\textbf{Instances dynamiques de maintenances :} Le modèle génère automatiquement des instances de maintenances avec possibilité de ne pas les planifier. Pour chaque instance $i$, une variable booléenne $\text{varMActive}[i]$ détermine si elle est effectuée. Les maintenances urgentes (périodicité nulle) sont obligatoires, les autres optionnelles. Les deadlines (dates butoirs) se propagent dynamiquement : si une maintenance est effectuée, la prochaine deadline est calculée à partir de son temps de fin plus la périodicité ; sinon, elle utilise la valeur historique. Cela permet une gestion réaliste où reporter une maintenance décale automatiquement la suivante.
+
+\textbf{Variables d'affectation :} En plus des variables de temps et voies, le modèle définit pour chaque instance de maintenance $i$ et opération $o$ une variable $\text{varOAffectation}[i, o]$ indiquant quel technicien spécifique (parmi tous les techniciens disponibles) est assigné à cette opération. La valeur 0 signifie que l'opération n'est pas applicable.
+
+\textbf{Blocs de travail des techniciens :} Ce qui distingue principalement e-v1 de l-v1. Plutôt que de simplement vérifier les capacités globales, ce modèle planifie explicitement les horaires de chaque technicien.
+
+Pour chaque technicien, chaque jour est divisé en blocs de travail continus séparés par des pauses. Un technicien peut avoir de 2 à 4 blocs par jour (donc 1 à 3 pauses). Pour chaque bloc, on définit :
 \begin{itemize}
-    \item Temps de début et de fin des opérations et maintenances
-    \item Voie assignée à chaque opération/maintenance
+	\item Début et fin du bloc (en périodes depuis le début de l'horizon)
+	\item Durée du bloc (différence entre fin et début)
 \end{itemize}
 
-\textbf{Variables spécifiques au Modèle 1 :} Le Modèle 1 utilise également des variables booléennes pour modéliser chaque technicien individuellement à chaque période (voir description ci-dessous).
-
-\subsection{Modèle 1 : Modélisation fine des techniciens}
-
-Le Modèle 1 utilise une approche de modélisation fine où chaque technicien est modélisé individuellement avec des variables booléennes pour chaque période. Pour chaque technicien $s$ et chaque période $p$, le modèle utilise deux variables :
+Les contraintes imposent que :
 \begin{itemize}
-    \item \texttt{varSTache[s, p]} : indique si le technicien $s$ est en train d'effectuer une tâche à la période $p$
-    \item \texttt{varSTravail[s, p]} : indique si le technicien $s$ est en travail (tâche ou attente) à la période $p$
+	\item Les blocs d'un même jour ne se chevauchent pas et sont ordonnés chronologiquement
+	\item La somme des durées des blocs d'un jour respecte les temps minimum et maximum de travail quotidien
+	\item Chaque opération assignée à un technicien doit être entièrement contenue dans l'un de ses blocs de travail (pas de tâche à cheval sur une pause)
+	\item Un technicien ne travaille un jour donné que s'il a effectivement une opération à réaliser ce jour-là (évite les journées vides)
 \end{itemize}
 
-Cette approche permet de modéliser finement les contraintes de travail des techniciens, incluant la gestion des pauses, des blocs de travail journaliers, et des limites de temps minimum et maximum par jour. Chaque technicien ne peut effectuer qu'une seule tâche à la fois (ubiquité), et les contraintes de temps de travail sont vérifiées par jour avec gestion des pauses.
+Cette modélisation permet de gérer de manière réaliste les contraintes de travail des techniciens avec pauses obligatoires, ce qui est impossible avec la vérification ponctuelle de l-v1. Cependant, l'ajout de ces contraintes augmente considérablement la complexité du modèle, tant en nombre de variables qu'en temps de résolution.
 
-Pour les non-chevauchements, le Modèle 1 utilise des contraintes de disjonction sur les voies et les trains. Si deux maintenances utilisent la même voie, elles ne peuvent pas se chevaucher. Si elles sont du même train, il faut un temps de setup entre elles.
+\textbf{Objectif avec pénalités :} Contrairement à l-v1 qui considère toutes les maintenances obligatoires, e-v1 gère les maintenances optionnelles. Pour chaque instance active, on calcule le retard pondéré habituel. Pour chaque instance non planifiée, on applique une forte pénalité (10000) multipliée par le poids de la maintenance. Les maintenances urgentes ont un poids de 100, les préventives un poids de 1. Cela encourage fortement à planifier toutes les maintenances tout en permettant d'en omettre si vraiment nécessaire.
 
-\subsection{Modèle 2 : Vérification ponctuelle}
+\subsection{Comparaison}
 
-Le Modèle 2 utilise une approche de vérification ponctuelle des contraintes de ressources. Pour chaque opération $o$ et chaque type de technicien $k$, le modèle vérifie la capacité totale utilisée au moment où l'opération $o$ commence. Cette vérification est effectuée en sommant le nombre de techniciens requis par toutes les opérations qui sont en cours à cet instant. Cette somme ne doit pas dépasser le nombre de techniciens disponibles $N_k$. La même logique s'applique aux équipements avec leur capacité simultanée $C_e$.
-
-Pour les non-chevauchements, le Modèle 2 utilise des contraintes disjonctives explicites sur les opérations. Si deux opérations utilisent la même voie, elles ne peuvent pas se chevaucher. Si elles sont du même train, il faut au moins $\sigma_{op}$ minutes entre la fin de l'une et le début de l'autre. Si elles sont de trains différents, il faut au moins $\sigma_{train}$ minutes.
-
-\subsection{Contraintes principales}
-
-Les deux modèles implémentent toutes les contraintes décrites dans la Section~\ref{sec:probleme}. La différence principale réside dans la façon dont les contraintes de ressources sont exprimées et dans la structure des contraintes de non-chevauchement.
-
-\subsection{Heuristiques}
-
-Les deux modèles utilisent les heuristiques par défaut des solveurs MiniZinc. Chuffed utilise des techniques de propagation de contraintes et de recherche locale, tandis que Gecode utilise des stratégies de branchement (first-fail, domain splitting). Aucune heuristique personnalisée n'a été implémentée dans les modèles.
-
-\subsection{Fonction objectif}
-
-Les deux modèles ont des fonctions objectif différentes :
-
-\textbf{Modèle 1 :} Le Modèle 1 utilise une fonction objectif composée qui minimise plusieurs critères avec des poids différents :
-\begin{itemize}
-    \item Retard pondéré des maintenances (priorité absolue, poids 1000)
-    \item Makespan (tasser le planning, poids 100)
-    \item Équité de charge entre techniciens (poids 10)
-    \item Coût d'inactivité des techniciens (poids 1)
-\end{itemize}
-
-\textbf{Modèle 2 :} Le Modèle 2 minimise uniquement le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité et $\delta_m$ la date butoir de la maintenance $m$.
+\begin{table}[h]
+	\centering
+	\small
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\textbf{Aspect}          & \textbf{l-v1}     & \textbf{e-v1}   \\
+		\hline
+		Organisation             & Monolithique      & Modulaire       \\
+		Unité temporelle         & Minutes           & Périodes        \\
+		Fenêtres/train           & 1 fixe            & Multiples       \\
+		Maintenances             & Obligatoires      & Optionnelles    \\
+		Deadlines                & Statiques         & Dynamiques      \\
+		Gestion techniciens      & Vérif. ponctuelle & Blocs détaillés \\
+		Pauses                   & Non               & Oui (1-3)       \\
+		Affectation individuelle & Non               & Oui             \\
+		Complexité               & Faible            & Élevée          \\
+		\hline
+	\end{tabular}
+	\caption{Comparaison l-v1 vs e-v1}
+	\label{tab:comparaison-modeles}
+\end{table}
