@@ -5,7 +5,7 @@ Cette section présente les résultats expérimentaux de la comparaison des deux
 
 \subsection{Performance globale}
 
-Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour chaque combinaison instance-modèle-solveur. Les timeouts (dépassement du temps limite de 600 secondes) sont indiqués par \textbf{TO}, et les résultats non encore disponibles par \textbf{---}.
+Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour chaque combinaison instance-modèle-solveur. Les timeouts (dépassement du temps limite de 600 secondes) sont indiqués par \textbf{TO}.
 
 \begin{table}[h]
 	\centering
@@ -21,22 +21,22 @@ Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour cha
 		small\_01  & 5.1                                     & 0.4                                       & 0.4      & 1.8         & 0.8         & 1.7         \\
 		small\_02  & 5.1                                     & 0.4                                       & 0.5      & 8.8         & \textbf{TO} & 4.4         \\
 		\midrule
-		medium\_01 & 4.7                                     & 0.6                                       & 0.9      & 37.1        & ---         & 22.1        \\
-		medium\_02 & 0.5                                     & 0.5                                       & 0.6      & 5.0         & ---         & 6.7         \\
-		medium\_03 & 94.0                                    & \textbf{TO}                               & 5.5      & \textbf{TO} & ---         & 42.3        \\
+		medium\_01 & 4.7                                     & 0.6                                       & 0.9      & 37.1        & \textbf{TO}  & 22.1        \\
+		medium\_02 & 0.5                                     & 0.5                                       & 0.6      & 5.0         & 5.3          & 6.7         \\
+		medium\_03 & 94.0                                    & \textbf{TO}                               & 5.5      & \textbf{TO} & \textbf{TO}  & 42.3        \\
 		\midrule
-		large\_01  & 0.9                                     & 0.9                                       & 1.5      & 8.2         & ---         & 16.9        \\
-		large\_02  & 14.7                                    & \textbf{TO}                               & 45.4     & \textbf{TO} & ---         & \textbf{TO} \\
-		large\_03  & 238.0                                   & \textbf{TO}                               & 5.9      & \textbf{TO} & ---         & 175.0       \\
+		large\_01  & 0.9                                     & 0.9                                       & 1.5      & 8.2         & \textbf{TO}  & 16.9        \\
+		large\_02  & 14.7                                    & \textbf{TO}                               & 45.4     & \textbf{TO} & \textbf{TO}  & \textbf{TO} \\
+		large\_03  & 238.0                                   & \textbf{TO}                               & 5.9      & \textbf{TO} & \textbf{TO}  & 175.0       \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-\textbf{Note :} TO = Timeout (> 600s), --- = Résultats non encore disponibles. Les temps sont arrondis à la première décimale.
+\textbf{Note :} TO = Timeout (> 600s). Les temps sont arrondis à la première décimale.
 
 \subsection{Qualité des solutions}
 
-Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction objectif (retard pondéré total) obtenues pour chaque instance résolue.
+Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction objectif (retard pondéré total) obtenues pour chaque instance résolue. Les valeurs \textbf{---} indiquent qu'aucune solution n'a été trouvée avant le timeout (statut UNKNOWN du solveur).
 
 \begin{table}[h]
 	\centering
@@ -50,15 +50,15 @@ Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction ob
 		Instance   & Chuffed                                 & Gecode                                    & OR-Tools & Chuffed & Gecode & OR-Tools \\
 		\midrule
 		small\_01  & 2300                                    & 2300                                      & 2300     & 72090   & 72090  & 72090    \\
-		small\_02  & 2300                                    & 2520                                      & 2520     & 5722    & ---    & 5722     \\
+		small\_02  & 2300                                    & 2520                                      & 2520     & 5722    & 147880 & 5722     \\
 		\midrule
 		medium\_01 & 1720                                    & 1720                                      & 1720     & 23938   & 229864 & 23938    \\
-		medium\_02 & 0                                       & 0                                         & 0        & 0       & ---    & 0        \\
-		medium\_03 & 6010                                    & ---                                       & 6010     & ---     & ---    & 120019   \\
+		medium\_02 & 0                                       & 0                                         & 0        & 0       & 0      & 0        \\
+		medium\_03 & 6010                                    & 7330                                      & 6010     & 314317  & 5404642 & 120019   \\
 		\midrule
-		large\_01  & 0                                       & 0                                         & 0        & 0       & ---    & 0        \\
-		large\_02  & 0                                       & ---                                       & 0        & ---     & ---    & ---      \\
-		large\_03  & 10360                                   & ---                                       & 10360    & ---     & ---    & 23791    \\
+		large\_01  & 0                                       & 0                                         & 0        & 0       & 160000 & 0        \\
+		large\_02  & 0                                       & ---                                       & 0        & 760099  & 830099 & ---      \\
+		large\_03  & 10360                                   & 16100                                     & 10360    & 483585  & 944852 & 23791    \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -71,7 +71,9 @@ Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction ob
 	\item Les \textbf{deadlines diffèrent} : e-v1 calcule dynamiquement les deadlines avec propagation, tandis que l-v1 utilise des deadlines statiques.
 \end{itemize}
 
-Néanmoins, ces valeurs permettent de vérifier que les solveurs trouvent des solutions cohérentes pour un même modèle (par exemple, tous les solveurs trouvent 0 pour large\_01 avec l-v1).
+Néanmoins, ces valeurs permettent de vérifier que les solveurs trouvent des solutions cohérentes pour un même modèle (par exemple, tous les solveurs trouvent 0 pour large\_01 avec l-v1). 
+
+\textbf{Note :} Les valeurs \textbf{---} dans le tableau indiquent que le solveur n'a pas trouvé de solution avant le timeout (statut UNKNOWN), contrairement aux timeouts où une solution a été trouvée mais l'optimalité n'a pas été prouvée.
 
 \subsection{Comparaison des modèles}
 
