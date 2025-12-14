@@ -1,13 +1,15 @@
 \section{Discussion}
 \label{sec:discussion}
 
-Cette section discute les résultats expérimentaux et présente les découvertes concernant le comportement des solveurs Chuffed et Gecode.
+Cette section discute les résultats expérimentaux et présente les découvertes concernant le comportement des solveurs Chuffed et Gecode sur les deux modèles.
 
 \subsection{Performance des solveurs}
 
-Les résultats montrent des différences importantes entre Chuffed et Gecode. Sur les instances medium\_02 et medium\_03, Chuffed prouve rapidement (en 2.6s et 4.0s) que ces instances sont insatisfiables (aucune solution n'existe), tandis que Gecode timeout après 300 secondes sans pouvoir conclure. Cela suggère que Chuffed est plus efficace pour détecter rapidement les conflits de contraintes.
+Les résultats montrent des différences importantes entre Chuffed et Gecode. [À compléter avec l'analyse comparative des solveurs sur les deux modèles : quel solveur est le plus performant pour chaque modèle, y a-t-il des différences selon le modèle utilisé ?]
 
-Sur les instances résolubles (small\_01 et small\_02), Gecode trouve des solutions de meilleure qualité : objectif de 0 vs 514 pour small\_01, et 3336 vs 4564 pour small\_02. Cela suggère que Gecode explore l'espace de recherche de manière plus systématique pour trouver des solutions optimales, tandis que Chuffed se contente de solutions réalisables plus rapidement.
+\subsection{Comparaison des modèles}
+
+[À compléter avec l'analyse comparative des deux modèles : quel modèle est le plus rapide en moyenne, y a-t-il des instances où un modèle excelle et l'autre échoue, quel est l'impact de la modélisation sur la performance ?]
 
 \subsection{Facteurs de difficulté}
 

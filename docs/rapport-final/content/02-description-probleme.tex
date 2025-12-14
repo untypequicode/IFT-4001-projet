@@ -51,4 +51,4 @@ Une solution est valide si elle respecte toutes les contraintes suivantes :
 
 \subsection{Fonction objectif}
 
-L'objectif est de minimiser le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité de la maintenance $m$ et $\delta_m$ est sa date butoir. Les maintenances urgentes (priorité 1) ont un poids plus élevé que les préventives (priorité 2).
+L'objectif est de minimiser le retard pondéré total : $\min \sum_{m} p_m \cdot \max(0, f_m - \delta_m)$ où $p_m$ est la priorité de la maintenance $m$ et $\delta_m$ est sa date butoir. Dans ce modèle, les maintenances préventives (priorité 2) ont un poids plus élevé que les urgentes (priorité 1) dans le calcul du retard pondéré.
