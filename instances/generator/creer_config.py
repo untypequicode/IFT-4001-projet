@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
 Créateur de fichiers de configuration JSON pour le générateur de données MiniZinc.
-Ce script pose des questions interactives pour créer un fichier de configuration.
+Mode Interactif : Lancez sans arguments.
+Mode CLI : Lancez avec des arguments (ex: --preset small --jours 10).
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -118,6 +120,8 @@ PRESETS = {
     },
 }
 
+# === FONCTIONS INTERACTIVES ===
+
 
 def afficher_presets():
     """Affiche la liste des presets disponibles"""
@@ -132,8 +136,8 @@ def afficher_presets():
         print(f"   → {config['jours']} jours, {total_trains} trains")
 
 
-def choisir_preset() -> Optional[Dict[str, Any]]:
-    """Demande à l'utilisateur s'il veut utiliser un preset"""
+def choisir_preset_interactif() -> Optional[Dict[str, Any]]:
+    """Demande à l'utilisateur s'il veut utiliser un preset (Mode Interactif)"""
     print("\n" + "=" * 70)
     print("🎯 UTILISATION D'UN PRESET")
     print("=" * 70)
@@ -178,7 +182,6 @@ def choisir_preset() -> Optional[Dict[str, Any]]:
 
 
 def demander_int(question: str, defaut: int) -> int:
-    """Demande un entier à l'utilisateur avec une valeur par défaut"""
     reponse = input(f"{question} [{defaut}]: ").strip()
     if not reponse:
         return defaut
@@ -192,11 +195,8 @@ def demander_int(question: str, defaut: int) -> int:
 def demander_liste(
     question: str, taille: int, defaut: Optional[List[int]] = None
 ) -> Optional[List[int]]:
-    """Demande une liste d'entiers à l'utilisateur"""
     print(f"{question}")
-
     if defaut is not None:
-        # Afficher la valeur par défaut du preset
         defaut_str = ", ".join(map(str, defaut))
         reponse = input(
             f"  Entrez {taille} valeurs séparées par des virgules [{defaut_str}] : "
@@ -208,87 +208,53 @@ def demander_liste(
             f"  Entrez {taille} valeurs séparées par des virgules (ou appuyez sur Entrée pour auto) : "
         ).strip()
         if not reponse:
-            return None  # Génération automatique
+            return None
 
     try:
         valeurs = [int(x.strip()) for x in reponse.split(",")]
         if len(valeurs) != taille:
             print(f"⚠ Nombre de valeurs incorrect ({len(valeurs)} au lieu de {taille})")
-            if defaut is not None:
-                print(f"   Utilisation de la valeur par défaut : {defaut}")
-                return defaut
-            else:
-                print("   Génération automatique")
-                return None
+            return defaut if defaut is not None else None
         return valeurs
     except ValueError:
         print("⚠ Format invalide")
-        if defaut is not None:
-            print(f"   Utilisation de la valeur par défaut : {defaut}")
-            return defaut
-        else:
-            print("   Génération automatique")
-            return None
+        return defaut if defaut is not None else None
 
 
-def creer_configuration(preset_base: Optional[Dict[str, Any]] = None):
+def creer_configuration_interactive(preset_base: Optional[Dict[str, Any]] = None):
     """Crée une configuration via des questions interactives"""
-
     print("╔" + "═" * 68 + "╗")
-    print("║" + " " * 15 + "CRÉATEUR DE CONFIGURATION JSON" + " " * 23 + "║")
+    print("║" + " " * 15 + "CRÉATEUR DE CONFIGURATION (INTERACTIF)" + " " * 15 + "║")
     print("╚" + "═" * 68 + "╝")
     print()
 
-    if preset_base is None:
-        print("Ce script va vous poser des questions pour créer un fichier de")
-        print(
-            "configuration JSON. Appuyez sur Entrée pour utiliser la valeur par défaut."
-        )
-        print()
-        defaults = {}
-    else:
-        print("Configuration basée sur le preset. Les valeurs par défaut sont celles")
-        print(
-            "du preset. Appuyez sur Entrée pour les conserver ou entrez une nouvelle valeur."
-        )
-        print()
-        defaults = preset_base
-
+    defaults = preset_base if preset_base else {}
     config = {}
 
     # === PÉRIODES ET UNITÉS ===
     print("\n" + "─" * 70)
     print("📅 PÉRIODES ET UNITÉS")
     print("─" * 70)
-
     config["jours"] = demander_int(
         "Nombre de jours à simuler", defaults.get("jours", 7)
     )
-
-    print("\nPériodes par jour :")
-    print("  - 96 périodes = 15 minutes par période (recommandé)")
-    print("  - 48 périodes = 30 minutes par période")
-    print("  - 24 périodes = 1 heure par période")
     config["periodes_par_jour"] = demander_int(
         "Périodes par jour", defaults.get("periodes_par_jour", 96)
     )
-
     config["setup"] = demander_int(
-        "Temps de setup entre opérations (périodes)", defaults.get("setup", 2)
+        "Temps de setup (périodes)", defaults.get("setup", 2)
     )
     config["temps_voie"] = demander_int(
-        "Temps entre deux trains sur une même voie (périodes)",
-        defaults.get("temps_voie", 4),
+        "Temps entre trains sur voie (périodes)", defaults.get("temps_voie", 4)
     )
     config["etage_max"] = demander_int(
-        "Nombre maximum d'étages pour un train", defaults.get("etage_max", 2)
+        "Nombre maximum d'étages", defaults.get("etage_max", 2)
     )
 
     # === VOIES ===
     print("\n" + "─" * 70)
     print("🛤️  VOIES")
     print("─" * 70)
-
     config["types_voies"] = demander_int(
         "Nombre de types de voies", defaults.get("types_voies", 3)
     )
@@ -302,17 +268,14 @@ def creer_configuration(preset_base: Optional[Dict[str, Any]] = None):
     print("\n" + "─" * 70)
     print("🔧 ÉQUIPEMENTS")
     print("─" * 70)
-
     config["nb_equipements"] = demander_int(
         "Nombre d'équipements disponibles", defaults.get("nb_equipements", 5)
     )
 
     # === TECHNICIENS ===
     print("\n" + "─" * 70)
-    print("👷 TECHNICIENS (par spécialité)")
+    print("👷 TECHNICIENS")
     print("─" * 70)
-    print("Exemples de spécialités : mécaniciens, électriciens, nettoyage, etc.")
-
     config["types_techniciens"] = demander_int(
         "Nombre de types de techniciens", defaults.get("types_techniciens", 3)
     )
@@ -326,8 +289,6 @@ def creer_configuration(preset_base: Optional[Dict[str, Any]] = None):
     print("\n" + "─" * 70)
     print("🚂 TRAINS")
     print("─" * 70)
-    print("Exemples de types de trains : TGV, TER, Intercités, etc.")
-
     config["types_trains"] = demander_int(
         "Nombre de types de trains", defaults.get("types_trains", 4)
     )
@@ -341,26 +302,16 @@ def creer_configuration(preset_base: Optional[Dict[str, Any]] = None):
     print("\n" + "─" * 70)
     print("🏢 GARES")
     print("─" * 70)
-
     config["nb_gares"] = demander_int(
-        "Nombre de gares proches du centre de maintenance", defaults.get("nb_gares", 5)
+        "Nombre de gares proches", defaults.get("nb_gares", 5)
     )
 
     # === MAINTENANCES ===
     print("\n" + "─" * 70)
     print("🔨 MAINTENANCES ET OPÉRATIONS")
     print("─" * 70)
-    print(
-        "Exemples de types de maintenances : journalière, hebdomadaire, mensuelle, annuelle"
-    )
-    print("(La périodicité est définie dans le générateur)")
-
     config["types_maintenances"] = demander_int(
         "Nombre de types de maintenances", defaults.get("types_maintenances", 4)
-    )
-
-    print(
-        "\nExemples de types d'opérations : nettoyage, contrôle électrique, révision mécanique, etc."
     )
     config["types_operations"] = demander_int(
         "Nombre de types d'opérations", defaults.get("types_operations", 8)
@@ -369,142 +320,255 @@ def creer_configuration(preset_base: Optional[Dict[str, Any]] = None):
     return config
 
 
+# === FONCTIONS CLI ===
+
+
+def parse_list_arg(arg_str: str) -> Optional[List[int]]:
+    """Convertit '1,2,3' en [1, 2, 3]"""
+    if not arg_str:
+        return None
+    try:
+        return [int(x.strip()) for x in arg_str.split(",")]
+    except ValueError:
+        print(f"❌ Erreur de format de liste : '{arg_str}'. Utilisez '1,2,3'")
+        sys.exit(1)
+
+
+def build_config_from_args(args) -> Dict[str, Any]:
+    """Construit la configuration basée sur les arguments CLI + Preset éventuel"""
+
+    # 1. Base : Soit vide, soit un preset
+    if args.preset:
+        if args.preset not in PRESETS:
+            print(f"❌ Preset '{args.preset}' inconnu.")
+            print(f"   Disponibles: {', '.join(PRESETS.keys())}")
+            sys.exit(1)
+        config = PRESETS[args.preset]["config"].copy()
+        print(f"✓ Base chargée depuis le preset '{args.preset}'")
+    else:
+        # Si pas de preset, on prend les valeurs par défaut "hardcodées" minimales pour éviter les crashs
+        # si l'utilisateur oublie un paramètre, ou on laisse vide.
+        # Ici on prend une base vide, si un paramètre manque, on le verra plus tard ou on met des défauts.
+        config = PRESETS["minimal"]["config"].copy()
+        if not args.quiet:
+            print(
+                "ℹ️  Aucun preset spécifié, utilisation de la base 'minimal' comme défaut."
+            )
+
+    # 2. Surcharge avec les arguments explicites (s'ils ne sont pas None)
+    if args.jours is not None:
+        config["jours"] = args.jours
+    if args.periodes is not None:
+        config["periodes_par_jour"] = args.periodes
+    if args.setup is not None:
+        config["setup"] = args.setup
+    if args.temps_voie is not None:
+        config["temps_voie"] = args.temps_voie
+    if args.etage_max is not None:
+        config["etage_max"] = args.etage_max
+
+    if args.types_voies is not None:
+        config["types_voies"] = args.types_voies
+    if args.voies_par_type is not None:
+        config["voies_par_type"] = parse_list_arg(args.voies_par_type)
+
+    if args.nb_equipements is not None:
+        config["nb_equipements"] = args.nb_equipements
+
+    if args.types_techs is not None:
+        config["types_techniciens"] = args.types_techs
+    if args.techs_par_type is not None:
+        config["techniciens_par_type"] = parse_list_arg(args.techs_par_type)
+
+    if args.types_trains is not None:
+        config["types_trains"] = args.types_trains
+    if args.trains_par_type is not None:
+        config["trains_par_type"] = parse_list_arg(args.trains_par_type)
+
+    if args.nb_gares is not None:
+        config["nb_gares"] = args.nb_gares
+    if args.types_maint is not None:
+        config["types_maintenances"] = args.types_maint
+    if args.types_ops is not None:
+        config["types_operations"] = args.types_ops
+
+    return config
+
+
 def afficher_resume(config: dict):
-    """Affiche un résumé de la configuration"""
     print("\n" + "═" * 70)
     print("📋 RÉSUMÉ DE LA CONFIGURATION")
     print("═" * 70)
-
-    total_voies = sum(config["voies_par_type"]) if config["voies_par_type"] else "auto"
-    total_techs = (
-        sum(config["techniciens_par_type"])
-        if config["techniciens_par_type"]
-        else "auto"
-    )
-    total_trains = (
-        sum(config["trains_par_type"]) if config["trains_par_type"] else "auto"
-    )
     total_periodes = config["jours"] * config["periodes_par_jour"]
-
     print(f"\n⏱️  Simulation : {config['jours']} jours ({total_periodes} périodes)")
-    print(f"🚂 Trains : {total_trains} trains ({config['types_trains']} types)")
-    print(f"🛤️  Voies : {total_voies} voies ({config['types_voies']} types)")
     print(
-        f"👷 Techniciens : {total_techs} techniciens ({config['types_techniciens']} types)"
+        f"🚂 Trains : {sum(config['trains_par_type'] or [])} ({config['types_trains']} types)"
     )
-    print(f"🏢 Gares : {config['nb_gares']}")
-    print(f"🔧 Équipements : {config['nb_equipements']}")
-    print(f"🔨 Maintenances : {config['types_maintenances']} types")
-    print(f"⚙️  Opérations : {config['types_operations']} types")
+    print(
+        f"🛤️  Voies : {sum(config['voies_par_type'] or [])} ({config['types_voies']} types)"
+    )
+    print(
+        f"👷 Techniciens : {sum(config['techniciens_par_type'] or [])} ({config['types_techniciens']} types)"
+    )
 
 
 def sauvegarder_config(config: dict, filename: str):
-    """Sauvegarde la configuration dans un fichier JSON"""
     path = Path(filename)
-
     with open(path, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
-
     print(f"\n✅ Configuration sauvegardée : {path}")
-    print(f"   Taille : {path.stat().st_size} octets")
+
+
+# === MAIN ===
 
 
 def main():
-    # Parser pour gérer -h / --help
-    import argparse
-
     parser = argparse.ArgumentParser(
-        description="Créateur interactif de fichiers de configuration JSON pour le générateur de données MiniZinc",
+        description="Créateur de configuration JSON (Interactif ou CLI)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Exemples:
-  python create_config.py
-    Lance le mode interactif pour créer une configuration
+EXEMPLES:
+  1. Mode Interactif (Menu) :
+     python creer_config.py
 
-Options de presets:
-  1. Utiliser un preset directement (pas de questions)
-  2. Utiliser un preset comme base (modifier les valeurs)
-  3. Configuration personnalisée (partir de zéro)
+  2. Mode Automatique (Utilise le preset 'medium', sauve dans config.json) :
+     python creer_config.py --preset medium --output config.json --quiet
 
-Presets disponibles: minimal, small, medium, large, tgv
-
-Le script vous posera des questions pour chaque paramètre.
-Appuyez sur Entrée pour utiliser les valeurs par défaut.
-
-Note sur les listes 'null' dans le JSON:
-  Quand une liste est 'null' (ex: "voies_par_type": null), le générateur
-  décide automatiquement en générant des valeurs aléatoires.
+  3. Mode Hybride (Preset 'small' mais avec 10 jours et plus de trains) :
+     python creer_config.py --preset small --jours 10 --trains-par-type "10,10" --output test.json
         """,
     )
-    parser.parse_args()
 
-    # Demander le preset
-    preset_choice = choisir_preset()
+    # Arguments Généraux
+    parser.add_argument(
+        "-o", "--output", type=str, help="Fichier de sortie (ex: config.json)"
+    )
+    parser.add_argument(
+        "-p",
+        "--preset",
+        type=str,
+        help="Preset de base (minimal, small, medium, large, tgv)",
+    )
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="Mode silencieux (pas de confirmation)",
+    )
 
-    if preset_choice and preset_choice["mode"] == "direct":
-        # Utiliser le preset directement sans poser de questions
-        config = preset_choice["config"]
-        print("\n✓ Configuration du preset utilisée directement")
-    elif preset_choice and preset_choice["mode"] == "base":
-        # Utiliser le preset comme base et poser les questions
-        config = creer_configuration(preset_base=preset_choice["config"])
+    # Arguments de Configuration
+    g_temps = parser.add_argument_group("Temps")
+    g_temps.add_argument("--jours", type=int, help="Nombre de jours")
+    g_temps.add_argument("--periodes", type=int, help="Périodes par jour")
+    g_temps.add_argument("--setup", type=int, help="Temps setup")
+    g_temps.add_argument("--temps-voie", type=int, help="Temps voie")
+    g_temps.add_argument("--etage-max", type=int, help="Etages max")
+
+    g_inf = parser.add_argument_group("Infrastructure")
+    g_inf.add_argument("--types-voies", type=int, help="Nb types voies")
+    g_inf.add_argument("--voies-par-type", type=str, help="Liste ex: '2,3,2'")
+    g_inf.add_argument("--nb-equipements", type=int, help="Nb equipements")
+    g_inf.add_argument("--nb-gares", type=int, help="Nb gares")
+
+    g_rh = parser.add_argument_group("Ressources Humaines")
+    g_rh.add_argument("--types-techs", type=int, help="Nb types techniciens")
+    g_rh.add_argument("--techs-par-type", type=str, help="Liste ex: '5,5'")
+
+    g_train = parser.add_argument_group("Trains & Maintenance")
+    g_train.add_argument("--types-trains", type=int, help="Nb types trains")
+    g_train.add_argument("--trains-par-type", type=str, help="Liste ex: '10,5,2'")
+    g_train.add_argument("--types-maint", type=int, help="Nb types maintenances")
+    g_train.add_argument("--types-ops", type=int, help="Nb types opérations")
+
+    args = parser.parse_args()
+
+    # Détection du mode : Si un argument de config ou preset est présent => CLI
+    # Sinon (juste output ou rien) => Interactif
+    args_cli_utilises = any(
+        [
+            args.preset,
+            args.jours,
+            args.periodes,
+            args.setup,
+            args.temps_voie,
+            args.etage_max,
+            args.types_voies,
+            args.voies_par_type,
+            args.nb_equipements,
+            args.types_techs,
+            args.techs_par_type,
+            args.types_trains,
+            args.trains_par_type,
+            args.nb_gares,
+            args.types_maint,
+            args.types_ops,
+        ]
+    )
+
+    if args_cli_utilises:
+        # === MODE CLI ===
+        print("🤖 Mode Ligne de Commande activé")
+        config = build_config_from_args(args)
+
+        # Gestion du fichier de sortie
+        nom_fichier = args.output if args.output else "config.json"
+        if not nom_fichier.endswith(".json"):
+            nom_fichier += ".json"
+
+        if not args.quiet:
+            afficher_resume(config)
+
+        sauvegarder_config(config, nom_fichier)
+
     else:
-        # Configuration personnalisée
-        config = creer_configuration()
+        # === MODE INTERACTIF ===
+        # Si on a juste passé --output mais pas de config, on le garde pour la fin
 
-    # Afficher le résumé
-    afficher_resume(config)
+        preset_choice = choisir_preset_interactif()
 
-    # Demander confirmation
-    print("\n" + "─" * 70)
-    confirmer = input("\n✓ Sauvegarder cette configuration ? [O/n] : ").strip().lower()
+        if preset_choice and preset_choice["mode"] == "direct":
+            config = preset_choice["config"]
+            print("\n✓ Configuration du preset utilisée directement")
+        elif preset_choice and preset_choice["mode"] == "base":
+            config = creer_configuration_interactive(
+                preset_base=preset_choice["config"]
+            )
+        else:
+            config = creer_configuration_interactive()
 
-    if (
-        confirmer
-        and confirmer != "o"
-        and confirmer != "oui"
-        and confirmer != "y"
-        and confirmer != "yes"
-    ):
-        print("\n❌ Configuration annulée")
-        return 1
+        afficher_resume(config)
 
-    # Demander le nom du fichier
-    print("\n" + "─" * 70)
-    nom_defaut = "config.json"
-    nom_fichier = input(f"Nom du fichier de configuration [{nom_defaut}] : ").strip()
-    if not nom_fichier:
-        nom_fichier = nom_defaut
+        # Sauvegarde
+        print("\n" + "─" * 70)
 
-    # Ajouter l'extension .json si nécessaire
-    if not nom_fichier.endswith(".json"):
-        nom_fichier += ".json"
+        if args.output:
+            nom_fichier = args.output
+            if not nom_fichier.endswith(".json"):
+                nom_fichier += ".json"
+            print(f"Sauvegarde vers : {nom_fichier}")
+            sauvegarder_config(config, nom_fichier)
+        else:
+            confirmer = (
+                input("\n✓ Sauvegarder cette configuration ? [O/n] : ").strip().lower()
+            )
+            if confirmer not in ["", "o", "oui", "y", "yes"]:
+                print("\n❌ Annulé")
+                return 1
 
-    # Vérifier si le fichier existe déjà
-    if Path(nom_fichier).exists():
-        ecraser = (
-            input(f"⚠️  Le fichier {nom_fichier} existe déjà. Écraser ? [o/N] : ")
-            .strip()
-            .lower()
-        )
-        if ecraser not in ["o", "oui", "y", "yes"]:
-            print("\n❌ Sauvegarde annulée")
-            return 1
+            nom_defaut = "config.json"
+            nom_fichier = input(f"Nom du fichier [{nom_defaut}] : ").strip()
+            if not nom_fichier:
+                nom_fichier = nom_defaut
+            if not nom_fichier.endswith(".json"):
+                nom_fichier += ".json"
 
-    # Sauvegarder
-    sauvegarder_config(config, nom_fichier)
+            sauvegarder_config(config, nom_fichier)
 
     # Instructions finales
-    print("\n" + "═" * 70)
-    print("🎯 PROCHAINES ÉTAPES")
-    print("═" * 70)
-    print(f"\n1. Vérifier la configuration :")
-    print(f"   cat {nom_fichier}")
-    print(f"\n2. Générer les données :")
-    print(f"   python generate_data.py -c {nom_fichier} -o data.dzn")
-    print(f"\n3. Résoudre avec MiniZinc :")
-    print(f"   minizinc src/main.mzn data.dzn")
-    print()
+    if not args.quiet:
+        print("\n" + "═" * 70)
+        print("🎯 SUITE :")
+        print(f"   python generer_data.py -c {nom_fichier}")
 
     return 0
 
@@ -513,8 +577,5 @@ if __name__ == "__main__":
     try:
         sys.exit(main())
     except KeyboardInterrupt:
-        print("\n\n❌ Opération annulée par l'utilisateur")
-        sys.exit(1)
-    except Exception as e:
-        print(f"\n❌ Erreur : {e}")
+        print("\n❌ Interrompu")
         sys.exit(1)

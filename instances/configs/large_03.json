@@ -1,0 +1,17 @@
+{
+  "jours": 1,
+  "periodes_par_jour": 144,
+  "setup": 1,
+  "temps_voie": 4,
+  "etage_max": 3,
+  "types_voies": 2,
+  "voies_par_type": [4, 4],
+  "nb_equipements": 2,
+  "types_techniciens": 3,
+  "techniciens_par_type": [7, 7, 8],
+  "types_trains": 1,
+  "trains_par_type": [15],
+  "nb_gares": 8,
+  "types_maintenances": 2,
+  "types_operations": 3
+}
