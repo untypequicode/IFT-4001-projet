@@ -2,7 +2,7 @@
 """
 Générateur de jeux de données pour les modèles MiniZinc de maintenance ferroviaire.
 Lit un fichier de configuration JSON et génère DEUX fichiers .dzn :
-1. {nom}_e-v1.dzn : Modèle détaillé (Périodes, e-v1).
+1. {nom}_e-v1.dzn : Modèle détaillé (Périodes, e-v1) avec INPUT INTERVALLES.
 2. {nom}_l-v1.dzn : Modèle RCPSP (Minutes, l-v1).
 """
 
@@ -74,12 +74,12 @@ class DatasetGenerator:
         self._generate_techniciens_data()
         self._generate_trains_data()
         self._generate_gares_data()
-        self._generate_trajets_data()
+        self._generate_trajets_data()  # Logique corrigée ici
         self._generate_operations_data()
         self._generate_maintenances_data()
 
     # =========================================================================
-    # GÉNÉRATION DES DONNÉES INTERNES (INDÉPENDANT DU FORMAT DE SORTIE)
+    # GÉNÉRATION DES DONNÉES INTERNES
     # =========================================================================
 
     def _generate_voies_data(self):
@@ -101,7 +101,6 @@ class DatasetGenerator:
             for _ in range(self.config["nb_equipements"])
         ]
 
-        # Disponibilité Matrice [Voie][Equip]
         self.VEDisponible = [
             [False for _ in range(self.config["nb_equipements"])]
             for _ in range(self.VNb)
@@ -122,7 +121,7 @@ class DatasetGenerator:
         for _ in range(self.config["types_techniciens"]):
             min_h = random.randint(6, 7)
             max_h = random.randint(8, 10)
-            self.STTempsMin.append(min_h * 4)  # En périodes de 15min approx
+            self.STTempsMin.append(min_h * 4)
             self.STTempsMax.append(max_h * 4)
 
     def _generate_trains_data(self):
@@ -138,75 +137,102 @@ class DatasetGenerator:
         ]
 
     def _generate_trajets_data(self):
-        self.TTrajetGare = []
-        self.TTrajetSens = []
+        """
+        Génère les intervalles UNIQUEMENT quand le train est au centre.
+        Corrigé pour garantir des intervalles même sur des horizons courts (1 jour).
+        """
+        self.InputNbIntervallesParTrain = []
+        self.InputIntervallesDebut = []
+        self.InputIntervallesFin = []
+        self.InputIntervallesGareDebut = []
+        self.InputIntervallesGareFin = []
+
         self.TArrivalMinutes = []
         self.TDepartureMinutes = []
 
         for train_idx in range(self.TNb):
-            gare_train = []
-            sens_train = []
-            periode = 0
-            position = random.randint(1, self.config["nb_gares"])
+            current_intervals = 0
+            periode_courante = 1
 
-            # Pour l-v1 : on cherche la première et dernière période où le train est "Au centre" (Gare=0)
-            first_center = -1
-            last_center = -1
+            first_center_arrival = -1
+            last_center_departure = -1
 
-            while periode < self.P:
-                # 1. Stationnement Gare
-                temps = random.randint(8, 24)
-                current_station = position
-                for _ in range(min(temps, self.P - periode)):
-                    gare_train.append(0)
-                    sens_train.append("gare")
-                    periode += 1
-                if periode >= self.P:
+            # --- CORRECTION : Offset proportionnel à l'horizon ---
+            # Si P est petit (48), l'offset max doit être petit (ex: 12)
+            max_offset = max(1, self.P // 6)
+            offset_initial = random.randint(0, max_offset)
+            periode_courante += offset_initial
+
+            while periode_courante <= self.P:
+                # --- PHASE 1 : Circulation ---
+                # Si l'horizon est court, on réduit le temps "dehors"
+                if self.P < 100:
+                    temps_exterieur = random.randint(4, 12)  # Court
+                else:
+                    temps_exterieur = random.randint(10, 40)  # Long
+
+                periode_courante += temps_exterieur
+
+                if periode_courante > self.P:
                     break
 
-                # 2. Aller (Gare -> Centre)
-                dest = current_station
-                temps_trajet = random.randint(4, 12)
-                for _ in range(min(temps_trajet, self.P - periode)):
-                    gare_train.append(current_station)
-                    sens_train.append("aller")
-                    periode += 1
-                if periode >= self.P:
-                    break
+                # --- PHASE 2 : Au Centre ---
+                debut_dispo = periode_courante
 
-                # 3. Au Centre (Maintenance possible)
-                if first_center == -1:
-                    first_center = periode
-                temps_service = random.randint(8, 24)
-                for _ in range(min(temps_service, self.P - periode)):
-                    gare_train.append(0)
-                    sens_train.append("gare")
-                    periode += 1
-                last_center = periode
-                if periode >= self.P:
-                    break
+                # Durée au centre adaptée
+                if self.P < 100:
+                    duree_dispo = random.randint(12, 24)
+                else:
+                    duree_dispo = random.randint(12, 48)
 
-                # 4. Retour
-                temps_retour = random.randint(4, 12)
-                for _ in range(min(temps_retour, self.P - periode)):
-                    gare_train.append(current_station)
-                    sens_train.append("retour")
-                    periode += 1
-                position = current_station
+                fin_dispo = min(debut_dispo + duree_dispo - 1, self.P)
 
-            self.TTrajetGare.append(gare_train)
-            self.TTrajetSens.append(sens_train)
+                if debut_dispo <= self.P:
+                    self.InputIntervallesDebut.append(debut_dispo)
+                    self.InputIntervallesFin.append(fin_dispo)
+                    self.InputIntervallesGareDebut.append(0)
+                    self.InputIntervallesGareFin.append(0)
+
+                    current_intervals += 1
+
+                    if first_center_arrival == -1:
+                        first_center_arrival = debut_dispo
+                    last_center_departure = fin_dispo
+
+                periode_courante = fin_dispo + 1
+
+            # --- CORRECTION : FAILSAFE (Sécurité) ---
+            # Si aucun intervalle n'a été généré (car horizon trop court ou aléatoire malchanceux),
+            # on en force un manuellement.
+            if current_intervals == 0:
+                debut_force = random.randint(1, max(1, self.P // 3))
+                fin_force = min(self.P, debut_force + random.randint(12, 24))
+
+                self.InputIntervallesDebut.append(debut_force)
+                self.InputIntervallesFin.append(fin_force)
+                self.InputIntervallesGareDebut.append(0)
+                self.InputIntervallesGareFin.append(0)
+
+                current_intervals = 1
+
+                if first_center_arrival == -1:
+                    first_center_arrival = debut_force
+                last_center_departure = fin_force
+
+            self.InputNbIntervallesParTrain.append(current_intervals)
 
             # Données l-v1
-            arr = (first_center if first_center != -1 else 0) * self.minutes_par_periode
-            dep = (
-                last_center if last_center != -1 else self.H_minutes
-            ) * self.minutes_par_periode
+            if first_center_arrival != -1:
+                arr = (first_center_arrival - 1) * self.minutes_par_periode
+                dep = (last_center_departure) * self.minutes_par_periode
+            else:
+                arr = 0
+                dep = self.H_minutes
+
             self.TArrivalMinutes.append(arr)
             self.TDepartureMinutes.append(dep)
 
     def _generate_operations_data(self):
-        # OEquipement [OpType][Equip] (bool)
         self.OEquipement = []
         for i in range(self.config["types_operations"]):
             self.OEquipement.append(
@@ -216,14 +242,12 @@ class DatasetGenerator:
                 ]
             )
 
-        # OTemps [OpType][Etage] (int périodes)
         self.OTemps = []
         for i in range(self.config["types_operations"]):
             self.OTemps.append(
                 [random.randint(1, 4) for _ in range(self.config["etage_max"])]
             )
 
-        # ODependance [OpType][OpType] (bool)
         self.ODependance = []
         for i in range(self.config["types_operations"]):
             row = []
@@ -234,13 +258,11 @@ class DatasetGenerator:
                     row.append(False)
             self.ODependance.append(row)
 
-        # OShift [OpType] -> TechType (int 1..NB_TECH_TYPES)
         self.OShift = [
             random.randint(1, self.config["types_techniciens"])
             for _ in range(self.config["types_operations"])
         ]
 
-        # OVoie [OpType][VoieType] (bool)
         self.OVoie = []
         for i in range(self.config["types_operations"]):
             self.OVoie.append(
@@ -285,27 +307,57 @@ class DatasetGenerator:
             )
 
     # =========================================================================
-    # EXPORTATION e-v1 (Le complexe original)
+    # EXPORTATION e-v1 (NOUVEAU FORMAT INTERVALLES + COMMENTAIRES)
     # =========================================================================
 
     def export_e_v1(self) -> str:
         lines = []
-        lines.append("% === DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ) ===")
+        lines.append(
+            "% ============================================================================"
+        )
+        lines.append("% DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ)")
+        lines.append("% Modèle basé sur des PÉRIODES discrètes.")
+        lines.append(
+            "% ============================================================================"
+        )
+        lines.append("")
+
+        lines.append("% --- Temps et Unités ---")
+        lines.append("% J: Nombre de jours de simulation")
+        lines.append("% PJ: Nombre de périodes par jour")
         lines.append(f"J = {self.J}; PJ = {self.PJ};")
+        lines.append("% PSetup: Temps de setup entre opérations (en périodes)")
+        lines.append(
+            "% PVoie: Temps de sécurité entre trains sur une voie (en périodes)"
+        )
         lines.append(
             f"PSetup = {self.config['setup']}; PVoie = {self.config['temps_voie']};"
         )
+        lines.append("% EtageMax: Nombre maximum d'étages (caténaires) possibles")
         lines.append(f"EtageMax = {self.config['etage_max']};")
+        lines.append("")
 
-        # Voies
+        lines.append("% --- Voies (Infrastructures) ---")
+        lines.append("% VTNb: Nombre de TYPES de voies")
         lines.append(f"VTNb = {self.config['types_voies']};")
+        lines.append("% VNbT: Nombre de voies pour chaque type")
         lines.append(f"VNbT = {self.VNbT};")
+        lines.append("% VEtage: Étage (équipement caténaire) de chaque voie physique")
         lines.append(f"VEtage = {self.VEtages};")
+        lines.append("")
 
-        # Equipements
+        lines.append("% --- Équipements ---")
+        lines.append("% ENb: Nombre de types d'équipements")
         lines.append(f"ENb = {self.config['nb_equipements']};")
+        lines.append(
+            "% ECapacite: Capacité simultanée (combien d'ops en // sur cet équipement)"
+        )
         lines.append(f"ECapacite = {self.ECapacite};")
+        lines.append("% EQuantite: Nombre total d'unités de cet équipement")
         lines.append(f"EQuantite = {self.EQuantite};")
+        lines.append(
+            "% VEDisponible: Matrice [Voie, Equipement] -> Est-ce dispo sur cette voie ?"
+        )
         lines.append("VEDisponible = [|")
         for i in range(self.VNb):
             row = [
@@ -314,41 +366,61 @@ class DatasetGenerator:
             ]
             lines.append("  " + ", ".join(row) + (" |" if i < self.VNb - 1 else ""))
         lines.append("|];")
+        lines.append("")
 
-        # Techniciens
+        lines.append("% --- Techniciens ---")
+        lines.append("% STNb: Nombre de types de techniciens (spécialités)")
         lines.append(f"STNb = {self.config['types_techniciens']};")
+        lines.append("% SNbT: Nombre de techniciens par spécialité")
         lines.append(f"SNbT = {self.SNbT};")
+        lines.append(
+            "% STTempsMin/Max: Temps de travail min/max journalier (en périodes)"
+        )
         lines.append(f"STTempsMin = {self.STTempsMin};")
         lines.append(f"STTempsMax = {self.STTempsMax};")
+        lines.append("")
 
-        # Trains
+        lines.append("% --- Trains ---")
+        lines.append("% TTNb: Nombre de TYPES de trains")
         lines.append(f"TTNb = {self.config['types_trains']};")
+        lines.append("% TNbT: Nombre de trains par type")
         lines.append(f"TNbT = {self.TNbT};")
+        lines.append("% TEtage: Étage requis par type de train")
         lines.append(f"TEtage = {self.TEtage};")
+        lines.append("")
 
-        # Gares
+        lines.append("% --- Gares et Trajets ---")
+        lines.append("% GNb: Nombre de gares périphériques")
         lines.append(f"GNb = {self.config['nb_gares']};")
+        lines.append("% GTemps: Temps de trajet Gare <-> Centre (en périodes)")
         lines.append(f"GTemps = {self.GTemps};")
+        lines.append("")
 
-        # Trajets
-        lines.append("TTrajetGare = [|")
-        for i, row in enumerate(self.TTrajetGare):
-            lines.append(
-                "  "
-                + ", ".join(map(str, row))
-                + (" |" if i < len(self.TTrajetGare) - 1 else "")
-            )
-        lines.append("|];")
-        lines.append("TTrajetSens = [|")
-        for i, row in enumerate(self.TTrajetSens):
-            lines.append(
-                "  " + ", ".join(row) + (" |" if i < len(self.TTrajetSens) - 1 else "")
-            )
-        lines.append("|];")
+        lines.append("% --- Intervalles de Disponibilité (Input) ---")
+        lines.append(
+            "% Liste plate des intervalles où les trains sont présents au centre."
+        )
+        lines.append("% Gare=0 signifie 'Au Centre'.")
+        lines.append(
+            "% InputNbIntervallesParTrain: Combien d'intervalles par train [1..TNb]"
+        )
+        lines.append(f"InputNbIntervallesParTrain = {self.InputNbIntervallesParTrain};")
+        lines.append("% InputIntervallesDebut: Période de début de chaque intervalle")
+        lines.append(f"InputIntervallesDebut = {self.InputIntervallesDebut};")
+        lines.append("% InputIntervallesFin: Période de fin de chaque intervalle")
+        lines.append(f"InputIntervallesFin = {self.InputIntervallesFin};")
+        lines.append("% InputIntervallesGareDebut: Gare de provenance (0=Centre)")
+        lines.append(f"InputIntervallesGareDebut = {self.InputIntervallesGareDebut};")
+        lines.append("% InputIntervallesGareFin: Gare de destination (0=Centre)")
+        lines.append(f"InputIntervallesGareFin = {self.InputIntervallesGareFin};")
+        lines.append("")
 
-        # Opérations
+        lines.append("% --- Opérations ---")
+        lines.append("% OTNb: Nombre de TYPES d'opérations")
         lines.append(f"OTNb = {self.config['types_operations']};")
-
+        lines.append(
+            "% OEquipement: Matrice [OpType, EquipType] -> Besoin équipement ?"
+        )
         lines.append("OEquipement = [|")
         for i, row in enumerate(self.OEquipement):
             r_str = ["true" if x else "false" for x in row]
@@ -359,6 +431,7 @@ class DatasetGenerator:
             )
         lines.append("|];")
 
+        lines.append("% OTemps: Matrice [OpType, Etage] -> Durée (périodes)")
         lines.append("OTemps = [|")
         for i, row in enumerate(self.OTemps):
             lines.append(
@@ -368,6 +441,7 @@ class DatasetGenerator:
             )
         lines.append("|];")
 
+        lines.append("% ODependance: Matrice [OpA, OpB] -> OpA dépend de OpB ?")
         lines.append("ODependance = [|")
         for i, row in enumerate(self.ODependance):
             r_str = ["true" if x else "false" for x in row]
@@ -378,8 +452,10 @@ class DatasetGenerator:
             )
         lines.append("|];")
 
+        lines.append("% OShift: Type de technicien requis pour l'opération")
         lines.append(f"OShift = {self.OShift};")
 
+        lines.append("% OVoie: Matrice [OpType, VoieType] -> Compatible ?")
         lines.append("OVoie = [|")
         for i, row in enumerate(self.OVoie):
             r_str = ["true" if x else "false" for x in row]
@@ -387,9 +463,14 @@ class DatasetGenerator:
                 "  " + ", ".join(r_str) + (" |" if i < len(self.OVoie) - 1 else "")
             )
         lines.append("|];")
+        lines.append("")
 
-        # Maintenances
+        lines.append("% --- Maintenances ---")
+        lines.append("% MTNb: Nombre de TYPES de maintenances")
         lines.append(f"MTNb = {self.config['types_maintenances']};")
+        lines.append(
+            "% MOperation: Matrice [MaintType, OpType] -> L'opération est-elle requise ?"
+        )
         lines.append("MOperation = [|")
         for i, row in enumerate(self.MOperation):
             r_str = ["true" if x else "false" for x in row]
@@ -398,6 +479,9 @@ class DatasetGenerator:
             )
         lines.append("|];")
 
+        lines.append(
+            "% MTPeriode: Périodicité [TrainType, MaintType] (périodes, 0=Urgente, infinity=Jamais)"
+        )
         lines.append("MTPeriode = [|")
         for i, row in enumerate(self.MTPeriode):
             lines.append(
@@ -407,6 +491,9 @@ class DatasetGenerator:
             )
         lines.append("|];")
 
+        lines.append(
+            "% MDerniereFois: Date dernière maintenance [TrainInstance, MaintType] (négatif = passé)"
+        )
         lines.append("MDerniereFois = [|")
         for i, row in enumerate(self.MDerniereFois):
             lines.append(
@@ -419,26 +506,36 @@ class DatasetGenerator:
         return "\n".join(lines)
 
     # =========================================================================
-    # EXPORTATION l-v1 (RCPSP Simplifié)
+    # EXPORTATION l-v1 (RCPSP Simplifié + COMMENTAIRES)
     # =========================================================================
 
     def export_l_v1(self) -> str:
         """
         Transforme les données abstraites en données concrètes pour le modèle l-v1.
         Unités: Minutes.
-        Concepts: Sets explicites (1..N).
         """
         lines = []
-        lines.append("% === DONNÉES GÉNÉRÉES POUR MODEL l-v1 (RCPSP) ===")
-        lines.append(f"H = {self.H_minutes};")
+        lines.append(
+            "% ============================================================================"
+        )
+        lines.append("% DONNÉES GÉNÉRÉES POUR MODEL l-v1 (RCPSP)")
+        lines.append("% Modèle continu (minutes) avec Sets explicites.")
+        lines.append(
+            "% ============================================================================"
+        )
+        lines.append("")
 
-        # --- 1. SETS & MAPPINGS ---
+        lines.append("% H: Horizon total de planification en minutes")
+        lines.append(f"H = {self.H_minutes};")
+        lines.append("")
+
+        lines.append("% --- Ensembles (Sets) : Indices 1..N ---")
         lines.append(f"TRAIN = 1..{self.TNb};")
         lines.append(f"TRACK = 1..{self.VNb};")
         lines.append(f"TECH = 1..{self.config['types_techniciens']};")
         lines.append(f"EQUIP = 1..{self.config['nb_equipements']};")
 
-        # --- 2. INSTANCIATION DES MAINTENANCES & OPÉRATIONS ---
+        # --- GENERATION DES INSTANCES MAINT/OP ---
         maint_list = []
         op_list = []
 
@@ -455,7 +552,6 @@ class DatasetGenerator:
                     continue
 
                 maint_id = len(maint_list) + 1
-
                 derniere = self.MDerniereFois[t_idx][m_type_idx]
                 periode_int = int(periode_val) if periode_val != 0 else self.P
                 due_date_period = derniere + periode_int
@@ -474,13 +570,11 @@ class DatasetGenerator:
                 maint_list.append(maint_obj)
 
                 type_to_global_id = {}
-
                 active_ops_types = [
                     o_idx
                     for o_idx, required in enumerate(self.MOperation[m_type_idx])
                     if required
                 ]
-
                 train_etage = self.TEtage[t_type_idx] - 1
 
                 current_ops_batch = []
@@ -494,15 +588,12 @@ class DatasetGenerator:
                     )
                     duree_m = duree_p * self.minutes_par_periode
 
-                    req_track_types = self.OVoie[op_type_idx]
-                    req_track = 1
-
                     op_obj = {
                         "id": op_id,
                         "maint": maint_id,
                         "type_idx": op_type_idx,
                         "duration": duree_m,
-                        "req_track": req_track,
+                        "req_track": 1,
                         "pred": 0,
                     }
                     type_to_global_id[op_type_idx] = op_id
@@ -521,41 +612,54 @@ class DatasetGenerator:
         lines.append(f"OP = 1..{len(op_list)};")
         lines.append("")
 
-        # --- 3. PARAMÈTRES TRAINS ---
+        lines.append("% --- Paramètres Trains ---")
+        lines.append("% arrival: Heure d'arrivée au centre (minutes)")
         lines.append("arrival = " + str(self.TArrivalMinutes) + ";")
+        lines.append("% departure: Heure de départ du centre (minutes)")
         lines.append("departure = " + str(self.TDepartureMinutes) + ";")
+
         train_complexities = []
         for t_idx in range(self.TNb):
             t_type = train_types_expanded[t_idx] - 1
             train_complexities.append(self.TEtage[t_type])
+        lines.append("% train_complexity: Basé sur le nombre d'étages (caténaire)")
         lines.append(f"train_complexity = {train_complexities};")
+        lines.append("")
 
-        # --- 4. PARAMÈTRES MAINTENANCES ---
+        lines.append("% --- Paramètres Maintenances ---")
         lines.append(f"maint_train = {[m['train'] for m in maint_list]};")
         lines.append(f"periodicity = {[m['periodicity'] for m in maint_list]};")
         lines.append(f"priority = {[m['priority'] for m in maint_list]};")
         lines.append(f"last_done = {[m['last_done'] for m in maint_list]};")
         lines.append(f"due_date = {[m['due_date'] for m in maint_list]};")
+        lines.append("")
 
-        # --- 5. PARAMÈTRES OPÉRATIONS ---
+        lines.append("% --- Paramètres Opérations ---")
         lines.append(f"op_maint = {[o['maint'] for o in op_list]};")
         lines.append(f"duration = {[o['duration'] for o in op_list]};")
         lines.append(f"required_track_type = {[o['req_track'] for o in op_list]};")
         lines.append(f"predecessor = {[o['pred'] for o in op_list]};")
+        lines.append("")
 
-        # --- 6. PARAMÈTRES RESSOURCES ---
+        lines.append("% --- Ressources Humaines ---")
+        lines.append("% nb_total: Nombre de techniciens par type")
         lines.append(f"nb_total = {self.SNbT};")
+        lines.append("% min/max_time: Temps de travail en minutes")
         lines.append(
             f"min_time = {[min_t * self.minutes_par_periode for min_t in self.STTempsMin]};"
         )
         lines.append(
             f"max_time = {[max_t * self.minutes_par_periode for max_t in self.STTempsMax]};"
         )
+        lines.append("")
 
+        lines.append("% --- Ressources Matérielles ---")
         lines.append(f"quantity = {self.EQuantite};")
         lines.append(f"simultaneous_capacity = {self.ECapacite};")
+        lines.append("")
 
-        # --- 7. RELATIONS N-N ---
+        lines.append("% --- Matrices de Besoins (Relations N-N) ---")
+        lines.append("% tech_required: [Op, TechType] -> 1 si requis, 0 sinon")
         lines.append("tech_required = [|")
         for o in op_list:
             op_type = o["type_idx"]
@@ -567,6 +671,7 @@ class DatasetGenerator:
             lines.append("  " + ", ".join(row) + " |")
         lines.append("|];")
 
+        lines.append("% equip_required: [Op, EquipType] -> 1 si requis, 0 sinon")
         lines.append("equip_required = [|")
         for o in op_list:
             op_type = o["type_idx"]
@@ -577,6 +682,7 @@ class DatasetGenerator:
             lines.append("  " + ", ".join(row) + " |")
         lines.append("|];")
 
+        lines.append("% equip_available_on_track: [Voie, EquipType] -> Dispo ?")
         lines.append("equip_available_on_track = [|")
         for v in range(self.VNb):
             row = []
@@ -585,8 +691,9 @@ class DatasetGenerator:
                 row.append(val)
             lines.append("  " + ", ".join(row) + " |")
         lines.append("|];")
+        lines.append("")
 
-        # --- 8. SETUP ---
+        lines.append("% --- Setup ---")
         setup_min = self.config["setup"] * self.minutes_par_periode
         lines.append(f"setup_time_between_trains = {setup_min * 2};")
         lines.append(f"setup_time_between_ops = {setup_min};")
@@ -615,26 +722,21 @@ def main():
     print(f"📖 Chargement de la configuration : {args.config}")
     config = charger_config(Path(args.config))
 
-    # Gestion du nom de base
     base_name = args.output
     if base_name.endswith(".dzn"):
         base_name = base_name[:-4]
 
-    # Création des noms de fichiers spécifiques e-v1 et l-v1
     out_e = f"{base_name}_e-v1.dzn"
     out_l = f"{base_name}_l-v1.dzn"
 
     print(f"\n⚙️  Génération des données en mémoire...")
     generator = DatasetGenerator(config, seed=args.seed)
 
-    # Export Modèle e-v1
     print(f"📄 Écriture de {out_e} (Modèle Périodes)...")
     data_e = generator.export_e_v1()
-
     Path(out_e).parent.mkdir(parents=True, exist_ok=True)
     Path(out_e).write_text(data_e, encoding="utf-8")
 
-    # Export Modèle l-v1
     print(f"📄 Écriture de {out_l} (Modèle RCPSP)...")
     data_l = generator.export_l_v1()
     Path(out_l).write_text(data_l, encoding="utf-8")

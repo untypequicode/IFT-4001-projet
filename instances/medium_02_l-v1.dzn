@@ -1,67 +1,81 @@
-% === DONNÉES GÉNÉRÉES POUR MODEL l-v1 (RCPSP) ===
+% ============================================================================
+% DONNÉES GÉNÉRÉES POUR MODEL l-v1 (RCPSP)
+% Modèle continu (minutes) avec Sets explicites.
+% ============================================================================
+
+% H: Horizon total de planification en minutes
 H = 1440;
+
+% --- Ensembles (Sets) : Indices 1..N ---
 TRAIN = 1..7;
 TRACK = 1..5;
 TECH = 1..3;
 EQUIP = 1..2;
-MAINT = 1..14;
-OP = 1..14;
+MAINT = 1..7;
+OP = 1..7;
 
-arrival = [190, 340, 200, 240, 280, 340, 220];
-departure = [1410, 1440, 1310, 1390, 1420, 1310, 1210];
-train_complexity = [3, 3, 3, 3, 3, 3, 3];
-maint_train = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
-periodicity = [10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080, 10080];
-priority = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-last_done = [-14110, -28890, -23330, -28090, -19160, -12500, -22120, -27520, -11630, -50, -2160, -24700, -35570, -36320];
-due_date = [0, 0, 0, 0, 0, 0, 0, 0, 0, 10030, 7920, 0, 0, 0];
-op_maint = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-duration = [30, 20, 30, 20, 30, 20, 30, 20, 30, 20, 30, 20, 30, 20];
-required_track_type = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-predecessor = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+% --- Paramètres Trains ---
+% arrival: Heure d'arrivée au centre (minutes)
+arrival = [290, 370, 350, 410, 490, 430, 490];
+% departure: Heure de départ du centre (minutes)
+departure = [1440, 1120, 1340, 1440, 1440, 1390, 1360];
+% train_complexity: Basé sur le nombre d'étages (caténaire)
+train_complexity = [1, 1, 1, 1, 1, 1, 1];
+
+% --- Paramètres Maintenances ---
+maint_train = [1, 2, 3, 4, 5, 6, 7];
+periodicity = [129600, 129600, 129600, 129600, 129600, 129600, 129600];
+priority = [2, 2, 2, 2, 2, 2, 2];
+last_done = [-13900, -29160, -9780, -27700, -2580, -30270, -22490];
+due_date = [115700, 100440, 119820, 101900, 127020, 99330, 107110];
+
+% --- Paramètres Opérations ---
+op_maint = [1, 2, 3, 4, 5, 6, 7];
+duration = [10, 10, 10, 10, 10, 10, 10];
+required_track_type = [1, 1, 1, 1, 1, 1, 1];
+predecessor = [0, 0, 0, 0, 0, 0, 0];
+
+% --- Ressources Humaines ---
+% nb_total: Nombre de techniciens par type
 nb_total = [5, 6, 7];
-min_time = [280, 240, 240];
-max_time = [400, 360, 360];
-quantity = [4, 2];
-simultaneous_capacity = [3, 3];
+% min/max_time: Temps de travail en minutes
+min_time = [240, 240, 280];
+max_time = [360, 360, 400];
+
+% --- Ressources Matérielles ---
+quantity = [5, 5];
+simultaneous_capacity = [1, 4];
+
+% --- Matrices de Besoins (Relations N-N) ---
+% tech_required: [Op, TechType] -> 1 si requis, 0 sinon
 tech_required = [|
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
-  0, 1, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
+  1, 0, 0 |
 |];
+% equip_required: [Op, EquipType] -> 1 si requis, 0 sinon
 equip_required = [|
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
-  0, 1 |
-  0, 0 |
+  1, 1 |
+  1, 1 |
+  1, 1 |
+  1, 1 |
+  1, 1 |
+  1, 1 |
+  1, 1 |
 |];
+% equip_available_on_track: [Voie, EquipType] -> Dispo ?
 equip_available_on_track = [|
   true, true |
-  false, false |
-  true, false |
-  true, false |
+  true, true |
+  true, true |
+  true, true |
   true, true |
 |];
+
+% --- Setup ---
 setup_time_between_trains = 20;
 setup_time_between_ops = 10;

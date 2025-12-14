@@ -1,66 +1,119 @@
-% === DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ) ===
+% ============================================================================
+% DONNÉES GÉNÉRÉES POUR MODEL e-v1 (DÉTAILLÉ)
+% Modèle basé sur des PÉRIODES discrètes.
+% ============================================================================
+
+% --- Temps et Unités ---
+% J: Nombre de jours de simulation
+% PJ: Nombre de périodes par jour
 J = 1; PJ = 144;
+% PSetup: Temps de setup entre opérations (en périodes)
+% PVoie: Temps de sécurité entre trains sur une voie (en périodes)
 PSetup = 1; PVoie = 4;
+% EtageMax: Nombre maximum d'étages (caténaires) possibles
 EtageMax = 3;
+
+% --- Voies (Infrastructures) ---
+% VTNb: Nombre de TYPES de voies
 VTNb = 2;
+% VNbT: Nombre de voies pour chaque type
 VNbT = [2, 2];
+% VEtage: Étage (équipement caténaire) de chaque voie physique
 VEtage = [3, 3, 3, 3];
+
+% --- Équipements ---
+% ENb: Nombre de types d'équipements
 ENb = 2;
-ECapacite = [2, 2];
-EQuantite = [3, 4];
+% ECapacite: Capacité simultanée (combien d'ops en // sur cet équipement)
+ECapacite = [3, 4];
+% EQuantite: Nombre total d'unités de cet équipement
+EQuantite = [4, 4];
+% VEDisponible: Matrice [Voie, Equipement] -> Est-ce dispo sur cette voie ?
 VEDisponible = [|
   true, true |
   true, true |
   true, true |
-  false, true
+  true, true
 |];
+
+% --- Techniciens ---
+% STNb: Nombre de types de techniciens (spécialités)
 STNb = 3;
+% SNbT: Nombre de techniciens par spécialité
 SNbT = [8, 6, 8];
+% STTempsMin/Max: Temps de travail min/max journalier (en périodes)
 STTempsMin = [24, 24, 28];
-STTempsMax = [40, 32, 32];
+STTempsMax = [32, 40, 36];
+
+% --- Trains ---
+% TTNb: Nombre de TYPES de trains
 TTNb = 1;
+% TNbT: Nombre de trains par type
 TNbT = [3];
+% TEtage: Étage requis par type de train
 TEtage = [3];
+
+% --- Gares et Trajets ---
+% GNb: Nombre de gares périphériques
 GNb = 3;
-GTemps = [3, 5, 4];
-TTrajetGare = [|
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0 |
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0
-|];
-TTrajetSens = [|
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare |
-  gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare, gare, gare, gare, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, aller, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, gare, retour, retour, retour, retour, retour, retour, retour, gare, gare, gare, gare, gare
-|];
+% GTemps: Temps de trajet Gare <-> Centre (en périodes)
+GTemps = [2, 3, 4];
+
+% --- Intervalles de Disponibilité (Input) ---
+% Liste plate des intervalles où les trains sont présents au centre.
+% Gare=0 signifie 'Au Centre'.
+% InputNbIntervallesParTrain: Combien d'intervalles par train [1..TNb]
+InputNbIntervallesParTrain = [2, 2, 3];
+% InputIntervallesDebut: Période de début de chaque intervalle
+InputIntervallesDebut = [50, 118, 34, 99, 42, 106, 134];
+% InputIntervallesFin: Période de fin de chaque intervalle
+InputIntervallesFin = [77, 144, 73, 112, 83, 120, 144];
+% InputIntervallesGareDebut: Gare de provenance (0=Centre)
+InputIntervallesGareDebut = [0, 0, 0, 0, 0, 0, 0];
+% InputIntervallesGareFin: Gare de destination (0=Centre)
+InputIntervallesGareFin = [0, 0, 0, 0, 0, 0, 0];
+
+% --- Opérations ---
+% OTNb: Nombre de TYPES d'opérations
 OTNb = 2;
+% OEquipement: Matrice [OpType, EquipType] -> Besoin équipement ?
 OEquipement = [|
-  false, true |
-  false, true
+  true, true |
+  true, true
 |];
+% OTemps: Matrice [OpType, Etage] -> Durée (périodes)
 OTemps = [|
-  2, 4, 1 |
-  1, 2, 3
+  1, 1, 1 |
+  4, 1, 1
 |];
+% ODependance: Matrice [OpA, OpB] -> OpA dépend de OpB ?
 ODependance = [|
   false, false |
   false, false
 |];
-OShift = [3, 2];
+% OShift: Type de technicien requis pour l'opération
+OShift = [1, 1];
+% OVoie: Matrice [OpType, VoieType] -> Compatible ?
 OVoie = [|
-  true, false |
-  false, true
+  false, true |
+  true, true
 |];
+
+% --- Maintenances ---
+% MTNb: Nombre de TYPES de maintenances
 MTNb = 2;
+% MOperation: Matrice [MaintType, OpType] -> L'opération est-elle requise ?
 MOperation = [|
-  true, true |
-  false, true
+  true, false |
+  true, false
 |];
+% MTPeriode: Périodicité [TrainType, MaintType] (périodes, 0=Urgente, infinity=Jamais)
 MTPeriode = [|
-  2016, 0
+  2016, 2016
 |];
+% MDerniereFois: Date dernière maintenance [TrainInstance, MaintType] (négatif = passé)
 MDerniereFois = [|
-  -1526, -1387 |
-  -711, -2752 |
-  -1674, -1891
+  -4177, -1122 |
+  -4159, -1578 |
+  -1218, -3305
 |];
