@@ -31,9 +31,9 @@ Le problème consiste à planifier les opérations de maintenance sur un horizon
 
 L'objectif est de minimiser le retard pondéré des maintenances par rapport à leurs dates butoirs, calculées en fonction de leur périodicité et de la dernière fois où elles ont été effectuées.
 
-## Contributions
+## Réalisations
 
-Les contributions principales de ce projet sont :
+Les réalisations principales de ce projet sont :
 
 1. **Développement de deux modèles MiniZinc** avec des approches de modélisation différentes (modélisation fine des techniciens vs vérification ponctuelle)
 2. **Évaluation expérimentale** sur 8 instances de différentes tailles (small, medium, large)
