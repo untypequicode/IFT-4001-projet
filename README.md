@@ -1,13 +1,114 @@
-# IFT-4001 / IFT-7020 Projet
+# Planification de Maintenance Ferroviaire : Comparaison de Deux Modèles MiniZinc
 
-Ce projet modélise et résout un problème de planification de maintenance ferroviaire en utilisant la programmation par contraintes (MiniZinc). L'objectif est d'automatiser la génération de plannings optimisés pour réduire le temps et les erreurs liés aux processus manuels.
+![MiniZinc](https://img.shields.io/badge/MiniZinc-2.9.0-blue)
+![Python](https://img.shields.io/badge/Python-3.x-green)
+![LaTeX](https://img.shields.io/badge/LaTeX-Required-orange)
+![Nix](https://img.shields.io/badge/Nix-Supported-lightblue)
 
-Le problème est modélisé comme un **RCPSP** (Resource-Constrained Project Scheduling Problem) et combine l'ordonnancement, l'affectation de ressources et des contraintes temporelles et opérationnelles (fenêtres temporelles, compétences des équipes, capacité d'atelier, priorités, replanification rapide).
+## Résumé
+
+Ce projet modélise et résout un problème de planification de maintenance ferroviaire en utilisant la programmation par contraintes (MiniZinc). Le problème est formulé comme un **Resource-Constrained Project Scheduling Problem (RCPSP)** avec des contraintes spécifiques au domaine ferroviaire : fenêtres temporelles strictes (possiblement multiples par train), temps de setup variables selon le contexte, et ressources multiples avec capacités simultanées.
+
+Deux modèles MiniZinc distincts ont été développés et comparés sur trois solveurs (Chuffed, Gecode, OR-Tools) : **l-v1** avec vérification ponctuelle des ressources, et **e-v1** avec modélisation fine des techniciens par blocs de travail. Les expérimentations sur 8 instances de différentes tailles révèlent que OR-Tools est le solveur le plus robuste (15 instances sur 16 résolues), et que le modèle l-v1 présente des performances supérieures (temps 2 à 20 fois plus rapides) au prix d'une modélisation moins détaillée.
 
 ## Auteurs
 
-- Léa Potin
-- Ethan Facca
+- **Ethan Facca**
+- **Léa Potin**
+
+## Problématique
+
+La planification de maintenance ferroviaire représente un défi opérationnel majeur pour les entreprises de transport. Avec des centaines de trains nécessitant des maintenances régulières, des fenêtres temporelles strictes, et des ressources limitées (voies, techniciens, équipements), ce problème présente toutes les caractéristiques d'un problème d'optimisation combinatoire complexe.
+
+Le problème consiste à planifier les opérations de maintenance sur un horizon de plusieurs jours en respectant :
+
+- Les fenêtres temporelles de présence des trains au centre de maintenance
+- Les contraintes de précédence entre opérations avec temps de setup
+- Les capacités limitées des ressources (voies exclusives, techniciens par type, équipements)
+- Les contraintes de travail des techniciens (temps min/max, pauses)
+- Les compatibilités entre voies et équipements
+- La gestion dynamique des deadlines et des maintenances optionnelles
+
+L'objectif est de minimiser le retard pondéré des maintenances par rapport à leurs dates butoirs, calculées en fonction de leur périodicité et de la dernière fois où elles ont été effectuées.
+
+## Contributions
+
+Les contributions principales de ce projet sont :
+
+1. **Développement de deux modèles MiniZinc** avec des approches de modélisation différentes (modélisation fine des techniciens vs vérification ponctuelle)
+2. **Évaluation expérimentale** sur 8 instances de différentes tailles (small, medium, large)
+3. **Comparaison des performances** sur trois solveurs (Chuffed, Gecode, OR-Tools)
+4. **Identification des facteurs de difficulté** et analyse de l'impact des choix de modélisation sur la performance
+
+## Méthodologie
+
+### Modèle l-v1 : Vérification ponctuelle
+
+Architecture **monolithique** (1 fichier) utilisant les **minutes** comme unité temporelle. Chaque train a une **fenêtre unique** définie par son arrivée et son départ.
+
+**Gestion des ressources par vérification ponctuelle :** Au lieu de créer une variable pour chaque technicien à chaque instant, le modèle vérifie simplement qu'à chaque début d'opération, la demande totale en techniciens ne dépasse pas la capacité disponible. Cette approche réduit le nombre de variables à seulement les temps et voies des opérations.
+
+**Caractéristiques principales :**
+- Horizon temporel : 1 jour (1440 minutes)
+- Vérification ponctuelle des ressources (techniciens, équipements)
+- Contraintes disjonctives explicites pour les non-chevauchements
+- Toutes les maintenances doivent être planifiées (pas d'optionnalité)
+- Objectif : minimiser le retard pondéré par priorité
+
+Voir `models/l-v1/README.md` pour plus de détails.
+
+### Modèle e-v1 : Modélisation fine et modulaire
+
+Architecture **modulaire** (6 fichiers) utilisant les **périodes** comme unité temporelle (typiquement 15 minutes). L'horizon total est configurable sur plusieurs jours.
+
+**Caractéristiques principales :**
+- Horizon temporel : multi-jours (configurable)
+- **Intervalles multiples** : un train peut avoir plusieurs fenêtres de présence durant l'horizon
+- **Instances dynamiques de maintenances** : génération automatique avec possibilité de ne pas les planifier
+- **Deadlines dynamiques** : propagation automatique des dates butoirs
+- **Variables d'affectation** : assignation spécifique de techniciens aux opérations
+- **Blocs de travail des techniciens** : planification explicite des horaires avec pauses obligatoires (1-3 par jour)
+- **Objectif avec pénalités** : gestion des maintenances optionnelles avec pénalités fortes (10000) pour les non planifiées
+
+Voir `models/e-v1/README.md` pour plus de détails.
+
+### Comparaison des modèles
+
+| Aspect | l-v1 | e-v1 |
+|--------|------|------|
+| Organisation | Monolithique | Modulaire |
+| Unité temporelle | Minutes | Périodes |
+| Fenêtres/train | 1 fixe | Multiples |
+| Maintenances | Obligatoires | Optionnelles |
+| Deadlines | Statiques | Dynamiques |
+| Gestion techniciens | Vérif. ponctuelle | Blocs détaillés |
+| Pauses | Non | Oui (1-3) |
+| Affectation individuelle | Non | Oui |
+| Complexité | Faible | Élevée |
+
+## Résultats expérimentaux
+
+Les expérimentations ont été réalisées avec un timeout de 10 minutes (600 secondes) sur 8 instances de différentes tailles :
+
+- **Small** : small_01, small_02 (2 trains, 2-3 maintenances)
+- **Medium** : medium_01, medium_02, medium_03 (3-4 trains, 4-5 maintenances)
+- **Large** : large_01, large_02, large_03 (5-6 trains, 6-8 maintenances)
+
+### Performance globale
+
+**Modèle l-v1 :** Le modèle l-v1 montre des performances globalement meilleures sur les instances small et medium. Toutes les instances small sont résolues en moins de 6 secondes avec tous les solveurs. Les instances medium sont également bien gérées, avec des temps variant de 0.5s à 94s selon le solveur. Les instances large présentent plus de difficultés, avec 2 timeouts sur Gecode.
+
+**Modèle e-v1 :** Le modèle e-v1 présente des temps de résolution systématiquement plus élevés que l-v1 (2 à 20 fois plus lents), reflétant sa complexité accrue due à la modélisation fine des blocs de travail des techniciens. Les instances medium et large présentent 4 timeouts.
+
+**Impact de la modélisation :** La différence de performance s'explique par le nombre de variables : l-v1 utilise $O(|OP|)$ variables (temps et voies uniquement), tandis que e-v1 ajoute $O(|S| \times J \times B)$ variables pour les blocs de travail des techniciens, où $S$ est le nombre de techniciens, $J$ le nombre de jours, et $B$ le nombre de blocs par jour.
+
+### Comparaison des solveurs
+
+- **OR-Tools** : Le solveur le plus robuste sur les deux modèles (15 instances sur 16 résolues), avec une capacité à résoudre des instances que les autres abandonnent.
+- **Gecode** : Excelle sur les petites instances de l-v1 mais peine sur e-v1 et les grandes instances.
+- **Chuffed** : Montre des performances variables selon l'instance.
+
+Pour une analyse détaillée des résultats, voir le rapport final (`docs/rapport-final/`).
 
 ## Prérequis
 
@@ -17,12 +118,12 @@ Le projet supporte Nix pour la reproductibilité des environnements. Voir https:
 
 ### Dépendances sans Nix
 
-- MiniZinc (avec solveurs Chuffed, Gecode, OR-Tools)
-- Python 3 (pour les scripts de génération d'instances)
-- LaTeX (pour la compilation des rapports)
-- `just` (exécuteur de recettes, optionnel)
+- **MiniZinc** (avec solveurs Chuffed, Gecode, OR-Tools)
+- **Python 3** (pour les scripts de génération d'instances)
+- **LaTeX** (pour la compilation des rapports)
+- **`just`** (exécuteur de recettes, optionnel)
 
-## Installation rapide
+## Installation
 
 1. Cloner le dépôt :
 
@@ -50,7 +151,7 @@ IFT-4001-projet/
 │       ├── content/             # Sections du rapport
 │       └── img/                 # Images et logos
 ├── models/                      # Modèles MiniZinc
-│   ├── e-v1/                    # Modèle e-v1 (Ethan)
+│   ├── e-v1/                    # Modèle e-v1
 │   │   ├── main.mzn             # Point d'entrée principal
 │   │   ├── constant.mzn         # Paramètres d'entrée
 │   │   ├── computed.mzn         # Pré-calculs
@@ -59,7 +160,7 @@ IFT-4001-projet/
 │   │   │   ├── maintenances.mzn
 │   │   │   └── techniciens.mzn
 │   │   └── README.md
-│   └── l-v1/                    # Modèle l-v1 (Léa)
+│   └── l-v1/                    # Modèle l-v1
 │       ├── model.mzn            # Modèle monolithique
 │       ├── data_example.dzn     # Exemple de données
 │       └── README.md
@@ -90,44 +191,6 @@ IFT-4001-projet/
 │       └── or-tools/
 └── src/                          # Scripts utilitaires
 ```
-
-## Modèles
-
-Le projet contient deux modèles MiniZinc distincts avec des approches de modélisation différentes :
-
-### Modèle l-v1 (Léa)
-
-Architecture monolithique avec vérification ponctuelle des contraintes de ressources. Le modèle minimise le retard pondéré total des maintenances. Voir `models/l-v1/README.md` pour plus de détails.
-
-**Caractéristiques principales :**
-- Horizon temporel : 1 jour (1440 minutes)
-- Vérification ponctuelle des ressources (techniciens, équipements)
-- Contraintes disjonctives explicites pour les non-chevauchements
-
-### Modèle e-v1 (Ethan)
-
-Architecture modulaire avec modélisation fine des techniciens (blocs de travail, pauses, limites quotidiennes). Le modèle minimise une fonction objectif composée (retard pondéré, makespan, équité, inactivité). Voir `models/e-v1/README.md` pour plus de détails.
-
-**Caractéristiques principales :**
-- Horizon temporel : multi-jours (configurable)
-- Modélisation fine des techniciens avec variables booléennes par période
-- Gestion des blocs de travail journaliers et des pauses
-
-## Instances de test
-
-Huit instances de test ont été générées automatiquement, couvrant différentes tailles et complexités :
-
-- **Small** : small_01, small_02 (2 trains, 2-3 maintenances)
-- **Medium** : medium_01, medium_02, medium_03 (3-4 trains, 4-5 maintenances)
-- **Large** : large_01, large_02, large_03 (5-6 trains, 6-8 maintenances)
-
-Chaque instance existe en deux versions :
-- `*_l-v1.dzn` : format pour le modèle l-v1
-- `*_e-v1.dzn` : format pour le modèle e-v1
-
-Les configurations JSON utilisées pour générer ces instances sont disponibles dans `instances/configs/`.
-
-Des instances supplémentaires exploitant les capacités multi-jours du modèle e-v1 sont disponibles dans `instances/multiday/`.
 
 ## Utilisation
 
@@ -184,26 +247,6 @@ Pour nettoyer les fichiers temporaires :
 just clean
 ```
 
-## Résultats
-
-Les résultats des expérimentations sont stockés dans `results/`, organisés par modèle et solveur. Chaque fichier contient les métriques de résolution (temps, valeur objectif, statut) pour une combinaison instance-modèle-solveur.
-
-Les résultats sont analysés et présentés dans le rapport final (`docs/rapport-final/`).
-
-## Documentation
-
-- **Rapport final** : `docs/rapport-final/main.pdf` (après compilation)
-- **Proposition initiale** : `docs/proposition/main.pdf` (après compilation)
-- **Documentation modèle l-v1** : `models/l-v1/README.md`
-- **Documentation modèle e-v1** : `models/e-v1/README.md`
-
-## Notes pour les développeurs
-
-- Les modèles sont indépendants et peuvent être modifiés séparément
-- Les instances sont générées à partir de configurations JSON pour assurer la cohérence
-- Les résultats doivent être organisés par modèle et solveur dans `results/`
-- La documentation doit être mise à jour lors de modifications importantes des modèles
-
 ## Solveurs supportés
 
 Le projet a été testé avec les solveurs suivants :
@@ -213,3 +256,21 @@ Le projet a été testé avec les solveurs suivants :
 - **OR-Tools (CP-SAT)** : Solveur avec techniques avancées de propagation
 
 Les performances varient selon le modèle et la complexité des instances. Voir le rapport final pour une analyse détaillée.
+
+## Documentation
+
+- **Rapport final** : `docs/rapport-final/main.pdf` (après compilation)
+- **Proposition initiale** : `docs/proposition/main.pdf` (après compilation)
+- **Documentation modèle l-v1** : `models/l-v1/README.md`
+- **Documentation modèle e-v1** : `models/e-v1/README.md`
+
+Les résultats des expérimentations sont stockés dans `results/`, organisés par modèle et solveur. Chaque fichier contient les métriques de résolution (temps, valeur objectif, statut) pour une combinaison instance-modèle-solveur.
+
+## Perspectives futures
+
+Les perspectives futures incluent :
+
+- Générer plus d'instances pour une évaluation plus complète
+- Développer des heuristiques personnalisées pour améliorer les performances
+- Adapter les instances pour permettre une comparaison directe entre modèles
+- Étendre la modélisation pour inclure d'autres contraintes réalistes

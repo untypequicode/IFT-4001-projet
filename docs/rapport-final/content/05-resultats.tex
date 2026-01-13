@@ -14,7 +14,7 @@ Le Tableau~\ref{tab:resultats_temps} présente les temps de résolution pour cha
 	\label{tab:resultats_temps}
 	\begin{tabular}{lcccccc}
 		\toprule
-		           & \multicolumn{3}{c}{\textbf{l-v1 (Léa)}} & \multicolumn{3}{c}{\textbf{e-v1 (Ethan)}}                                                      \\
+		           & \multicolumn{3}{c}{\textbf{l-v1}} & \multicolumn{3}{c}{\textbf{e-v1}}                                                      \\
 		\cmidrule(lr){2-4} \cmidrule(lr){5-7}
 		Instance   & Chuffed                                 & Gecode                                    & OR-Tools & Chuffed     & Gecode      & OR-Tools    \\
 		\midrule
@@ -45,7 +45,7 @@ Le Tableau~\ref{tab:resultats_objectifs} présente les valeurs de la fonction ob
 	\label{tab:resultats_objectifs}
 	\begin{tabular}{lcccccc}
 		\toprule
-		           & \multicolumn{3}{c}{\textbf{l-v1 (Léa)}} & \multicolumn{3}{c}{\textbf{e-v1 (Ethan)}}                                          \\
+		           & \multicolumn{3}{c}{\textbf{l-v1}} & \multicolumn{3}{c}{\textbf{e-v1}}                                          \\
 		\cmidrule(lr){2-4} \cmidrule(lr){5-7}
 		Instance   & Chuffed                                 & Gecode                                    & OR-Tools & Chuffed & Gecode & OR-Tools \\
 		\midrule
@@ -77,9 +77,9 @@ Néanmoins, ces valeurs permettent de vérifier que les solveurs trouvent des so
 
 \subsection{Comparaison des modèles}
 
-\textbf{Modèle l-v1 (Léa) :} Le modèle l-v1 montre des performances globalement meilleures sur les instances small et medium. Sur les 8 instances testées, il résout toutes les instances small en moins de 6 secondes avec tous les solveurs. Les instances medium sont également bien gérées, avec des temps variant de 0.5s à 94s selon le solveur. Les instances large présentent plus de difficultés, avec 2 timeouts sur Gecode (large\_02, large\_03).
+\textbf{Modèle l-v1 :} Le modèle l-v1 montre des performances globalement meilleures sur les instances small et medium. Sur les 8 instances testées, il résout toutes les instances small en moins de 6 secondes avec tous les solveurs. Les instances medium sont également bien gérées, avec des temps variant de 0.5s à 94s selon le solveur. Les instances large présentent plus de difficultés, avec 2 timeouts sur Gecode (large\_02, large\_03).
 
-\textbf{Modèle e-v1 (Ethan) :} Le modèle e-v1 présente des temps de résolution systématiquement plus élevés que l-v1, reflétant sa complexité accrue due à la modélisation fine des blocs de travail des techniciens. Sur les instances small, les temps varient de 0.8s à 8.8s, soit environ 2 à 20 fois plus lents que l-v1. Les instances medium et large présentent 4 timeouts (small\_02 avec Gecode, medium\_03 avec Chuffed, large\_02 et large\_03 avec Chuffed).
+\textbf{Modèle e-v1 :} Le modèle e-v1 présente des temps de résolution systématiquement plus élevés que l-v1, reflétant sa complexité accrue due à la modélisation fine des blocs de travail des techniciens. Sur les instances small, les temps varient de 0.8s à 8.8s, soit environ 2 à 20 fois plus lents que l-v1. Les instances medium et large présentent 4 timeouts (small\_02 avec Gecode, medium\_03 avec Chuffed, large\_02 et large\_03 avec Chuffed).
 
 \textbf{Impact de la modélisation :} La différence de performance s'explique par le nombre de variables : l-v1 utilise $O(|OP|)$ variables (temps et voies uniquement), tandis que e-v1 ajoute $O(|S| \times J \times B)$ variables pour les blocs de travail des techniciens, où $S$ est le nombre de techniciens, $J$ le nombre de jours, et $B$ le nombre de blocs par jour. Cette explosion combinatoire rend la résolution significativement plus difficile, au prix d'une modélisation plus réaliste des contraintes humaines.
 
